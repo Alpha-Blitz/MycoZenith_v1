@@ -63,9 +63,9 @@ function ProductCard({ slug, image, name, tag, description, price }: typeof PROD
     <div className="group relative flex flex-col rounded-2xl overflow-hidden border border-white/[0.08] hover:border-[#8B5CF6]/40 bg-[#161616] transition-all duration-300 hover:shadow-[0_8px_40px_rgba(139,92,246,0.12)]">
 
       {/* ── Image (entire top is a link) ─────────────────── */}
-      <Link href={`/products/${slug}`} className="relative block aspect-square overflow-hidden">
+      <Link href={`/products/${slug}`} className="relative block aspect-square overflow-hidden bg-[#161616]">
         <Image src={image} alt={name} fill
-          className="object-cover object-center scale-[0.93] transition-transform duration-500 group-hover:scale-[0.97]"
+          className="object-contain object-center p-4 transition-transform duration-500 group-hover:scale-[1.04]"
           sizes="(max-width: 768px) 100vw, 33vw" />
         {/* Bottom scrim */}
         <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#161616] via-[#161616]/50 to-transparent" />
