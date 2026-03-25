@@ -63,7 +63,7 @@ function ProductCard({ slug, image, name, tag, description, price }: typeof PROD
     <div className="group relative flex flex-col rounded-2xl overflow-hidden border border-white/[0.08] hover:border-[#8B5CF6]/40 bg-[#161616] transition-all duration-300 hover:shadow-[0_8px_40px_rgba(139,92,246,0.12)]">
 
       {/* ── Image (entire top is a link) ─────────────────── */}
-      <Link href={`/products/${slug}`} className="relative block aspect-[4/3] overflow-hidden">
+      <Link href={`/products/${slug}`} className="relative block aspect-square overflow-hidden">
         <Image src={image} alt={name} fill
           className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.04]"
           sizes="(max-width: 768px) 100vw, 33vw" />
@@ -99,7 +99,7 @@ function ProductCard({ slug, image, name, tag, description, price }: typeof PROD
         <div className="grid grid-cols-2 gap-2.5 mt-2">
           <Link
             href={`/products/${slug}`}
-            className="group/btn inline-flex items-center justify-center gap-1.5 bg-[#F97316] hover:bg-[#EA580C] text-white text-sm font-semibold px-4 py-2.5 rounded-2xl transition-all duration-200 hover:scale-[1.03]"
+            className="group/btn inline-flex items-center justify-center gap-1.5 bg-[#F97316] hover:bg-[#EA580C] text-white text-sm font-semibold px-4 py-2.5 rounded-full transition-all duration-200 hover:scale-[1.03]"
           >
             Shop Now
             <span className="inline-block transition-transform duration-200 group-hover/btn:translate-x-1">

@@ -60,12 +60,12 @@ export default function Hero() {
           {/* CTAs */}
           <div className="flex flex-wrap items-center gap-4">
             <Link href="/products"
-              className="group/btn inline-flex items-center gap-2 bg-[#F97316] hover:bg-[#EA580C] text-white text-sm font-semibold px-7 py-3.5 rounded-2xl transition-all duration-200 hover:scale-[1.03]">
+              className="group/btn inline-flex items-center gap-2 bg-[#F97316] hover:bg-[#EA580C] text-white text-sm font-semibold px-7 py-3.5 rounded-full transition-all duration-200 hover:scale-[1.03]">
               Shop Now
               <span className="inline-block transition-transform duration-200 group-hover/btn:translate-x-1"><ArrowRight /></span>
             </Link>
             <Link href="/about"
-              className="group inline-flex items-center gap-1.5 border border-[#F97316]/70 hover:border-[#F97316] text-[#F97316] hover:text-[#F97316] text-sm font-medium px-5 py-3.5 rounded-2xl transition-all duration-200">
+              className="group inline-flex items-center gap-1.5 border border-[#F97316]/70 hover:border-[#F97316] text-[#F97316] hover:text-[#F97316] text-sm font-medium px-5 py-3.5 rounded-full transition-all duration-200">
               Learn More
               <span className="inline-block transition-transform duration-200 group-hover:translate-x-1"><ArrowRight /></span>
             </Link>

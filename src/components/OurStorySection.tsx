@@ -61,7 +61,7 @@ export default function OurStorySection() {
               in your body — and exactly what it does.
             </p>
             <Link href="/about"
-              className="group/btn inline-flex items-center gap-2 bg-[#F97316] hover:bg-[#EA580C] text-white text-sm font-semibold px-7 py-3.5 rounded-2xl transition-all duration-200 hover:scale-[1.03]">
+              className="group/btn inline-flex items-center gap-2 bg-[#F97316] hover:bg-[#EA580C] text-white text-sm font-semibold px-7 py-3.5 rounded-full transition-all duration-200 hover:scale-[1.03]">
               Read Our Story
               <span className="inline-block transition-transform duration-200 group-hover/btn:translate-x-1"><ArrowRight /></span>
             </Link>

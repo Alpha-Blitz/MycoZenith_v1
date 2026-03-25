@@ -11,7 +11,7 @@ export default function NewsletterForm() {
       />
       <button
         type="submit"
-        className="bg-[#F97316] hover:bg-[#EA580C] text-white text-sm font-semibold px-4 py-3 rounded-2xl transition-all duration-200 hover:scale-[1.02]"
+        className="bg-[#F97316] hover:bg-[#EA580C] text-white text-sm font-semibold px-4 py-3 rounded-full transition-all duration-200 hover:scale-[1.02]"
       >
         Subscribe
       </button>
