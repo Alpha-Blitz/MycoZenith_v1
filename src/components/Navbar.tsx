@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
+import { useAuth } from '@/context/AuthContext'
 
 const NAV_LINKS = [
   { href: '/',         label: 'Home'     },
@@ -76,14 +77,17 @@ function CloseIcon() {
 
 /* ─── Navbar ──────────────────────────────────────────────────── */
 export default function Navbar() {
-  const [scrolled,    setScrolled]    = useState(false)
-  const [mobileOpen,  setMobileOpen]  = useState(false)
-  const [searchOpen,  setSearchOpen]  = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
+  const [scrolled,      setScrolled]      = useState(false)
+  const [mobileOpen,    setMobileOpen]    = useState(false)
+  const [searchOpen,    setSearchOpen]    = useState(false)
+  const [searchQuery,   setSearchQuery]   = useState('')
+  const [avatarOpen,    setAvatarOpen]    = useState(false)
 
   const searchInputRef = useRef<HTMLInputElement>(null)
+  const avatarRef      = useRef<HTMLDivElement>(null)
   const pathname = usePathname()
   const router   = useRouter()
+  const { user, openModal, signOut } = useAuth()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10)
@@ -102,7 +106,21 @@ export default function Navbar() {
     if (searchOpen) setTimeout(() => searchInputRef.current?.focus(), 60)
   }, [searchOpen])
 
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (avatarRef.current && !avatarRef.current.contains(e.target as Node)) {
+        setAvatarOpen(false)
+      }
+    }
+    if (avatarOpen) document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [avatarOpen])
+
   const closeSearch = () => { setSearchOpen(false); setSearchQuery('') }
+
+  const userInitial = user?.user_metadata?.full_name?.charAt(0)?.toUpperCase()
+    ?? user?.email?.charAt(0)?.toUpperCase()
+    ?? '?'
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -194,10 +212,37 @@ export default function Navbar() {
               className="cursor-pointer text-white/55 hover:text-[#8B5CF6] hover:scale-110 transition-all duration-200">
               <CartIcon />
             </button>
-            <button aria-label="Login"
-              className="cursor-pointer text-white/55 hover:text-[#8B5CF6] hover:scale-110 transition-all duration-200">
-              <UserIcon />
-            </button>
+            {user ? (
+              <div ref={avatarRef} className="relative">
+                <button
+                  onClick={() => setAvatarOpen((v) => !v)}
+                  aria-label="Account menu"
+                  className="w-8 h-8 rounded-full bg-[#8B5CF6]/20 border border-[#8B5CF6]/40 flex items-center justify-center text-[#8B5CF6] text-sm font-semibold cursor-pointer hover:bg-[#8B5CF6]/30 transition-colors duration-200"
+                >
+                  {userInitial}
+                </button>
+                {avatarOpen && (
+                  <div className="absolute right-0 top-full mt-2 w-44 bg-[#161616] border border-white/[0.1] rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.6)] overflow-hidden z-50">
+                    <p className="px-4 pt-3 pb-2 text-white/40 text-xs truncate">{user.email}</p>
+                    <div className="border-t border-white/[0.07]" />
+                    <button
+                      onClick={() => { setAvatarOpen(false); signOut() }}
+                      className="w-full text-left px-4 py-3 text-sm text-white/75 hover:text-white hover:bg-white/[0.05] transition-colors duration-200 cursor-pointer"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <button
+                aria-label="Login"
+                onClick={openModal}
+                className="cursor-pointer text-white/55 hover:text-[#8B5CF6] hover:scale-110 transition-all duration-200"
+              >
+                <UserIcon />
+              </button>
+            )}
 
           </div>
 
@@ -263,9 +308,24 @@ export default function Navbar() {
           <button className="flex flex-col items-center gap-2 text-white/45 hover:text-[#8B5CF6] transition-colors duration-200">
             <CartIcon /><span className="text-xs tracking-wide">Cart</span>
           </button>
-          <button className="flex flex-col items-center gap-2 text-white/45 hover:text-[#8B5CF6] transition-colors duration-200">
-            <UserIcon /><span className="text-xs tracking-wide">Login</span>
-          </button>
+          {user ? (
+            <button
+              onClick={() => { setMobileOpen(false); signOut() }}
+              className="flex flex-col items-center gap-2 text-white/45 hover:text-[#8B5CF6] transition-colors duration-200"
+            >
+              <div className="w-[22px] h-[22px] rounded-full bg-[#8B5CF6]/20 border border-[#8B5CF6]/40 flex items-center justify-center text-[#8B5CF6] text-[10px] font-semibold">
+                {userInitial}
+              </div>
+              <span className="text-xs tracking-wide">Sign Out</span>
+            </button>
+          ) : (
+            <button
+              onClick={() => { setMobileOpen(false); openModal() }}
+              className="flex flex-col items-center gap-2 text-white/45 hover:text-[#8B5CF6] transition-colors duration-200"
+            >
+              <UserIcon /><span className="text-xs tracking-wide">Login</span>
+            </button>
+          )}
         </div>
       </div>
     </>
