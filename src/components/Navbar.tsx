@@ -11,29 +11,8 @@ const NAV_LINKS = [
   { href: '/about',    label: 'About'    },
 ]
 
-/* ─── Logo Mark ──────────────────────────────────────────────── */
-function LogoMark() {
-  return (
-    <svg
-      width="28" height="28" viewBox="0 0 28 28"
-      fill="none" xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
-      {/* Outer ring */}
-      <circle cx="14" cy="14" r="13" stroke="#0EA5E9" strokeWidth="1.2" strokeOpacity="0.35" />
-      {/* Mushroom cap */}
-      <path
-        d="M14 6C9.6 6 6.5 9.2 6.5 12.5c0 1.6.6 3.1 1.7 4.2H9v2.3h10v-2.3h.8c1.1-1.1 1.7-2.6 1.7-4.2C21.5 9.2 18.4 6 14 6z"
-        fill="#0EA5E9" fillOpacity="0.9"
-      />
-      {/* Stem */}
-      <rect x="12" y="16.5" width="4" height="2.5" rx="0.8" fill="#0EA5E9" fillOpacity="0.7" />
-    </svg>
-  )
-}
-
 /* ─── Icons ───────────────────────────────────────────────────── */
-function SearchIcon({ size = 20 }: { size?: number }) {
+function SearchIcon({ size = 22 }: { size?: number }) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24"
       fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
@@ -53,7 +32,7 @@ function CloseSmIcon({ size = 17 }: { size?: number }) {
   )
 }
 
-function CartIcon({ size = 20 }: { size?: number }) {
+function CartIcon({ size = 22 }: { size?: number }) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24"
       fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
@@ -64,7 +43,7 @@ function CartIcon({ size = 20 }: { size?: number }) {
   )
 }
 
-function UserIcon({ size = 20 }: { size?: number }) {
+function UserIcon({ size = 22 }: { size?: number }) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24"
       fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
@@ -145,10 +124,9 @@ export default function Navbar() {
           {/* ── Logo ─────────────────────────────────────────── */}
           <Link
             href="/"
-            className="flex items-center gap-2.5 group shrink-0"
+            className="flex items-center shrink-0 group"
           >
-            <LogoMark />
-            <span className="text-[#0EA5E9] font-bold text-[17px] tracking-[-0.01em] group-hover:text-[#38BDF8] transition-colors duration-200">
+            <span className="font-bold text-[17px] tracking-[-0.01em] text-slate-200 group-hover:text-white transition-colors duration-200">
               MycoZenith
             </span>
           </Link>
@@ -239,9 +217,8 @@ export default function Navbar() {
         ].join(' ')}
       >
         <div className="flex items-center justify-between px-6 h-[66px] border-b border-white/[0.06]">
-          <Link href="/" className="flex items-center gap-2.5">
-            <LogoMark />
-            <span className="text-[#0EA5E9] font-bold text-[17px] tracking-[-0.01em]">MycoZenith</span>
+          <Link href="/" className="flex items-center">
+            <span className="font-bold text-[17px] tracking-[-0.01em] text-slate-200">MycoZenith</span>
           </Link>
           <button onClick={() => setMobileOpen(false)} aria-label="Close menu"
             className="text-white/55 hover:text-white transition-colors duration-200">

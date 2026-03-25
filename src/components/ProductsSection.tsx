@@ -65,7 +65,7 @@ function ProductCard({ slug, image, name, tag, description, price }: typeof PROD
       {/* ── Image (entire top is a link) ─────────────────── */}
       <Link href={`/products/${slug}`} className="relative block aspect-square overflow-hidden">
         <Image src={image} alt={name} fill
-          className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.04]"
+          className="object-cover object-center scale-[0.93] transition-transform duration-500 group-hover:scale-[0.97]"
           sizes="(max-width: 768px) 100vw, 33vw" />
         {/* Bottom scrim */}
         <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#161616] via-[#161616]/50 to-transparent" />
