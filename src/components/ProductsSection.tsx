@@ -63,9 +63,9 @@ function ProductCard({ slug, image, name, tag, description, price }: typeof PROD
     <div className="group relative flex flex-col rounded-2xl overflow-hidden border border-white/[0.08] hover:border-[#8B5CF6]/40 bg-[#161616] transition-all duration-300 hover:shadow-[0_8px_40px_rgba(139,92,246,0.12)]">
 
       {/* ── Image (entire top is a link) ─────────────────── */}
-      <Link href={`/products/${slug}`} className="relative block aspect-square overflow-hidden bg-[#161616]">
+      <Link href={`/products/${slug}`} className="relative block aspect-[3/4] overflow-hidden">
         <Image src={image} alt={name} fill
-          className="object-contain object-center p-4 transition-transform duration-500 group-hover:scale-[1.04]"
+          className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.05]"
           sizes="(max-width: 768px) 100vw, 33vw" />
         {/* Bottom scrim */}
         <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#161616] via-[#161616]/50 to-transparent" />
@@ -130,17 +130,17 @@ function ProductCard({ slug, image, name, tag, description, price }: typeof PROD
 
 export default function ProductsSection() {
   return (
-    <section className="bg-[#0F0F0F] pt-28 pb-16 px-6">
+    <section className="bg-[#0F0F0F] pt-20 sm:pt-28 pb-12 sm:pb-16 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
 
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 sm:gap-6 mb-10 sm:mb-14">
           <div>
             <div className="inline-flex items-center gap-2 mb-4">
               <span className="w-5 h-px bg-[#8B5CF6]" />
               <span className="text-[#8B5CF6] text-xs font-semibold tracking-[0.22em] uppercase">Our Range</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-semibold text-white tracking-tight leading-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-white tracking-tight leading-tight">
               Formulated for<br />Peak Performance
             </h2>
           </div>
@@ -152,7 +152,7 @@ export default function ProductsSection() {
         </div>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
           {PRODUCTS.map((product) => (
             <ProductCard key={product.slug} {...product} />
           ))}

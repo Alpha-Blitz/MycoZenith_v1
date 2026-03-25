@@ -31,7 +31,7 @@ export default function Hero() {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 w-full pt-28 pb-20">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full pt-24 sm:pt-28 pb-16 sm:pb-20">
         <div className="max-w-[560px]">
 
           {/* Eyebrow */}
@@ -43,7 +43,7 @@ export default function Hero() {
           </div>
 
           {/* Headline */}
-          <h1 className="text-5xl md:text-6xl lg:text-[68px] font-semibold text-white leading-[1.04] tracking-[-0.02em] mb-6">
+          <h1 className="text-[42px] sm:text-5xl md:text-6xl lg:text-[68px] font-semibold text-white leading-[1.04] tracking-[-0.02em] mb-5 sm:mb-6">
             Nature's Intelligence.
             <br />
             <span className="text-white/50">Engineered for</span>
@@ -72,7 +72,7 @@ export default function Hero() {
           </div>
 
           {/* Stats */}
-          <div className="flex flex-wrap items-center gap-x-8 gap-y-4 mt-16 pt-8 border-t border-white/[0.08]">
+          <div className="flex flex-wrap items-center gap-x-6 sm:gap-x-8 gap-y-4 mt-10 sm:mt-16 pt-8 border-t border-white/[0.08]">
             {STATS.map(({ value, label }) => (
               <div key={label} className="flex flex-col gap-0.5">
                 <span className="text-white text-xl font-semibold tracking-tight">{value}</span>

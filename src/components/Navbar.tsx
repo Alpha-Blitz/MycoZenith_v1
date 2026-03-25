@@ -119,14 +119,17 @@ export default function Navbar() {
           scrolled ? 'border-b border-white/[0.07] shadow-[0_2px_24px_rgba(0,0,0,0.7)]' : '',
         ].join(' ')}
       >
-        <div className="max-w-7xl mx-auto px-6 h-[66px] flex items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-[66px] flex items-center justify-between gap-4">
 
           {/* ── Logo ─────────────────────────────────────────── */}
           <Link
             href="/"
             className="flex items-center shrink-0 group"
           >
-            <span className="font-bold text-[17px] tracking-[-0.01em] text-slate-200 group-hover:text-white transition-colors duration-200">
+            <span
+              style={{ fontFamily: 'var(--font-playfair)' }}
+              className="font-semibold text-[20px] tracking-wide text-slate-100 group-hover:text-white transition-colors duration-200"
+            >
               MycoZenith
             </span>
           </Link>
@@ -216,9 +219,9 @@ export default function Navbar() {
           mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none',
         ].join(' ')}
       >
-        <div className="flex items-center justify-between px-6 h-[66px] border-b border-white/[0.06]">
+        <div className="flex items-center justify-between px-4 sm:px-6 h-[66px] border-b border-white/[0.06]">
           <Link href="/" className="flex items-center">
-            <span className="font-bold text-[17px] tracking-[-0.01em] text-slate-200">MycoZenith</span>
+            <span style={{ fontFamily: 'var(--font-playfair)' }} className="font-semibold text-[20px] tracking-wide text-slate-100">MycoZenith</span>
           </Link>
           <button onClick={() => setMobileOpen(false)} aria-label="Close menu"
             className="text-white/55 hover:text-white transition-colors duration-200">
@@ -227,7 +230,7 @@ export default function Navbar() {
         </div>
 
         {/* Mobile search */}
-        <div className="px-6 pt-6">
+        <div className="px-4 sm:px-6 pt-6">
           <form
             onSubmit={(e) => {
               e.preventDefault()

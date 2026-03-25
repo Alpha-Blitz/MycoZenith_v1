@@ -35,9 +35,9 @@ function CheckIcon() {
 
 export default function OurStorySection() {
   return (
-    <section className="bg-[#0F0F0F] py-28 px-6">
-      <div className="max-w-7xl mx-auto border-t border-white/[0.07] pt-28">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+    <section className="bg-[#0F0F0F] py-16 sm:py-28 px-4 sm:px-6">
+      <div className="max-w-7xl mx-auto border-t border-white/[0.07] pt-16 sm:pt-28">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
           {/* Left */}
           <div>
@@ -45,7 +45,7 @@ export default function OurStorySection() {
               <span className="w-5 h-px bg-[#8B5CF6]" />
               <span className="text-[#8B5CF6] text-xs font-semibold tracking-[0.22em] uppercase">Our Story</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-semibold text-white tracking-tight leading-tight mb-6">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-white tracking-tight leading-tight mb-6">
               Built on Evidence.<br />
               <span className="text-white/45">Not on Hype.</span>
             </h2>
@@ -71,7 +71,7 @@ export default function OurStorySection() {
           <div className="flex flex-col gap-5">
             {PILLARS.map(({ label, body }) => (
               <div key={label}
-                className="flex gap-5 bg-[#161616] border border-white/[0.08] rounded-2xl p-7 hover:border-[#8B5CF6]/35 transition-colors duration-300">
+                className="flex gap-4 sm:gap-5 bg-[#161616] border border-white/[0.08] rounded-2xl p-5 sm:p-7 hover:border-[#8B5CF6]/35 transition-colors duration-300">
                 <div className="w-8 h-8 rounded-full bg-[#8B5CF6]/15 border border-[#8B5CF6]/25 flex items-center justify-center text-[#8B5CF6] shrink-0 mt-0.5">
                   <CheckIcon />
                 </div>
