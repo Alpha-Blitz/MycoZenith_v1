@@ -83,11 +83,11 @@ function ProductCard({ slug, image, name, tag, description, price }: typeof PROD
         {/* Name + price */}
         <div className="flex items-start justify-between gap-2">
           <Link href={`/products/${slug}`} className="group/title">
-            <h3 className="text-white text-lg font-semibold tracking-tight group-hover/title:text-white/80 transition-colors duration-200">
+            <h3 className="text-white text-xl font-semibold tracking-tight group-hover/title:text-white/80 transition-colors duration-200">
               {name}
             </h3>
           </Link>
-          <span className="text-[#F97316] text-sm font-bold tracking-tight shrink-0 tabular-nums">
+          <span className="text-[#F97316] text-base font-bold tracking-tight shrink-0 tabular-nums">
             {price}
           </span>
         </div>
@@ -99,7 +99,7 @@ function ProductCard({ slug, image, name, tag, description, price }: typeof PROD
         <div className="grid grid-cols-2 gap-2.5 mt-2">
           <Link
             href={`/products/${slug}`}
-            className="group/btn inline-flex items-center justify-center gap-1.5 bg-[#F97316] hover:bg-[#EA580C] text-white text-sm font-semibold px-4 py-2.5 rounded-full transition-all duration-200 hover:scale-[1.03]"
+            className="group/btn inline-flex items-center justify-center gap-1.5 bg-[#F97316] hover:bg-[#EA580C] text-white text-sm font-semibold px-4 py-3 rounded-xl transition-all duration-200 hover:scale-[1.03]"
           >
             Shop Now
             <span className="inline-block transition-transform duration-200 group-hover/btn:translate-x-1">
@@ -109,7 +109,7 @@ function ProductCard({ slug, image, name, tag, description, price }: typeof PROD
           <button
             onClick={handleAddToCart}
             className={[
-              'inline-flex items-center justify-center gap-1.5 text-sm font-medium px-4 py-2.5 rounded-xl border transition-all duration-200 cursor-pointer',
+              'inline-flex items-center justify-center gap-1.5 text-sm font-medium px-4 py-3 rounded-xl border transition-all duration-200 cursor-pointer',
               added
                 ? 'bg-[#8B5CF6]/20 border-[#8B5CF6]/50 text-[#8B5CF6]'
                 : 'bg-white/[0.05] border-white/[0.12] text-white/80 hover:bg-white/[0.1] hover:border-white/[0.2] hover:text-white',
