@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import NewsletterForm from '@/components/NewsletterForm'
@@ -10,7 +10,7 @@ const POSTS = [
   {
     slug:     'cordyceps-vo2-max',
     image:    '/vo2.webp',
-    category: 'Performance Science',
+    category: 'Performance',
     title:    'How Cordyceps Militaris Increases VO₂ Max and Aerobic Capacity',
     excerpt:  'A deep dive into the adenosine mechanisms that make cordyceps one of the most studied ergogenic fungi in sport science.',
     date:     'Mar 18, 2026',
@@ -19,7 +19,7 @@ const POSTS = [
   {
     slug:     'lions-mane-ngf',
     image:    '/neuro.webp',
-    category: 'Cognitive Health',
+    category: 'Science',
     title:    "Lion's Mane and NGF: The Neurotrophic Case for Daily Supplementation",
     excerpt:  "Nerve Growth Factor stimulation isn't just for recovery — it's the foundation of long-term cognitive resilience.",
     date:     'Mar 10, 2026',
@@ -28,7 +28,7 @@ const POSTS = [
   {
     slug:     'mushroom-extraction',
     image:    '/fruiting.jpeg',
-    category: 'Product Science',
+    category: 'Guides',
     title:    'Fruiting Body vs. Mycelium: Why Extraction Method Defines Potency',
     excerpt:  "Most mushroom supplements are mycelium-on-grain with negligible beta-glucan content. Here's how to read a supplement panel.",
     date:     'Feb 28, 2026',
@@ -37,7 +37,7 @@ const POSTS = [
   {
     slug:     'reishi-cortisol',
     image:    '/reishi.jpeg',
-    category: 'Recovery',
+    category: 'Science',
     title:    'Reishi and the HPA Axis: A Clinical Look at Cortisol Modulation',
     excerpt:  'Chronic stress dysregulates the hypothalamic–pituitary–adrenal axis. Reishi triterpenes offer a targeted, adaptogenic response.',
     date:     'Feb 14, 2026',
@@ -46,7 +46,7 @@ const POSTS = [
   {
     slug:     'lions-mane-sleep',
     image:    '/lm.jpeg',
-    category: 'Recovery',
+    category: 'Performance',
     title:    "Sleep Architecture and Neurogenesis: The Overnight Role of Lion's Mane",
     excerpt:  'Deep sleep is when the brain consolidates memory and clears metabolic waste. NGF support during this window may amplify the gains.',
     date:     'Jan 30, 2026',
@@ -55,7 +55,7 @@ const POSTS = [
   {
     slug:     'cordyceps-atp',
     image:    '/cordy.jpeg',
-    category: 'Performance Science',
+    category: 'Science',
     title:    'ATP Synthesis and Cordyceps: The Mitochondrial Connection',
     excerpt:  "Cordyceps sinensis increases cellular ATP production by upregulating key enzymes in the electron transport chain — here's the mechanism.",
     date:     'Jan 12, 2026',
@@ -63,7 +63,8 @@ const POSTS = [
   },
 ]
 
-const CATEGORIES = ['All', 'Performance Science', 'Cognitive Health', 'Product Science', 'Recovery']
+const CATEGORIES = ['All', 'Performance', 'Science', 'Guides', 'Lifestyle', 'Updates']
+const PAGE_SIZE   = 3
 
 /* ─── Icons ───────────────────────────────────────────────────── */
 function ArrowRight({ size = 13 }: { size?: number }) {
@@ -84,37 +85,45 @@ function SearchIcon() {
   )
 }
 
-/* ─── Article Card ────────────────────────────────────────────── */
-function ArticleCard({ post, featured = false }: { post: typeof POSTS[0]; featured?: boolean }) {
+/* ─── Blog Card ───────────────────────────────────────────────── */
+function BlogCard({ post }: { post: typeof POSTS[0] }) {
   return (
     <Link href={`/blog/${post.slug}`}
       className="group flex flex-col rounded-2xl overflow-hidden border border-white/[0.08] hover:border-[#8B5CF6]/40 transition-all duration-300 bg-[#161616] hover:shadow-[0_8px_40px_rgba(139,92,246,0.10)] h-full">
 
-      <div className={`relative overflow-hidden ${featured ? 'aspect-[16/8]' : 'aspect-[16/9]'}`}>
+      {/* Thumbnail — fixed 16:9 */}
+      <div className="relative aspect-[16/9] overflow-hidden shrink-0">
         <Image src={post.image} alt={post.title} fill
           className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 66vw, 33vw" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#161616]/60 to-transparent" />
-        <div className="absolute bottom-3 left-4">
-          <span className="inline-block bg-[#8B5CF6]/20 border border-[#8B5CF6]/35 text-[#8B5CF6] text-[10px] font-semibold tracking-[0.16em] uppercase px-3 py-1 rounded-full backdrop-blur-sm">
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#161616]/50 to-transparent" />
+        {/* Category tag */}
+        <div className="absolute top-3 left-4">
+          <span className="inline-block bg-[#8B5CF6]/20 border border-[#8B5CF6]/35 text-[#8B5CF6] text-[10px] font-semibold tracking-[0.16em] uppercase px-2.5 py-1 rounded-full backdrop-blur-sm">
             {post.category}
           </span>
         </div>
       </div>
 
-      <div className={`flex flex-col gap-3 flex-1 ${featured ? 'p-7' : 'p-6'}`}>
-        <h3 className={`text-white font-semibold leading-snug group-hover:text-white/90 transition-colors duration-200 ${featured ? 'text-lg sm:text-xl' : 'text-base'}`}>
+      {/* Body */}
+      <div className="flex flex-col gap-3 p-5 flex-1">
+        {/* Title — clamp 2 lines */}
+        <h3 className="text-white text-base font-semibold leading-snug line-clamp-2 group-hover:text-white/85 transition-colors duration-200">
           {post.title}
         </h3>
-        <p className="text-white/55 text-sm leading-relaxed flex-1">{post.excerpt}</p>
-        <div className="flex items-center justify-between pt-4 border-t border-white/[0.07]">
-          <div className="flex items-center gap-3 text-white/40 text-xs">
-            <span>{post.date}</span>
-            <span>·</span>
+        {/* Excerpt — clamp 3 lines */}
+        <p className="text-white/50 text-sm leading-relaxed line-clamp-3 flex-1">
+          {post.excerpt}
+        </p>
+        {/* Footer */}
+        <div className="flex items-center justify-between pt-3 border-t border-white/[0.07] mt-auto">
+          <div className="flex items-center gap-2 text-white/35 text-xs">
             <span>{post.readTime}</span>
+            <span>·</span>
+            <span>{post.date}</span>
           </div>
-          <span className="text-[#8B5CF6]/55 group-hover:text-[#8B5CF6] transition-colors duration-200">
-            <ArrowRight size={14} />
+          <span className="text-[#8B5CF6]/50 group-hover:text-[#8B5CF6] transition-colors duration-200">
+            <ArrowRight size={13} />
           </span>
         </div>
       </div>
@@ -125,7 +134,11 @@ function ArticleCard({ post, featured = false }: { post: typeof POSTS[0]; featur
 /* ─── Page ────────────────────────────────────────────────────── */
 export default function BlogPage() {
   const [activeCategory, setActiveCategory] = useState('All')
-  const [search, setSearch] = useState('')
+  const [search,         setSearch]         = useState('')
+  const [visible,        setVisible]        = useState(PAGE_SIZE)
+
+  // Reset pagination when filters change
+  useEffect(() => { setVisible(PAGE_SIZE) }, [activeCategory, search])
 
   const filteredPosts = useMemo(() => {
     const q = search.toLowerCase()
@@ -136,45 +149,78 @@ export default function BlogPage() {
     })
   }, [activeCategory, search])
 
-  const showHero  = activeCategory === 'All' && search === ''
-  const heroPost  = showHero ? POSTS[0] : null
-  const gridPosts = showHero ? filteredPosts.slice(1) : filteredPosts
-
-  const countLabel = (() => {
-    const n      = filteredPosts.length
-    const suffix = `${n} article${n !== 1 ? 's' : ''}`
-    return activeCategory !== 'All' ? `${suffix} in ${activeCategory}` : suffix
-  })()
+  const showHero   = activeCategory === 'All' && search === ''
+  const heroPost   = showHero ? POSTS[0] : null
+  const gridSource = showHero ? filteredPosts.slice(1) : filteredPosts
+  const visibleGrid = gridSource.slice(0, visible)
+  const hasMore    = visible < gridSource.length
 
   return (
     <div className="min-h-screen bg-[#0A0A0A]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-28 sm:pt-32 pb-20 sm:pb-28">
 
-        {/* ── Page Header ──────────────────────────────────────── */}
-        <div className="mb-12 sm:mb-16 max-w-2xl">
+        {/* ── Hero Section ─────────────────────────────────────── */}
+        <div className="mb-10 sm:mb-14">
           <div className="inline-flex items-center gap-2 mb-5">
             <span className="w-5 h-px bg-[#8B5CF6]" />
             <span className="text-[#8B5CF6] text-xs font-semibold tracking-[0.22em] uppercase">From the Lab</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl md:text-[56px] font-semibold text-white tracking-tight leading-[1.05] mb-4">
-            The Science<br />Behind the Stack
-          </h1>
-          <p className="text-white/50 text-base sm:text-lg leading-relaxed">
-            Evidence-based insights on mushroom adaptogens, cognitive performance, and human optimization.
-          </p>
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+            <div>
+              <h1 className="text-4xl sm:text-5xl md:text-[56px] font-semibold text-white tracking-tight leading-[1.05] mb-3">
+                Insights &amp; Knowledge
+              </h1>
+              <p className="text-white/45 text-base sm:text-lg leading-relaxed max-w-xl">
+                Science-backed deep dives on adaptogens, performance optimization, and the biology of peak human output.
+              </p>
+            </div>
+          </div>
         </div>
 
-        {/* ── Controls ─────────────────────────────────────────── */}
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-4">
+        {/* ── Featured Post Highlight ───────────────────────────── */}
+        {heroPost && (
+          <Link href={`/blog/${heroPost.slug}`}
+            className="group relative block w-full rounded-2xl overflow-hidden border border-white/[0.08] hover:border-[#8B5CF6]/40 transition-all duration-300 mb-10 sm:mb-12 hover:shadow-[0_16px_60px_rgba(139,92,246,0.12)]">
+            <div className="relative aspect-[4/3] sm:aspect-[21/8] w-full overflow-hidden">
+              <Image src={heroPost.image} alt={heroPost.title} fill priority
+                className="object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]"
+                sizes="100vw" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0A]/95 via-[#0A0A0A]/65 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#0A0A0A]/70 to-transparent" />
+            </div>
+            <div className="absolute inset-0 flex flex-col justify-end sm:justify-center p-6 sm:p-10 max-w-[580px]">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="inline-block bg-[#F97316]/15 border border-[#F97316]/35 text-[#F97316] text-[10px] font-semibold tracking-[0.18em] uppercase px-3 py-1 rounded-full">
+                  Featured
+                </span>
+                <span className="inline-block bg-[#8B5CF6]/20 border border-[#8B5CF6]/35 text-[#8B5CF6] text-[10px] font-semibold tracking-[0.16em] uppercase px-3 py-1 rounded-full">
+                  {heroPost.category}
+                </span>
+              </div>
+              <h2 className="text-white text-xl sm:text-2xl md:text-[28px] font-semibold leading-tight tracking-tight mb-3 line-clamp-2 group-hover:text-white/90 transition-colors duration-200">
+                {heroPost.title}
+              </h2>
+              <p className="text-white/50 text-sm leading-relaxed mb-5 hidden sm:line-clamp-2">{heroPost.excerpt}</p>
+              <div className="flex items-center gap-5">
+                <span className="text-white/35 text-xs">{heroPost.readTime} · {heroPost.date}</span>
+                <span className="inline-flex items-center gap-1.5 text-[#F97316] text-xs font-semibold group-hover:gap-2.5 transition-all duration-200">
+                  Read Article <ArrowRight size={11} />
+                </span>
+              </div>
+            </div>
+          </Link>
+        )}
 
-          {/* Category pills */}
-          <div className="flex flex-wrap gap-2 flex-1">
+        {/* ── Category Filter Bar ───────────────────────────────── */}
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-3">
+          {/* Scrollable chips */}
+          <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none flex-1">
             {CATEGORIES.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
                 className={[
-                  'px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200 cursor-pointer whitespace-nowrap',
+                  'px-4 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200 cursor-pointer whitespace-nowrap shrink-0',
                   activeCategory === cat
                     ? 'bg-[#8B5CF6]/15 border-[#8B5CF6]/50 text-[#8B5CF6]'
                     : 'bg-transparent border-white/[0.1] text-white/50 hover:text-white hover:border-white/20',
@@ -184,9 +230,8 @@ export default function BlogPage() {
               </button>
             ))}
           </div>
-
           {/* Search */}
-          <div className="relative w-full sm:w-[220px] shrink-0">
+          <div className="relative w-full sm:w-[210px] shrink-0">
             <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/30 pointer-events-none">
               <SearchIcon />
             </span>
@@ -200,60 +245,36 @@ export default function BlogPage() {
           </div>
         </div>
 
-        {/* Article count */}
-        <p className="text-white/35 text-xs tracking-wide mb-8 sm:mb-10">{countLabel}</p>
+        {/* Count */}
+        <p className="text-white/30 text-xs tracking-wide mb-8">
+          {filteredPosts.length} article{filteredPosts.length !== 1 ? 's' : ''}
+          {activeCategory !== 'All' && ` in ${activeCategory}`}
+        </p>
 
-        {/* ── Featured Hero Post ────────────────────────────────── */}
-        {heroPost && (
-          <Link href={`/blog/${heroPost.slug}`}
-            className="group relative block w-full rounded-2xl overflow-hidden border border-white/[0.08] hover:border-[#8B5CF6]/40 transition-all duration-300 mb-6 sm:mb-8 hover:shadow-[0_16px_60px_rgba(139,92,246,0.12)]">
-
-            <div className="relative aspect-[4/3] sm:aspect-[21/9] w-full overflow-hidden">
-              <Image src={heroPost.image} alt={heroPost.title} fill priority
-                className="object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]"
-                sizes="100vw" />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0A]/95 via-[#0A0A0A]/65 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#0A0A0A]/60 to-transparent" />
+        {/* ── Blog Grid ─────────────────────────────────────────── */}
+        {visibleGrid.length > 0 ? (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+              {visibleGrid.map((post) => (
+                <BlogCard key={post.slug} post={post} />
+              ))}
             </div>
 
-            {/* Text overlay */}
-            <div className="absolute inset-0 flex flex-col justify-end sm:justify-center p-6 sm:p-10 max-w-xl">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="inline-block bg-[#F97316]/15 border border-[#F97316]/35 text-[#F97316] text-[10px] font-semibold tracking-[0.18em] uppercase px-3 py-1 rounded-full">
-                  Featured
-                </span>
-                <span className="inline-block bg-[#8B5CF6]/20 border border-[#8B5CF6]/35 text-[#8B5CF6] text-[10px] font-semibold tracking-[0.16em] uppercase px-3 py-1 rounded-full backdrop-blur-sm">
-                  {heroPost.category}
-                </span>
+            {/* Load More */}
+            {hasMore && (
+              <div className="flex justify-center mt-10">
+                <button
+                  onClick={() => setVisible((v) => v + PAGE_SIZE)}
+                  className="inline-flex items-center gap-2 border border-white/[0.12] text-white/60 hover:text-white hover:border-white/25 text-sm font-medium px-7 py-3 rounded-xl transition-all duration-200 cursor-pointer"
+                >
+                  Load More
+                  <ArrowRight size={12} />
+                </button>
               </div>
-              <h2 className="text-white text-xl sm:text-2xl md:text-3xl font-semibold leading-tight tracking-tight mb-3 group-hover:text-white/90 transition-colors duration-200">
-                {heroPost.title}
-              </h2>
-              <p className="text-white/55 text-sm leading-relaxed mb-5 hidden sm:block">{heroPost.excerpt}</p>
-              <div className="flex items-center gap-5">
-                <div className="flex items-center gap-3 text-white/40 text-xs">
-                  <span>{heroPost.date}</span>
-                  <span>·</span>
-                  <span>{heroPost.readTime}</span>
-                </div>
-                <span className="inline-flex items-center gap-1.5 text-[#F97316] text-xs font-semibold group-hover:gap-2.5 transition-all duration-200">
-                  Read Article <ArrowRight size={11} />
-                </span>
-              </div>
-            </div>
-          </Link>
-        )}
-
-        {/* ── Article Grid ──────────────────────────────────────── */}
-        {gridPosts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
-            {gridPosts.map((post, idx) => (
-              <div key={post.slug} className={idx === 0 ? 'sm:col-span-2' : ''}>
-                <ArticleCard post={post} featured={idx === 0} />
-              </div>
-            ))}
-          </div>
+            )}
+          </>
         ) : (
+          /* Empty state */
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <div className="w-12 h-12 rounded-full bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 flex items-center justify-center mb-4 text-white/30">
               <SearchIcon />
@@ -276,13 +297,13 @@ export default function BlogPage() {
           <div className="flex-1">
             <div className="inline-flex items-center gap-2 mb-3">
               <span className="w-4 h-px bg-[#8B5CF6]" />
-              <span className="text-[#8B5CF6] text-[10px] font-semibold tracking-[0.22em] uppercase">Stay Updated</span>
+              <span className="text-[#8B5CF6] text-[10px] font-semibold tracking-[0.22em] uppercase">Newsletter</span>
             </div>
             <h3 className="text-white text-xl sm:text-2xl font-semibold tracking-tight mb-2">
-              Science in your inbox
+              Stay ahead of performance science
             </h3>
             <p className="text-white/45 text-sm leading-relaxed max-w-sm">
-              Performance insights and new product launches — no spam, ever.
+              New research, product launches, and optimization guides — straight to your inbox.
             </p>
           </div>
           <div className="w-full sm:w-72 shrink-0">
