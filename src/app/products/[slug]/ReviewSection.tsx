@@ -76,6 +76,53 @@ function RatingBar({ count, total, label }: { count: number; total: number; labe
   )
 }
 
+/* ─── Review Grid with Load More ─────────────────────────── */
+const PAGE = 3
+
+function ArrowDown() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+      fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 5v14M5 12l7 7 7-7" />
+    </svg>
+  )
+}
+
+function ReviewGrid({ reviews }: { reviews: Review[] }) {
+  const [visible, setVisible] = useState(PAGE)
+  const shown = reviews.slice(0, visible)
+  const hasMore = visible < reviews.length
+
+  return (
+    <div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {shown.map((r, i) => (
+          <div key={i} className="bg-[#111111] border border-white/[0.07] rounded-2xl p-6 flex flex-col gap-3">
+            <div className="flex items-start justify-between gap-3">
+              <Stars rating={r.rating} />
+              <span className="text-white/25 text-xs shrink-0">{r.date}</span>
+            </div>
+            {r.title && <p className="text-white font-semibold text-sm">{r.title}</p>}
+            <p className="text-white/60 text-sm leading-relaxed flex-1">"{r.quote}"</p>
+            <p className="text-white/35 text-xs font-medium border-t border-white/[0.06] pt-3">— {r.author}</p>
+          </div>
+        ))}
+      </div>
+
+      {hasMore && (
+        <div className="flex justify-center mt-6">
+          <button
+            onClick={() => setVisible((v) => v + PAGE)}
+            className="inline-flex items-center gap-2 border border-white/[0.12] text-white/55 hover:text-white hover:border-white/25 text-sm font-medium px-6 py-3 rounded-xl transition-all duration-200 cursor-pointer"
+          >
+            Read more reviews <ArrowDown />
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}
+
 /* ─── Component ───────────────────────────────────────────── */
 export default function ReviewSection({ initial }: { initial: Testimonial[] }) {
   const seeded: Review[] = initial.map((t, i) => ({
@@ -197,22 +244,8 @@ export default function ReviewSection({ initial }: { initial: Testimonial[] }) {
         </div>
       )}
 
-      {/* Review list */}
-      <div className="flex flex-col gap-4">
-        {reviews.map((r, i) => (
-          <div key={i} className="bg-[#111111] border border-white/[0.07] rounded-2xl p-6">
-            <div className="flex items-start justify-between gap-4 mb-3">
-              <div>
-                <Stars rating={r.rating} />
-                {r.title && <p className="text-white font-semibold mt-1.5">{r.title}</p>}
-              </div>
-              <span className="text-white/25 text-xs shrink-0">{r.date}</span>
-            </div>
-            <p className="text-white/60 text-sm leading-relaxed mb-3">"{r.quote}"</p>
-            <p className="text-white/35 text-xs font-medium">— {r.author}</p>
-          </div>
-        ))}
-      </div>
+      {/* Review list — 3-column grid with Load More */}
+      <ReviewGrid reviews={reviews} />
     </section>
   )
 }
