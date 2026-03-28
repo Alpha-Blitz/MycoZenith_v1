@@ -111,7 +111,6 @@ export default function ProductsSection() {
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 sm:gap-6 mb-10 sm:mb-14">
           <div>
             <div className="inline-flex items-center gap-2 mb-4">
-              <span className="w-5 h-px bg-[#8B5CF6]" />
               <span className="text-[#8B5CF6] text-xs font-semibold tracking-[0.22em] uppercase">Our Range</span>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-white tracking-tight leading-tight">

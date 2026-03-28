@@ -268,7 +268,6 @@ export default function BlogPage() {
         <div className="mt-16 sm:mt-20 bg-[#111111] border border-white/[0.08] rounded-2xl p-8 sm:p-10 flex flex-col sm:flex-row sm:items-center gap-8">
           <div className="flex-1">
             <div className="inline-flex items-center gap-2 mb-3">
-              <span className="w-4 h-px bg-[#8B5CF6]" />
               <span className="text-[#8B5CF6] text-[10px] font-semibold tracking-[0.22em] uppercase">Newsletter</span>
             </div>
             <h3 className="text-white text-xl sm:text-2xl font-semibold tracking-tight mb-2">

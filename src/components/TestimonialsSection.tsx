@@ -38,9 +38,7 @@ export default function TestimonialsSection() {
         {/* Header */}
         <div className="text-center mb-10 sm:mb-16">
           <div className="inline-flex items-center gap-2 mb-4">
-            <span className="w-5 h-px bg-[#8B5CF6]" />
             <span className="text-[#8B5CF6] text-xs font-semibold tracking-[0.22em] uppercase">Testimonials</span>
-            <span className="w-5 h-px bg-[#8B5CF6]" />
           </div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-white tracking-tight">Trusted by Performers</h2>
           <p className="text-white/58 mt-4 text-base max-w-md mx-auto leading-relaxed">

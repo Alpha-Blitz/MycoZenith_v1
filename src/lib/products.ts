@@ -28,6 +28,7 @@ export type Testimonial = {
 export type Product = {
   slug: string
   image: string
+  images: string[]
   name: string
   tag: string
   description: string
@@ -50,6 +51,7 @@ export const PRODUCTS: Product[] = [
   {
     slug:        'lions-mane',
     image:       '/lm.jpeg',
+    images:      ['/lm.jpeg', '/neuro.webp', '/fruiting.jpeg'],
     name:        "Lion's Mane",
     tag:         'Cognitive Focus',
     description: "Sharpen neural pathways and fuel deep focus. Lion's Mane stimulates NGF for long-term cognitive performance.",
@@ -100,6 +102,7 @@ export const PRODUCTS: Product[] = [
   {
     slug:        'reishi',
     image:       '/reishi.jpeg',
+    images:      ['/reishi.jpeg', '/hero.jpeg', '/lm.jpeg'],
     name:        'Reishi',
     tag:         'Stress + Immunity',
     description: 'Adaptogenic support to regulate cortisol, fortify immunity, and promote restful recovery.',
@@ -150,6 +153,7 @@ export const PRODUCTS: Product[] = [
   {
     slug:        'cordyceps',
     image:       '/cordy.jpeg',
+    images:      ['/cordy.jpeg', '/vo2.webp', '/hero1.jpeg'],
     name:        'Cordyceps',
     tag:         'Energy + Endurance',
     description: 'Unlock cellular energy at the mitochondrial level. Clinically studied for VO₂ max and sustained output.',

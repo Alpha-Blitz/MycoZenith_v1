@@ -42,7 +42,6 @@ export default function OurStorySection() {
           {/* Left */}
           <div>
             <div className="inline-flex items-center gap-2 mb-6">
-              <span className="w-5 h-px bg-[#8B5CF6]" />
               <span className="text-[#8B5CF6] text-xs font-semibold tracking-[0.22em] uppercase">Our Story</span>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-white tracking-tight leading-tight mb-6">

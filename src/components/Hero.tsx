@@ -36,7 +36,6 @@ export default function Hero() {
 
           {/* Eyebrow */}
           <div className="inline-flex items-center gap-2 mb-8">
-            <span className="w-5 h-px bg-[#8B5CF6]" />
             <span className="text-[#8B5CF6] text-xs font-semibold tracking-[0.22em] uppercase">
               Cordyceps Performance Complex
             </span>

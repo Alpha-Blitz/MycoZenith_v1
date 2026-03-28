@@ -5,6 +5,7 @@ import { PRODUCTS } from '@/lib/products'
 import NewsletterForm from '@/components/NewsletterForm'
 import ProductActions from './ProductActions'
 import FAQAccordion from './FAQAccordion'
+import ImageCarousel from './ImageCarousel'
 
 export function generateStaticParams() {
   return PRODUCTS.map((p) => ({ slug: p.slug }))
@@ -103,28 +104,18 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         {/* ── Breadcrumb ─────────────────────────────────────────── */}
         <nav className="flex items-center gap-2 text-sm text-white/35 mb-10">
           <Link href="/" className="hover:text-white/70 transition-colors duration-200">Shop</Link>
-          <span className="text-white/20">›</span>
+          <span className="text-white/40 text-base">›</span>
           <Link href="/products" className="hover:text-white/70 transition-colors duration-200">Products</Link>
-          <span className="text-white/20">›</span>
+          <span className="text-white/40 text-base">›</span>
           <span className="text-white/60">{product.name}</span>
         </nav>
 
         {/* ── Hero ───────────────────────────────────────────────── */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 mb-12 sm:mb-16">
 
-          {/* Image */}
+          {/* Image carousel */}
           <div className="lg:col-span-5">
-            <div className="group relative aspect-[3/4] rounded-2xl overflow-hidden border border-white/[0.08]">
-              <Image src={product.image} alt={product.name} fill priority
-                className="object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]"
-                sizes="(max-width: 1024px) 100vw, 42vw" />
-              <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/40 to-transparent" />
-              <div className="absolute top-5 left-5">
-                <span className="inline-block bg-white/12 border border-white/20 text-white text-[10px] font-semibold tracking-[0.16em] uppercase px-3 py-1 rounded-full backdrop-blur-sm">
-                  {product.tag}
-                </span>
-              </div>
-            </div>
+            <ImageCarousel images={product.images} name={product.name} tag={product.tag} />
           </div>
 
           {/* Info */}
@@ -189,7 +180,6 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         <section className="mb-14 sm:mb-16 grid grid-cols-1 lg:grid-cols-12 gap-10">
           <div className="lg:col-span-5">
             <div className="inline-flex items-center gap-2 mb-3">
-              <span className="w-5 h-px bg-[#8B5CF6]" />
               <span className="text-[#8B5CF6] text-xs font-semibold tracking-[0.22em] uppercase">Overview</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-semibold text-white tracking-tight mb-3">Product Description</h2>
@@ -226,7 +216,6 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         {/* ── Key Benefits ───────────────────────────────────────── */}
         <section className="mb-14 sm:mb-16">
           <div className="inline-flex items-center gap-2 mb-3">
-            <span className="w-5 h-px bg-[#8B5CF6]" />
             <span className="text-[#8B5CF6] text-xs font-semibold tracking-[0.22em] uppercase">Science-backed</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-semibold text-white tracking-tight mb-8">What it does</h2>
@@ -249,7 +238,6 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         {/* ── Why MycoZenith? ────────────────────────────────────── */}
         <section className="mb-14 sm:mb-16 bg-[#111111] border border-white/[0.08] rounded-2xl p-8 sm:p-10">
           <div className="inline-flex items-center gap-2 mb-3">
-            <span className="w-5 h-px bg-[#8B5CF6]" />
             <span className="text-[#8B5CF6] text-xs font-semibold tracking-[0.22em] uppercase">Customer Stories</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-semibold text-white tracking-tight mb-2">Why MycoZenith?</h2>
@@ -272,7 +260,6 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         <section className="mb-14 sm:mb-16 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
           <div className="lg:col-span-4">
             <div className="inline-flex items-center gap-2 mb-3">
-              <span className="w-5 h-px bg-[#8B5CF6]" />
               <span className="text-[#8B5CF6] text-xs font-semibold tracking-[0.22em] uppercase">Protocol</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-semibold text-white tracking-tight mb-3">How to Use</h2>
@@ -299,7 +286,6 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         {/* ── FAQs ───────────────────────────────────────────────── */}
         <section className="mb-14 sm:mb-16">
           <div className="inline-flex items-center gap-2 mb-3">
-            <span className="w-5 h-px bg-[#8B5CF6]" />
             <span className="text-[#8B5CF6] text-xs font-semibold tracking-[0.22em] uppercase">FAQs</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-semibold text-white tracking-tight mb-8">Common Questions</h2>
@@ -309,7 +295,6 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         {/* ── Related Products ───────────────────────────────────── */}
         <section className="mb-14 sm:mb-16">
           <div className="inline-flex items-center gap-2 mb-3">
-            <span className="w-5 h-px bg-[#8B5CF6]" />
             <span className="text-[#8B5CF6] text-xs font-semibold tracking-[0.22em] uppercase">The Stack</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-semibold text-white tracking-tight mb-8">Also in the stack</h2>
@@ -325,7 +310,6 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         <div className="bg-[#111111] border border-white/[0.08] rounded-2xl p-8 sm:p-10 flex flex-col sm:flex-row sm:items-center gap-8">
           <div className="flex-1">
             <div className="inline-flex items-center gap-2 mb-3">
-              <span className="w-4 h-px bg-[#8B5CF6]" />
               <span className="text-[#8B5CF6] text-[10px] font-semibold tracking-[0.22em] uppercase">Newsletter</span>
             </div>
             <h3 className="text-white text-xl sm:text-2xl font-semibold tracking-tight mb-2">
