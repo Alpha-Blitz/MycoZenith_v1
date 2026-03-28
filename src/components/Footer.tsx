@@ -128,7 +128,7 @@ export default function Footer() {
         <div className="mt-16 pt-8 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-6">
             <p className="text-white/30 text-xs">© {year} MycoZenith. All rights reserved.</p>
-            <p className="text-white/40 text-xs">GSTIN: 29BHJPH3246Q1ZU</p>
+            <p className="text-white/30 text-xs">GSTIN: 29BHJPH3246Q1ZU</p>
           </div>
           <div className="flex flex-wrap gap-6 justify-center">
             {LEGAL.map((item) => (

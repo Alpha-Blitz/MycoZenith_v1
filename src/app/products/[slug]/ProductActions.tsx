@@ -14,6 +14,25 @@ function CartIcon() {
   )
 }
 
+function ArrowRight() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+      fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M5 12h14M12 5l7 7-7 7" />
+    </svg>
+  )
+}
+
+function RefreshIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
+      fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M23 4v6h-6" /><path d="M1 20v-6h6" />
+      <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+    </svg>
+  )
+}
+
 function LockIcon() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
@@ -62,10 +81,10 @@ export default function ProductActions() {
         onClick={handleAddToCart}
         className="w-full flex items-center justify-center gap-2 bg-[#F97316] hover:bg-[#EA580C] text-white text-sm font-bold px-6 py-4 rounded-xl transition-all duration-200 hover:scale-[1.01] cursor-pointer tracking-wide"
       >
-        BUY NOW
+        BUY NOW <ArrowRight />
       </button>
 
-      {/* Row 2: Add to Cart + secondary Buy Now */}
+      {/* Row 2: Add to Cart + Subscribe & Save */}
       <div className="grid grid-cols-2 gap-3">
         <button
           onClick={handleAddToCart}
@@ -79,10 +98,12 @@ export default function ProductActions() {
           <CartIcon />
           {added ? 'Added!' : 'Add to Cart'}
         </button>
-        <Link href="/products"
-          className="inline-flex items-center justify-center gap-1.5 border border-[#F97316]/50 text-[#F97316] hover:bg-[#F97316]/10 text-sm font-semibold px-4 py-3.5 rounded-xl transition-all duration-200 cursor-pointer">
-          Back to Shop
-        </Link>
+        <button
+          onClick={handleAddToCart}
+          className="inline-flex items-center justify-center gap-1.5 border border-[#8B5CF6]/50 text-[#8B5CF6] hover:bg-[#8B5CF6]/10 text-sm font-semibold px-4 py-3.5 rounded-xl transition-all duration-200 cursor-pointer">
+          <RefreshIcon />
+          Subscribe &amp; Save
+        </button>
       </div>
 
       {/* Secure checkout note */}
