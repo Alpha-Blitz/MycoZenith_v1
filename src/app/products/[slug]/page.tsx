@@ -103,11 +103,11 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-24 sm:pt-28 pb-20 sm:pb-28">
 
         {/* ── Breadcrumb ─────────────────────────────────────────── */}
-        <nav className="flex items-center gap-2 text-sm text-white/35 mb-10">
-          <Link href="/" className="hover:text-white/70 transition-colors duration-200">Shop</Link>
-          <span className="text-white/40 text-base">›</span>
-          <Link href="/products" className="hover:text-white/70 transition-colors duration-200">Products</Link>
-          <span className="text-[#F97316] text-base">›</span>
+        <nav className="flex items-center gap-2 text-sm text-[#8B5CF6]/60 mb-10">
+          <Link href="/" className="hover:text-[#8B5CF6] transition-colors duration-200">Shop</Link>
+          <span className="text-[#8B5CF6]/35 text-base">›</span>
+          <Link href="/products" className="hover:text-[#8B5CF6] transition-colors duration-200">Products</Link>
+          <span className="text-[#F97316]/60 text-base">›</span>
           <span className="text-[#F97316]">{product.name}</span>
         </nav>
 
@@ -305,7 +305,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           </div>
           <h2 className="text-2xl sm:text-3xl font-semibold text-white tracking-tight mb-8">Also in the stack</h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-xl">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {related.map((r) => (
               <RelatedCard key={r.slug} slug={r.slug} image={r.image} name={r.name} tag={r.tag} price={r.price} />
             ))}

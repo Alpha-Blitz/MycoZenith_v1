@@ -52,7 +52,7 @@ export default function BlogsSection() {
               <span className="text-[#8B5CF6] text-xs font-semibold tracking-[0.22em] uppercase">From the Lab</span>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-white tracking-tight leading-tight">
-              The Science<br />Behind the Stack
+              Insights and<br />Knowledge
             </h2>
           </div>
           <Link href="/blog"

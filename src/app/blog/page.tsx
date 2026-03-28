@@ -4,64 +4,7 @@ import { useState, useMemo, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import NewsletterForm from '@/components/NewsletterForm'
-
-/* ─── Data ────────────────────────────────────────────────────── */
-const POSTS = [
-  {
-    slug:     'cordyceps-vo2-max',
-    image:    '/vo2.webp',
-    category: 'Performance',
-    title:    'How Cordyceps Militaris Increases VO₂ Max and Aerobic Capacity',
-    excerpt:  'A deep dive into the adenosine mechanisms that make cordyceps one of the most studied ergogenic fungi in sport science.',
-    date:     'Mar 18, 2026',
-    readTime: '7 min read',
-  },
-  {
-    slug:     'lions-mane-ngf',
-    image:    '/neuro.webp',
-    category: 'Science',
-    title:    "Lion's Mane and NGF: The Neurotrophic Case for Daily Supplementation",
-    excerpt:  "Nerve Growth Factor stimulation isn't just for recovery — it's the foundation of long-term cognitive resilience.",
-    date:     'Mar 10, 2026',
-    readTime: '5 min read',
-  },
-  {
-    slug:     'mushroom-extraction',
-    image:    '/fruiting.jpeg',
-    category: 'Guides',
-    title:    'Fruiting Body vs. Mycelium: Why Extraction Method Defines Potency',
-    excerpt:  "Most mushroom supplements are mycelium-on-grain with negligible beta-glucan content. Here's how to read a supplement panel.",
-    date:     'Feb 28, 2026',
-    readTime: '6 min read',
-  },
-  {
-    slug:     'reishi-cortisol',
-    image:    '/reishi.jpeg',
-    category: 'Science',
-    title:    'Reishi and the HPA Axis: A Clinical Look at Cortisol Modulation',
-    excerpt:  'Chronic stress dysregulates the hypothalamic–pituitary–adrenal axis. Reishi triterpenes offer a targeted, adaptogenic response.',
-    date:     'Feb 14, 2026',
-    readTime: '8 min read',
-  },
-  {
-    slug:     'lions-mane-sleep',
-    image:    '/lm.jpeg',
-    category: 'Performance',
-    title:    "Sleep Architecture and Neurogenesis: The Overnight Role of Lion's Mane",
-    excerpt:  'Deep sleep is when the brain consolidates memory and clears metabolic waste. NGF support during this window may amplify the gains.',
-    date:     'Jan 30, 2026',
-    readTime: '6 min read',
-  },
-  {
-    slug:     'cordyceps-atp',
-    image:    '/cordy.jpeg',
-    category: 'Science',
-    title:    'ATP Synthesis and Cordyceps: The Mitochondrial Connection',
-    excerpt:  "Cordyceps sinensis increases cellular ATP production by upregulating key enzymes in the electron transport chain — here's the mechanism.",
-    date:     'Jan 12, 2026',
-    readTime: '9 min read',
-  },
-]
+import { POSTS } from '@/lib/blog'
 
 const CATEGORIES = ['All', 'Performance', 'Science', 'Guides', 'Lifestyle', 'Updates']
 const PAGE_SIZE   = 3

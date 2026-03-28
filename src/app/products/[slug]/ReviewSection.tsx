@@ -79,19 +79,20 @@ function RatingBar({ count, total, label }: { count: number; total: number; labe
 /* ─── Review Grid with Load More ─────────────────────────── */
 const PAGE = 3
 
-function ArrowDown() {
+function ArrowRight() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
       fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 5v14M5 12l7 7 7-7" />
+      <path d="M5 12h14M12 5l7 7-7 7" />
     </svg>
   )
 }
 
 function ReviewGrid({ reviews }: { reviews: Review[] }) {
-  const [visible, setVisible] = useState(PAGE)
-  const shown = reviews.slice(0, visible)
-  const hasMore = visible < reviews.length
+  const [page, setPage] = useState(0)
+  const totalPages = Math.ceil(reviews.length / PAGE)
+  const shown = reviews.slice(page * PAGE, (page + 1) * PAGE)
+  const hasMore = page < totalPages - 1
 
   return (
     <div>
@@ -112,10 +113,10 @@ function ReviewGrid({ reviews }: { reviews: Review[] }) {
       {hasMore && (
         <div className="flex justify-center mt-6">
           <button
-            onClick={() => setVisible((v) => v + PAGE)}
+            onClick={() => setPage((p) => p + 1)}
             className="inline-flex items-center gap-2 border border-white/[0.12] text-white/55 hover:text-white hover:border-white/25 text-sm font-medium px-6 py-3 rounded-xl transition-all duration-200 cursor-pointer"
           >
-            Read more reviews <ArrowDown />
+            Read more reviews <ArrowRight />
           </button>
         </div>
       )}
