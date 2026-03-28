@@ -106,7 +106,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           <Link href="/" className="hover:text-white/70 transition-colors duration-200">Shop</Link>
           <span className="text-white/40 text-base">›</span>
           <Link href="/products" className="hover:text-white/70 transition-colors duration-200">Products</Link>
-          <span className="text-white/40 text-base">›</span>
+          <span className="text-[#F97316] text-base">›</span>
           <span className="text-[#F97316]">{product.name}</span>
         </nav>
 

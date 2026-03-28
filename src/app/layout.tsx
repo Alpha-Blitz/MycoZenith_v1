@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { AuthProvider } from '@/context/AuthContext'
 import AuthModal from '@/components/AuthModal'
+import FirstVisitPopup from '@/components/FirstVisitPopup'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -36,6 +37,7 @@ export default function RootLayout({
           <AuthModal />
           <main className="flex-1">{children}</main>
           <Footer />
+          <FirstVisitPopup />
         </AuthProvider>
       </body>
     </html>

@@ -30,7 +30,7 @@ export default function FAQAccordion({ faqs }: { faqs: FAQ[] }) {
             </span>
           </button>
           {openIdx === i && (
-            <div className="px-6 pb-5">
+            <div className="px-6 pt-2 pb-5">
               <p className="text-white/55 text-sm leading-relaxed">{faq.a}</p>
             </div>
           )}

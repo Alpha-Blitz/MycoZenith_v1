@@ -31,15 +31,15 @@ export default function ImageCarousel({ images, name, tag }: { images: string[];
     <div className="flex flex-col gap-3">
 
       {/* Main image */}
-      <div className="group relative aspect-[3/4] rounded-2xl overflow-hidden border border-white/[0.08]">
+      <div className="group relative h-[460px] sm:h-[520px] rounded-2xl overflow-hidden border border-white/[0.08] bg-[#0D0D0D]">
         <Image
           key={active}
           src={images[active]}
           alt={`${name} — view ${active + 1}`}
           fill
           priority={active === 0}
-          className="object-cover object-center transition-opacity duration-300"
-          sizes="(max-width: 1024px) 100vw, 42vw"
+          className="object-contain object-center transition-opacity duration-300"
+          sizes="(max-width: 1024px) 100vw, 50vw"
         />
         <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/40 to-transparent" />
 
