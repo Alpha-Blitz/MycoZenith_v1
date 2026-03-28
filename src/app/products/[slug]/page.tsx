@@ -6,6 +6,7 @@ import NewsletterForm from '@/components/NewsletterForm'
 import ProductActions from './ProductActions'
 import FAQAccordion from './FAQAccordion'
 import ImageCarousel from './ImageCarousel'
+import ReviewSection from './ReviewSection'
 
 export function generateStaticParams() {
   return PRODUCTS.map((p) => ({ slug: p.slug }))
@@ -290,6 +291,11 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           </div>
           <h2 className="text-2xl sm:text-3xl font-semibold text-white tracking-tight mb-8">Common Questions</h2>
           <FAQAccordion faqs={product.faq} />
+        </section>
+
+        {/* ── Customer Reviews ───────────────────────────────────── */}
+        <section className="mb-14 sm:mb-16">
+          <ReviewSection initial={product.testimonials} />
         </section>
 
         {/* ── Related Products ───────────────────────────────────── */}

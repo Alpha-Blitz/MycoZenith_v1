@@ -85,7 +85,7 @@ export default function ImageCarousel({ images, name, tag }: { images: string[];
               onClick={() => setActive(i)}
               aria-label={`View image ${i + 1}`}
               className={[
-                'relative aspect-square flex-1 overflow-hidden transition-all duration-200 cursor-pointer',
+                'relative flex-1 h-[52px] overflow-hidden transition-all duration-200 cursor-pointer',
                 active === i
                   ? 'opacity-100 ring-1 ring-inset ring-[#8B5CF6]'
                   : 'opacity-45 hover:opacity-70',

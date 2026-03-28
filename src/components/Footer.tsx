@@ -47,7 +47,11 @@ const RESOURCES = [
   { label: 'Sustainability',     href: '#' },
 ]
 
-const LEGAL = ['Privacy Policy', 'Terms of Service', 'Cookie Policy']
+const LEGAL = [
+  { label: 'Privacy Policy',   href: '/privacy' },
+  { label: 'Terms of Service', href: '/terms'   },
+  { label: 'Cookie Policy',    href: '/cookies' },
+]
 
 export default function Footer() {
   const year = new Date().getFullYear()
@@ -131,8 +135,8 @@ export default function Footer() {
             <p className="text-white/30 text-xs">GSTIN: 29BHJPH3246Q1ZU</p>
           </div>
           <div className="flex flex-wrap gap-6 justify-center">
-            {LEGAL.map((item) => (
-              <Link key={item} href="#" className="text-white/30 hover:text-white/60 text-xs transition-colors duration-200">{item}</Link>
+            {LEGAL.map(({ label, href }) => (
+              <Link key={label} href={href} className="text-white/30 hover:text-white/60 text-xs transition-colors duration-200">{label}</Link>
             ))}
           </div>
         </div>
