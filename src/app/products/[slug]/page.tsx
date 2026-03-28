@@ -107,19 +107,19 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           <span className="text-white/40 text-base">›</span>
           <Link href="/products" className="hover:text-white/70 transition-colors duration-200">Products</Link>
           <span className="text-white/40 text-base">›</span>
-          <span className="text-white/60">{product.name}</span>
+          <span className="text-[#F97316]">{product.name}</span>
         </nav>
 
         {/* ── Hero ───────────────────────────────────────────────── */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 mb-12 sm:mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 mb-12 sm:mb-16">
 
           {/* Image carousel */}
-          <div className="lg:col-span-5">
+          <div>
             <ImageCarousel images={product.images} name={product.name} tag={product.tag} />
           </div>
 
           {/* Info */}
-          <div className="lg:col-span-7 flex flex-col gap-5 lg:pt-2">
+          <div className="flex flex-col gap-5 lg:pt-2">
 
             {/* Name */}
             <div>

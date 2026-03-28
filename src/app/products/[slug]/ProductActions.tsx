@@ -100,7 +100,7 @@ export default function ProductActions() {
         </button>
         <button
           onClick={handleAddToCart}
-          className="inline-flex items-center justify-center gap-1.5 border border-[#8B5CF6]/50 text-[#8B5CF6] hover:bg-[#8B5CF6]/10 text-sm font-semibold px-4 py-3.5 rounded-xl transition-all duration-200 cursor-pointer">
+          className="inline-flex items-center justify-center gap-1.5 border border-[#F97316]/50 text-[#F97316] hover:bg-[#F97316]/10 text-sm font-semibold px-4 py-3.5 rounded-xl transition-all duration-200 cursor-pointer">
           <RefreshIcon />
           Subscribe &amp; Save
         </button>
