@@ -100,7 +100,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
   return (
     <div className="min-h-screen bg-[#171717]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-24 sm:pt-28 pb-20 sm:pb-28">
+      <div className="max-w-7xl mx-auto px-6 sm:px-10 pt-24 sm:pt-28 pb-20 sm:pb-28">
 
         {/* ── Breadcrumb ─────────────────────────────────────────── */}
         <nav className="flex items-center gap-2 text-sm text-[#8B5CF6]/60 mb-10">

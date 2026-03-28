@@ -98,7 +98,15 @@ export default function BlogPage() {
     <div className="min-h-screen bg-[#171717]">
 
       {/* ── Content ───────────────────────────────────────────────── */}
-      <div id="articles" className="max-w-7xl mx-auto px-4 sm:px-6 pt-24 sm:pt-28 pb-20 sm:pb-28">
+      <div id="articles" className="max-w-7xl mx-auto px-6 sm:px-10 pt-24 sm:pt-28 pb-20 sm:pb-28">
+
+        {/* ── Page Title ────────────────────────────────────────── */}
+        <div className="mb-10 sm:mb-12">
+          <p className="text-[#8B5CF6] text-[11px] font-semibold tracking-[0.22em] uppercase mb-3">Journal</p>
+          <h1 className="text-white text-4xl sm:text-5xl font-semibold tracking-tight">
+            Insights and Knowledge
+          </h1>
+        </div>
 
         {/* ── Featured Post Highlight ───────────────────────────── */}
         {featuredPost && (

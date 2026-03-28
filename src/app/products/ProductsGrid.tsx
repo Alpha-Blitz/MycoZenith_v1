@@ -91,7 +91,7 @@ function SortDropdown({ value, onChange }: { value: SortKey; onChange: (v: SortK
       </button>
 
       {open && (
-        <div className="absolute left-0 top-full mt-1.5 min-w-[11rem] w-max bg-[#111111] border border-white/[0.1] rounded-xl overflow-hidden z-50 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+        <div className="absolute right-0 top-full mt-1.5 min-w-[11rem] w-max bg-[#111111] border border-white/[0.1] rounded-xl overflow-hidden z-50 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
           {SORTS.map((s) => (
             <button
               key={s.value}

@@ -85,14 +85,14 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <div className="max-w-7xl mx-auto px-6 sm:px-10">
 
         {/* ── Mission ────────────────────────────────────────────── */}
         <section className="py-20 sm:py-28 border-b border-white/[0.06]">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
             <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-white/[0.08]">
-              <Image src="/hero1.jpeg" alt="Cordyceps mushroom" fill
+              <Image src="/neuro.webp" alt="Cordyceps mushroom" fill
                 className="object-cover object-center" sizes="(max-width: 1024px) 100vw, 50vw" />
               <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A]/60 to-transparent" />
             </div>
@@ -172,20 +172,27 @@ export default function AboutPage() {
 
         {/* ── Philosophy ─────────────────────────────────────────── */}
         <section className="py-20 sm:py-28 border-b border-white/[0.06]">
-          <div className="max-w-3xl">
-            <span className="text-[#8B5CF6] text-xs font-semibold tracking-[0.22em] uppercase">Philosophy</span>
-            <h2 className="text-3xl sm:text-4xl font-semibold text-white tracking-tight mt-3 mb-6">
-              The supplement industry has a transparency problem.
-            </h2>
-            <p className="text-white/60 text-base leading-relaxed mb-5">
-              Most brands race to the bottom on cost, using mycelium grown on grain — a product that is majority starch, with negligible beta-glucan content. They rely on consumers not knowing the difference. We think that's wrong.
-            </p>
-            <p className="text-white/60 text-base leading-relaxed mb-5">
-              At MycoZenith, every capsule contains exclusively fruiting body extract, independently verified for beta-glucan percentage. When we say ≥30% beta-glucans, we mean a third-party lab confirmed it — not a sales team estimated it.
-            </p>
-            <p className="text-white/50 text-base leading-relaxed">
-              We publish Certificates of Analysis. We use real extract ratios (8:1, 10:1, 15:1) that reflect actual concentration. We dose at levels the clinical literature supports. That is not a marketing differentiator — it is the baseline we hold ourselves to.
-            </p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            <div>
+              <span className="text-[#8B5CF6] text-xs font-semibold tracking-[0.22em] uppercase">Philosophy</span>
+              <h2 className="text-3xl sm:text-4xl font-semibold text-white tracking-tight mt-3 mb-6">
+                The supplement industry has a transparency problem.
+              </h2>
+              <p className="text-white/60 text-base leading-relaxed mb-5">
+                Most brands race to the bottom on cost, using mycelium grown on grain — a product that is majority starch, with negligible beta-glucan content. They rely on consumers not knowing the difference. We think that's wrong.
+              </p>
+              <p className="text-white/60 text-base leading-relaxed mb-5">
+                At MycoZenith, every capsule contains exclusively fruiting body extract, independently verified for beta-glucan percentage. When we say ≥30% beta-glucans, we mean a third-party lab confirmed it — not a sales team estimated it.
+              </p>
+              <p className="text-white/50 text-base leading-relaxed">
+                We publish Certificates of Analysis. We use real extract ratios (8:1, 10:1, 15:1) that reflect actual concentration. We dose at levels the clinical literature supports. That is not a marketing differentiator — it is the baseline we hold ourselves to.
+              </p>
+            </div>
+            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-white/[0.08]">
+              <Image src="/fruiting.jpeg" alt="Mushroom fruiting body" fill
+                className="object-cover object-center" sizes="(max-width: 1024px) 100vw, 50vw" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A]/50 to-transparent" />
+            </div>
           </div>
         </section>
 
