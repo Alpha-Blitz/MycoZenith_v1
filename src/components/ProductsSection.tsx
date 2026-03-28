@@ -130,7 +130,7 @@ function ProductCard({ slug, image, name, tag, description, price }: typeof PROD
 
 export default function ProductsSection() {
   return (
-    <section className="bg-[#0F0F0F] pt-20 sm:pt-28 pb-12 sm:pb-16 px-4 sm:px-6">
+    <section className="bg-[#171717] pt-20 sm:pt-28 pb-12 sm:pb-16 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
 
         {/* Header */}

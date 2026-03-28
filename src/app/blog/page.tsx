@@ -89,17 +89,17 @@ function SearchIcon() {
 function BlogCard({ post }: { post: typeof POSTS[0] }) {
   return (
     <Link href={`/blog/${post.slug}`}
-      className="group flex flex-col rounded-2xl overflow-hidden border border-white/[0.08] hover:border-[#8B5CF6]/40 transition-all duration-300 bg-[#161616] hover:shadow-[0_8px_40px_rgba(139,92,246,0.10)] h-full">
+      className="group flex flex-col rounded-2xl overflow-hidden border border-white/[0.08] hover:border-[#8B5CF6]/40 transition-all duration-300 bg-[#111111] hover:shadow-[0_8px_40px_rgba(139,92,246,0.10)] h-full">
 
       {/* Thumbnail — fixed 16:9 */}
       <div className="relative aspect-[16/9] overflow-hidden shrink-0">
         <Image src={post.image} alt={post.title} fill
           className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#161616]/50 to-transparent" />
-        {/* Category tag */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#111111]/50 to-transparent" />
+        {/* Category tag — white */}
         <div className="absolute top-3 left-4">
-          <span className="inline-block bg-[#8B5CF6]/20 border border-[#8B5CF6]/35 text-[#8B5CF6] text-[10px] font-semibold tracking-[0.16em] uppercase px-2.5 py-1 rounded-full backdrop-blur-sm">
+          <span className="inline-block bg-white/10 border border-white/20 text-white text-[10px] font-semibold tracking-[0.16em] uppercase px-2.5 py-1 rounded-full backdrop-blur-sm">
             {post.category}
           </span>
         </div>
@@ -107,15 +107,12 @@ function BlogCard({ post }: { post: typeof POSTS[0] }) {
 
       {/* Body */}
       <div className="flex flex-col gap-3 p-5 flex-1">
-        {/* Title — clamp 2 lines */}
         <h3 className="text-white text-base font-semibold leading-snug line-clamp-2 group-hover:text-white/85 transition-colors duration-200">
           {post.title}
         </h3>
-        {/* Excerpt — clamp 3 lines */}
         <p className="text-white/50 text-sm leading-relaxed line-clamp-3 flex-1">
           {post.excerpt}
         </p>
-        {/* Footer */}
         <div className="flex items-center justify-between pt-3 border-t border-white/[0.07] mt-auto">
           <div className="flex items-center gap-2 text-white/35 text-xs">
             <span>{post.readTime}</span>
@@ -137,7 +134,6 @@ export default function BlogPage() {
   const [search,         setSearch]         = useState('')
   const [visible,        setVisible]        = useState(PAGE_SIZE)
 
-  // Reset pagination when filters change
   useEffect(() => { setVisible(PAGE_SIZE) }, [activeCategory, search])
 
   const filteredPosts = useMemo(() => {
@@ -149,40 +145,54 @@ export default function BlogPage() {
     })
   }, [activeCategory, search])
 
-  const showHero   = activeCategory === 'All' && search === ''
-  const heroPost   = showHero ? POSTS[0] : null
-  const gridSource = showHero ? filteredPosts.slice(1) : filteredPosts
-  const visibleGrid = gridSource.slice(0, visible)
-  const hasMore    = visible < gridSource.length
+  const showFeatured = activeCategory === 'All' && search === ''
+  const featuredPost = showFeatured ? POSTS[0] : null
+  // Featured post also appears in the grid — no slice
+  const visibleGrid  = filteredPosts.slice(0, visible)
+  const hasMore      = visible < filteredPosts.length
 
   return (
     <div className="min-h-screen bg-[#0A0A0A]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-28 sm:pt-32 pb-20 sm:pb-28">
 
-        {/* ── Hero Section ─────────────────────────────────────── */}
-        <div className="mb-10 sm:mb-14">
+      {/* ── Full-Width Hero ───────────────────────────────────────── */}
+      <div className="relative h-[58vh] sm:h-[65vh] overflow-hidden flex items-center">
+        <Image src="/neuro.webp" alt="Blog hero" fill priority
+          className="object-cover object-center scale-105"
+          sizes="100vw" />
+        {/* Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0A]/95 via-[#0A0A0A]/75 to-[#0A0A0A]/20" />
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#0A0A0A] to-transparent" />
+        <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#0A0A0A] to-transparent" />
+
+        {/* Hero content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full">
           <div className="inline-flex items-center gap-2 mb-5">
             <span className="w-5 h-px bg-[#8B5CF6]" />
             <span className="text-[#8B5CF6] text-xs font-semibold tracking-[0.22em] uppercase">From the Lab</span>
           </div>
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-            <div>
-              <h1 className="text-4xl sm:text-5xl md:text-[56px] font-semibold text-white tracking-tight leading-[1.05] mb-3">
-                Insights &amp; Knowledge
-              </h1>
-              <p className="text-white/45 text-base sm:text-lg leading-relaxed max-w-xl">
-                Science-backed deep dives on adaptogens, performance optimization, and the biology of peak human output.
-              </p>
-            </div>
-          </div>
+          <h1 className="text-4xl sm:text-5xl md:text-[60px] font-semibold text-white tracking-tight leading-[1.04] mb-4">
+            Insights &amp; Knowledge
+          </h1>
+          <p className="text-white/55 text-base sm:text-lg leading-relaxed max-w-lg mb-8">
+            Science-backed deep dives on adaptogens, performance optimization, and the biology of peak human output.
+          </p>
+          <a href="#articles"
+            className="inline-flex items-center gap-2 bg-[#F97316] hover:bg-[#EA580C] text-white text-sm font-semibold px-7 py-3.5 rounded-xl transition-all duration-200 hover:scale-[1.03]">
+            Explore Articles
+            <ArrowRight size={13} />
+          </a>
         </div>
+      </div>
+
+      {/* ── Content ───────────────────────────────────────────────── */}
+      <div id="articles" className="max-w-7xl mx-auto px-4 sm:px-6 pt-14 sm:pt-16 pb-20 sm:pb-28">
 
         {/* ── Featured Post Highlight ───────────────────────────── */}
-        {heroPost && (
-          <Link href={`/blog/${heroPost.slug}`}
+        {featuredPost && (
+          <Link href={`/blog/${featuredPost.slug}`}
             className="group relative block w-full rounded-2xl overflow-hidden border border-white/[0.08] hover:border-[#8B5CF6]/40 transition-all duration-300 mb-10 sm:mb-12 hover:shadow-[0_16px_60px_rgba(139,92,246,0.12)]">
             <div className="relative aspect-[4/3] sm:aspect-[21/8] w-full overflow-hidden">
-              <Image src={heroPost.image} alt={heroPost.title} fill priority
+              <Image src={featuredPost.image} alt={featuredPost.title} fill
                 className="object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]"
                 sizes="100vw" />
               <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0A]/95 via-[#0A0A0A]/65 to-transparent" />
@@ -193,16 +203,16 @@ export default function BlogPage() {
                 <span className="inline-block bg-[#F97316]/15 border border-[#F97316]/35 text-[#F97316] text-[10px] font-semibold tracking-[0.18em] uppercase px-3 py-1 rounded-full">
                   Featured
                 </span>
-                <span className="inline-block bg-[#8B5CF6]/20 border border-[#8B5CF6]/35 text-[#8B5CF6] text-[10px] font-semibold tracking-[0.16em] uppercase px-3 py-1 rounded-full">
-                  {heroPost.category}
+                <span className="inline-block bg-white/10 border border-white/20 text-white text-[10px] font-semibold tracking-[0.16em] uppercase px-3 py-1 rounded-full">
+                  {featuredPost.category}
                 </span>
               </div>
               <h2 className="text-white text-xl sm:text-2xl md:text-[28px] font-semibold leading-tight tracking-tight mb-3 line-clamp-2 group-hover:text-white/90 transition-colors duration-200">
-                {heroPost.title}
+                {featuredPost.title}
               </h2>
-              <p className="text-white/50 text-sm leading-relaxed mb-5 hidden sm:line-clamp-2">{heroPost.excerpt}</p>
+              <p className="text-white/50 text-sm leading-relaxed mb-5 hidden sm:line-clamp-2">{featuredPost.excerpt}</p>
               <div className="flex items-center gap-5">
-                <span className="text-white/35 text-xs">{heroPost.readTime} · {heroPost.date}</span>
+                <span className="text-white/35 text-xs">{featuredPost.readTime} · {featuredPost.date}</span>
                 <span className="inline-flex items-center gap-1.5 text-[#F97316] text-xs font-semibold group-hover:gap-2.5 transition-all duration-200">
                   Read Article <ArrowRight size={11} />
                 </span>
@@ -213,7 +223,6 @@ export default function BlogPage() {
 
         {/* ── Category Filter Bar ───────────────────────────────── */}
         <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-3">
-          {/* Scrollable chips */}
           <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none flex-1">
             {CATEGORIES.map((cat) => (
               <button
@@ -230,7 +239,6 @@ export default function BlogPage() {
               </button>
             ))}
           </div>
-          {/* Search */}
           <div className="relative w-full sm:w-[210px] shrink-0">
             <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/30 pointer-events-none">
               <SearchIcon />
@@ -245,7 +253,6 @@ export default function BlogPage() {
           </div>
         </div>
 
-        {/* Count */}
         <p className="text-white/30 text-xs tracking-wide mb-8">
           {filteredPosts.length} article{filteredPosts.length !== 1 ? 's' : ''}
           {activeCategory !== 'All' && ` in ${activeCategory}`}
@@ -259,8 +266,6 @@ export default function BlogPage() {
                 <BlogCard key={post.slug} post={post} />
               ))}
             </div>
-
-            {/* Load More */}
             {hasMore && (
               <div className="flex justify-center mt-10">
                 <button
@@ -274,7 +279,6 @@ export default function BlogPage() {
             )}
           </>
         ) : (
-          /* Empty state */
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <div className="w-12 h-12 rounded-full bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 flex items-center justify-center mb-4 text-white/30">
               <SearchIcon />
@@ -282,10 +286,8 @@ export default function BlogPage() {
             <p className="text-white text-base font-medium mb-1">No articles found</p>
             <p className="text-white/40 text-sm">
               Try a different keyword or{' '}
-              <button
-                onClick={() => { setActiveCategory('All'); setSearch('') }}
-                className="text-[#8B5CF6] hover:text-[#a78bfa] transition-colors duration-200 cursor-pointer"
-              >
+              <button onClick={() => { setActiveCategory('All'); setSearch('') }}
+                className="text-[#8B5CF6] hover:text-[#a78bfa] transition-colors duration-200 cursor-pointer">
                 clear filters
               </button>
             </p>
@@ -293,7 +295,7 @@ export default function BlogPage() {
         )}
 
         {/* ── Newsletter CTA ────────────────────────────────────── */}
-        <div className="mt-16 sm:mt-20 bg-[#161616] border border-white/[0.08] rounded-2xl p-8 sm:p-10 flex flex-col sm:flex-row sm:items-center gap-8">
+        <div className="mt-16 sm:mt-20 bg-[#111111] border border-white/[0.08] rounded-2xl p-8 sm:p-10 flex flex-col sm:flex-row sm:items-center gap-8">
           <div className="flex-1">
             <div className="inline-flex items-center gap-2 mb-3">
               <span className="w-4 h-px bg-[#8B5CF6]" />

@@ -32,7 +32,7 @@ function StarIcon() {
 
 export default function TestimonialsSection() {
   return (
-    <section className="bg-[#0F0F0F] py-16 sm:py-28 px-4 sm:px-6">
+    <section className="bg-[#171717] py-16 sm:py-28 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto border-t border-white/[0.07] pt-16 sm:pt-28">
 
         {/* Header */}

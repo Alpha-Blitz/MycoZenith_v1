@@ -2,7 +2,7 @@
 
 export default function NewsletterForm() {
   return (
-    <form className="flex flex-col gap-2" onSubmit={(e) => e.preventDefault()}>
+    <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
       <input
         type="email"
         placeholder="your@email.com"
