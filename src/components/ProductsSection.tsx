@@ -3,33 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
-
-const PRODUCTS = [
-  {
-    slug:        'lions-mane',
-    image:       '/lm.jpeg',
-    name:        "Lion's Mane",
-    tag:         'Cognitive Focus',
-    description: "Sharpen neural pathways and fuel deep focus. Lion's Mane stimulates NGF for long-term cognitive performance.",
-    price:       '₹1,599',
-  },
-  {
-    slug:        'reishi',
-    image:       '/reishi.jpeg',
-    name:        'Reishi',
-    tag:         'Stress + Immunity',
-    description: 'Adaptogenic support to regulate cortisol, fortify immunity, and promote restful recovery.',
-    price:       '₹1,199',
-  },
-  {
-    slug:        'cordyceps',
-    image:       '/cordy.jpeg',
-    name:        'Cordyceps',
-    tag:         'Energy + Endurance',
-    description: 'Unlock cellular energy at the mitochondrial level. Clinically studied for VO₂ max and sustained output.',
-    price:       '₹2,599',
-  },
-]
+import { PRODUCTS } from '@/lib/products'
 
 function ArrowRight({ size = 13 }: { size?: number }) {
   return (
