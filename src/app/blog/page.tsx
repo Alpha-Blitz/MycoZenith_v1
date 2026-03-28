@@ -152,40 +152,10 @@ export default function BlogPage() {
   const hasMore      = visible < filteredPosts.length
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A]">
-
-      {/* ── Full-Width Hero ───────────────────────────────────────── */}
-      <div className="relative h-[58vh] sm:h-[65vh] overflow-hidden flex items-center">
-        <Image src="/neuro.webp" alt="Blog hero" fill priority
-          className="object-cover object-center scale-105"
-          sizes="100vw" />
-        {/* Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0A]/95 via-[#0A0A0A]/75 to-[#0A0A0A]/20" />
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#0A0A0A] to-transparent" />
-        <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#0A0A0A] to-transparent" />
-
-        {/* Hero content */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full">
-          <div className="inline-flex items-center gap-2 mb-5">
-            <span className="w-5 h-px bg-[#8B5CF6]" />
-            <span className="text-[#8B5CF6] text-xs font-semibold tracking-[0.22em] uppercase">From the Lab</span>
-          </div>
-          <h1 className="text-4xl sm:text-5xl md:text-[60px] font-semibold text-white tracking-tight leading-[1.04] mb-4">
-            Insights &amp; Knowledge
-          </h1>
-          <p className="text-white/55 text-base sm:text-lg leading-relaxed max-w-lg mb-8">
-            Science-backed deep dives on adaptogens, performance optimization, and the biology of peak human output.
-          </p>
-          <a href="#articles"
-            className="inline-flex items-center gap-2 bg-[#F97316] hover:bg-[#EA580C] text-white text-sm font-semibold px-7 py-3.5 rounded-xl transition-all duration-200 hover:scale-[1.03]">
-            Explore Articles
-            <ArrowRight size={13} />
-          </a>
-        </div>
-      </div>
+    <div className="min-h-screen bg-[#171717]">
 
       {/* ── Content ───────────────────────────────────────────────── */}
-      <div id="articles" className="max-w-7xl mx-auto px-4 sm:px-6 pt-14 sm:pt-16 pb-20 sm:pb-28">
+      <div id="articles" className="max-w-7xl mx-auto px-4 sm:px-6 pt-24 sm:pt-28 pb-20 sm:pb-28">
 
         {/* ── Featured Post Highlight ───────────────────────────── */}
         {featuredPost && (
