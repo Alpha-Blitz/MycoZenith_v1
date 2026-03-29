@@ -28,8 +28,9 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   )
 }
 
-const INPUT = "w-full bg-white/[0.04] border border-white/[0.1] focus:border-[#8B5CF6]/50 text-white text-sm rounded-xl px-4 py-2.5 outline-none transition-colors duration-150 placeholder-white/20"
+const INPUT = "w-full bg-white/[0.04] border border-white/[0.1] focus:border-[#8B5CF6]/50 text-white text-sm rounded-xl px-4 py-2.5 outline-none transition-colors duration-150 placeholder-white/30"
 const TEXTAREA = INPUT + " resize-none"
+const NUMBER_INPUT = INPUT + " admin-number-input"
 
 function DynamicList<T extends ListItem>({
   items, setItems, fields, addLabel,
@@ -193,10 +194,10 @@ export default function ProductForm({ initialData, id }: { initialData?: Partial
       <Section title="Pricing">
         <div className="grid grid-cols-3 gap-4">
           <Field label="Price (₹)">
-            <input type="number" value={data.price} onChange={e => set('price', e.target.value)} placeholder="1599" className={INPUT} />
+            <input type="number" value={data.price} onChange={e => set('price', e.target.value)} placeholder="1599" className={NUMBER_INPUT} />
           </Field>
           <Field label="Compare Price (₹)">
-            <input type="number" value={data.compare_price} onChange={e => set('compare_price', e.target.value)} placeholder="1999" className={INPUT} />
+            <input type="number" value={data.compare_price} onChange={e => set('compare_price', e.target.value)} placeholder="1999" className={NUMBER_INPUT} />
           </Field>
           <Field label="Display Price">
             <input type="text" value={data.price_display} onChange={e => set('price_display', e.target.value)} placeholder="₹1,599" className={INPUT} />
@@ -206,15 +207,26 @@ export default function ProductForm({ initialData, id }: { initialData?: Partial
 
       {/* Media */}
       <Section title="Media">
-        <ImageUpload label="Primary Image" value={data.image} onChange={v => set('image', v)} />
-        <Field label="Additional Images (URLs)">
-          <DynamicList
-            items={(data.images || []).map(u => ({ url: u }))}
-            setItems={v => set('images', v.map(i => i.url))}
-            fields={[{ key: 'url', label: 'Image URL or /public path' }]}
-            addLabel="Add image"
-          />
-        </Field>
+        <div className="grid grid-cols-2 gap-3">
+          {/* Primary image — larger */}
+          <div className="col-span-2">
+            <ImageUpload label="Primary Image" value={data.image} onChange={v => set('image', v)} />
+          </div>
+          {/* Additional images grid */}
+          {[0, 1, 2].map(idx => (
+            <ImageUpload
+              key={idx}
+              label={`Additional Image ${idx + 1}`}
+              value={(data.images || [])[idx] ?? ''}
+              onChange={v => {
+                const imgs = [...(data.images || []), '', '', ''].slice(0, 3)
+                imgs[idx] = v
+                set('images', imgs.filter((u, i) => u || i < idx))
+              }}
+              compact
+            />
+          ))}
+        </div>
       </Section>
 
       {/* Hero Bullets */}
@@ -271,7 +283,7 @@ export default function ProductForm({ initialData, id }: { initialData?: Partial
       <Section title="Inventory">
         <div className="grid grid-cols-3 gap-4">
           <Field label="Stock">
-            <input type="number" value={data.stock} onChange={e => set('stock', e.target.value)} className={INPUT} />
+            <input type="number" value={data.stock} onChange={e => set('stock', e.target.value)} className={NUMBER_INPUT} />
           </Field>
           <Field label="SKU">
             <input type="text" value={data.sku} onChange={e => set('sku', e.target.value)} className={INPUT} />

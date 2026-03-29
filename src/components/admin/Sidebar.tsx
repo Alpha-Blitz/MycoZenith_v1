@@ -82,7 +82,7 @@ export default function Sidebar() {
       <nav className="flex-1 px-3 py-4 flex flex-col gap-5 overflow-y-auto">
         {NAV_SECTIONS.map(section => (
           <div key={section.label}>
-            <p className="text-[10px] font-semibold tracking-[0.18em] uppercase text-white/20 px-3 mb-1.5">{section.label}</p>
+            <p className="text-[10px] font-semibold tracking-[0.18em] uppercase text-white/35 px-3 mb-1.5">{section.label}</p>
             <div className="flex flex-col gap-0.5">
               {section.items.map(({ href, label, icon }) => {
                 const active = isActive(href)
@@ -92,13 +92,13 @@ export default function Sidebar() {
                       'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 relative',
                       active
                         ? 'bg-[#8B5CF6]/12 text-white'
-                        : 'text-white/45 hover:text-white/80 hover:bg-white/[0.04]',
+                        : 'text-white/60 hover:text-white hover:bg-white/[0.05]',
                     ].join(' ')}
                   >
                     {active && (
                       <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-4 bg-[#8B5CF6] rounded-r-full" />
                     )}
-                    <span className={active ? 'text-[#8B5CF6]' : 'text-white/30'}>{icon}</span>
+                    <span className={active ? 'text-[#8B5CF6]' : 'text-white/45'}>{icon}</span>
                     {label}
                   </Link>
                 )
@@ -111,7 +111,7 @@ export default function Sidebar() {
       {/* Footer */}
       <div className="px-3 py-3 border-t border-white/[0.06] shrink-0 flex flex-col gap-0.5">
         <Link href="/"
-          className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs text-white/35 hover:text-white/60 hover:bg-white/[0.04] transition-all duration-150">
+          className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-white/50 hover:text-white/80 hover:bg-white/[0.04] transition-all duration-150">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
           </svg>

@@ -2,7 +2,8 @@
 
 import { useState } from 'react'
 
-const INPUT = "w-full bg-white/[0.04] border border-white/[0.1] focus:border-[#8B5CF6]/50 text-white text-sm rounded-xl px-4 py-2.5 outline-none transition-colors duration-150 placeholder-white/20"
+const INPUT = "w-full bg-white/[0.04] border border-white/[0.1] focus:border-[#8B5CF6]/50 text-white text-sm rounded-xl px-4 py-2.5 outline-none transition-colors duration-150 placeholder-white/30"
+const NUMBER_INPUT = INPUT + " admin-number-input"
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -117,11 +118,11 @@ export default function SettingsForm({ initial }: {
         <div className="grid grid-cols-2 gap-4">
           <Field label="Free Shipping Threshold (₹)">
             <input type="number" value={shipping.freeShippingThreshold}
-              onChange={e => setShipping(s => ({ ...s, freeShippingThreshold: Number(e.target.value) }))} className={INPUT} />
+              onChange={e => setShipping(s => ({ ...s, freeShippingThreshold: Number(e.target.value) }))} className={NUMBER_INPUT} />
           </Field>
           <Field label="Flat Rate (₹)">
             <input type="number" value={shipping.flatRate}
-              onChange={e => setShipping(s => ({ ...s, flatRate: Number(e.target.value) }))} className={INPUT} />
+              onChange={e => setShipping(s => ({ ...s, flatRate: Number(e.target.value) }))} className={NUMBER_INPUT} />
           </Field>
         </div>
         <SaveBtn k="shipping" value={shipping} />

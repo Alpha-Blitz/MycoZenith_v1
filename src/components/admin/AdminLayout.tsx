@@ -77,7 +77,7 @@ export default function AdminLayout({ children, user }: { children: React.ReactN
               )}
             </div>
             {description && !isNew && !isEdit && (
-              <p className="text-white/30 text-xs mt-0.5 hidden sm:block">{description}</p>
+              <p className="text-white/45 text-xs mt-0.5 hidden sm:block">{description}</p>
             )}
           </div>
 
@@ -86,7 +86,7 @@ export default function AdminLayout({ children, user }: { children: React.ReactN
 
             {/* View site */}
             <Link href="/" target="_blank"
-              className="hidden sm:flex items-center gap-1.5 text-xs text-white/35 hover:text-white/60 transition-colors duration-150">
+              className="hidden sm:flex items-center gap-1.5 text-sm text-white/50 hover:text-white/80 transition-colors duration-150">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
               </svg>
