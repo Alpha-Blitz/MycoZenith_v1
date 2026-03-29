@@ -141,7 +141,7 @@ export default function Navbar() {
 
           {/* ── Logo ─────────────────────────────────────────── */}
           <Link
-            href="/"
+            href={pathname === '/about' ? '/admin' : '/'}
             className="flex items-center shrink-0 group"
           >
             <span

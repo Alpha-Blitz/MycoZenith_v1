@@ -1,11 +1,6 @@
 import type { Metadata } from 'next'
 import { Geist, Playfair_Display } from 'next/font/google'
 import './globals.css'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
-import { AuthProvider } from '@/context/AuthContext'
-import AuthModal from '@/components/AuthModal'
-import FirstVisitPopup from '@/components/FirstVisitPopup'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -20,25 +15,14 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   title: 'MycoZenith — Cordyceps Performance Supplements',
-  description:
-    'Premium cordyceps-powered supplements designed to enhance energy, endurance, and mental clarity.',
+  description: 'Premium cordyceps-powered supplements designed to enhance energy, endurance, and mental clarity.',
 }
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${geistSans.variable} ${playfair.variable}`}>
       <body className="min-h-screen bg-[#0A0A0A] text-white flex flex-col">
-        <AuthProvider>
-          <Navbar />
-          <AuthModal />
-          <main className="flex-1">{children}</main>
-          <Footer />
-          <FirstVisitPopup />
-        </AuthProvider>
+        {children}
       </body>
     </html>
   )
