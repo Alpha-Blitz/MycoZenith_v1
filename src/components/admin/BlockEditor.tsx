@@ -107,7 +107,7 @@ function BlockRow({ block, onChange, onDelete, onMove, isFirst, isLast }: {
             <div className="flex gap-2">
               <div className="relative shrink-0">
                 <select
-                  className={INPUT + ' admin-select w-24 shrink-0'}
+                  className="admin-select w-24 shrink-0 bg-[#0F0F0F] border border-white/[0.1] focus:border-[#8B5CF6]/60 text-white text-sm rounded-lg px-3 py-2 outline-none transition-colors duration-150 cursor-pointer"
                   value={block.level}
                   onChange={e => upd({ level: Number(e.target.value) as 2 | 3 })}
                 >
@@ -233,7 +233,7 @@ export default function BlockEditor({ value, onChange }: {
         <select
           value={addType}
           onChange={e => setAddType(e.target.value as BlockType)}
-          className="flex-1 admin-select bg-white/[0.05] border border-white/[0.12] text-white/80 text-sm rounded-xl px-4 py-2.5 outline-none focus:border-[#8B5CF6]/50 transition-colors duration-150 cursor-pointer"
+          className="flex-1 admin-select bg-[#0F0F0F] border border-white/[0.12] text-white/80 text-sm rounded-xl px-4 py-2.5 outline-none focus:border-[#8B5CF6]/50 transition-colors duration-150 cursor-pointer"
         >
           {(Object.keys(BLOCK_LABELS) as BlockType[]).map(t => (
             <option key={t} value={t}>{BLOCK_LABELS[t]}</option>
