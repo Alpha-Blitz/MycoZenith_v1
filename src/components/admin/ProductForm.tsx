@@ -12,7 +12,7 @@ function slugify(s: string) {
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="bg-[#111111] border border-white/[0.07] rounded-2xl p-6">
+    <div className="bg-[#0F0F0F] border border-white/[0.07] rounded-2xl p-6">
       <h3 className="text-white font-semibold text-sm mb-4 pb-3 border-b border-white/[0.07]">{title}</h3>
       <div className="flex flex-col gap-4">{children}</div>
     </div>
@@ -137,7 +137,7 @@ export default function ProductForm({ initialData, id }: { initialData?: Partial
   return (
     <div className="flex flex-col gap-5 max-w-3xl">
       {/* Status bar */}
-      <div className="flex items-center justify-between bg-[#111111] border border-white/[0.07] rounded-2xl px-6 py-4">
+      <div className="flex items-center justify-between bg-[#0F0F0F] border border-white/[0.07] rounded-2xl px-6 py-4">
         <div className="flex items-center gap-3">
           <span className="text-white/50 text-sm">Status:</span>
           <div className="flex items-center gap-2">

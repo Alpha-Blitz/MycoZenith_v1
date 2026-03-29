@@ -63,17 +63,17 @@ export default function Sidebar() {
   }
 
   return (
-    <aside className="fixed left-0 top-0 h-full w-[240px] bg-[#080808] border-r border-white/[0.06] flex flex-col z-40">
+    <aside className="fixed left-0 top-0 h-full w-[240px] bg-[#0F0F0F] border-r border-white/[0.06] flex flex-col z-40">
 
       {/* Brand */}
-      <div className="h-16 flex items-center px-5 border-b border-white/[0.06] shrink-0 gap-2.5">
-        <div className="w-7 h-7 rounded-lg bg-[#8B5CF6]/20 border border-[#8B5CF6]/30 flex items-center justify-center shrink-0">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <div className="h-16 flex items-center px-5 border-b border-white/[0.06] shrink-0 gap-3">
+        <div className="w-9 h-9 rounded-xl bg-[#8B5CF6]/20 border border-[#8B5CF6]/30 flex items-center justify-center shrink-0">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
           </svg>
         </div>
         <div className="flex flex-col leading-tight">
-          <span style={{ fontFamily: 'var(--font-playfair)' }} className="font-semibold text-[15px] tracking-wide text-white leading-none">MycoZenith</span>
+          <span style={{ fontFamily: 'var(--font-playfair)' }} className="font-semibold text-[17px] tracking-wide text-white leading-none">MycoZenith</span>
           <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-[#8B5CF6]/70 mt-0.5">Admin Panel</span>
         </div>
       </div>

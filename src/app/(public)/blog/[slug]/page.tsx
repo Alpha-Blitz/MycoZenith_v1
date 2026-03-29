@@ -154,7 +154,7 @@ export default async function BlogArticlePage({
             />
 
             {/* ── About the Author ──────────────────────────────── */}
-            <div className="bg-[#111111] border border-white/[0.07] rounded-2xl p-6 flex gap-4 items-start mb-10">
+            <div className="bg-[#0F0F0F] border border-white/[0.07] rounded-2xl p-6 flex gap-4 items-start mb-10">
               <div className="relative w-14 h-14 rounded-full overflow-hidden shrink-0">
                 <Image
                   src={post.author.avatar}
@@ -226,7 +226,7 @@ export default async function BlogArticlePage({
                 <Link
                   key={p.slug}
                   href={`/blog/${p.slug}`}
-                  className="group flex flex-col rounded-2xl overflow-hidden border border-white/[0.07] hover:border-[#8B5CF6]/30 bg-[#111111] transition-all duration-300 hover:shadow-[0_8px_32px_rgba(139,92,246,0.10)]"
+                  className="group flex flex-col rounded-2xl overflow-hidden border border-white/[0.07] hover:border-[#8B5CF6]/30 bg-[#0F0F0F] transition-all duration-300 hover:shadow-[0_8px_32px_rgba(139,92,246,0.10)]"
                 >
                   <div className="relative aspect-video overflow-hidden">
                     <Image
@@ -255,7 +255,7 @@ export default async function BlogArticlePage({
         )}
 
         {/* ── Newsletter CTA ─────────────────────────────────────── */}
-        <div className="mt-20 bg-[#111111] border border-white/[0.08] rounded-2xl p-8 sm:p-10 flex flex-col sm:flex-row sm:items-center gap-8">
+        <div className="mt-20 bg-[#0F0F0F] border border-white/[0.08] rounded-2xl p-8 sm:p-10 flex flex-col sm:flex-row sm:items-center gap-8">
           <div className="flex-1">
             <div className="inline-flex items-center gap-2 mb-3">
               <span className="text-[#8B5CF6] text-[10px] font-semibold tracking-[0.22em] uppercase">Newsletter</span>

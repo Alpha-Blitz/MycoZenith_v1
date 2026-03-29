@@ -71,7 +71,7 @@ export default function CookiePolicyPage() {
         {/* Cookie type table */}
         <div className="mb-10 flex flex-col gap-3">
           {COOKIE_TYPES.map((type) => (
-            <div key={type.name} className="bg-[#111111] border border-white/[0.07] rounded-xl p-5">
+            <div key={type.name} className="bg-[#0F0F0F] border border-white/[0.07] rounded-xl p-5">
               <div className="flex items-start justify-between gap-3 mb-2">
                 <h3 className="text-white font-semibold text-sm">{type.name}</h3>
                 <span className={`text-[10px] font-semibold tracking-[0.14em] uppercase px-2.5 py-1 rounded-full border ${

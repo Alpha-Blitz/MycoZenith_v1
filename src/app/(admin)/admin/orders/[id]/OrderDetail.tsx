@@ -8,7 +8,7 @@ import Image from 'next/image'
 const ORDER_STATUSES = ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled', 'refunded']
 
 const INPUT = "w-full bg-white/[0.04] border border-white/[0.1] focus:border-[#8B5CF6]/50 text-white text-sm rounded-xl px-4 py-2.5 outline-none transition-colors duration-150"
-const SELECT = INPUT + " cursor-pointer"
+const SELECT = INPUT + " cursor-pointer admin-select"
 
 function fmt(n: number) {
   return '₹' + Number(n).toLocaleString('en-IN', { maximumFractionDigits: 0 })
@@ -79,7 +79,7 @@ export default function OrderDetail({ order }: { order: Order }) {
     <div className="flex flex-col gap-5 max-w-3xl">
 
       {/* Header */}
-      <div className="flex items-center justify-between bg-[#111111] border border-white/[0.07] rounded-2xl px-6 py-4">
+      <div className="flex items-center justify-between bg-[#0F0F0F] border border-white/[0.07] rounded-2xl px-6 py-4">
         <div>
           <p className="text-white font-semibold font-mono">{order.order_number}</p>
           <p className="text-white/40 text-xs mt-0.5">
@@ -90,7 +90,7 @@ export default function OrderDetail({ order }: { order: Order }) {
       </div>
 
       {/* Items */}
-      <div className="bg-[#111111] border border-white/[0.07] rounded-2xl p-6">
+      <div className="bg-[#0F0F0F] border border-white/[0.07] rounded-2xl p-6">
         <h3 className="text-white font-semibold text-sm mb-4 pb-3 border-b border-white/[0.07]">Items</h3>
         <div className="flex flex-col gap-3">
           {order.order_items.map(item => (
@@ -115,7 +115,7 @@ export default function OrderDetail({ order }: { order: Order }) {
       </div>
 
       {/* Customer */}
-      <div className="bg-[#111111] border border-white/[0.07] rounded-2xl p-6">
+      <div className="bg-[#0F0F0F] border border-white/[0.07] rounded-2xl p-6">
         <h3 className="text-white font-semibold text-sm mb-4 pb-3 border-b border-white/[0.07]">Customer</h3>
         <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-sm">
           <div><p className="text-white/40 text-xs mb-0.5">Name</p><p className="text-white/80">{order.customer_name}</p></div>
@@ -138,7 +138,7 @@ export default function OrderDetail({ order }: { order: Order }) {
       </div>
 
       {/* Status update */}
-      <div className="bg-[#111111] border border-white/[0.07] rounded-2xl p-6">
+      <div className="bg-[#0F0F0F] border border-white/[0.07] rounded-2xl p-6">
         <h3 className="text-white font-semibold text-sm mb-4 pb-3 border-b border-white/[0.07]">Update Status</h3>
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">

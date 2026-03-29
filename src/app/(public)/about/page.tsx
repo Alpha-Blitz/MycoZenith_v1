@@ -128,7 +128,7 @@ export default function AboutPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {VALUES.map((v) => (
-              <div key={v.title} className="bg-[#111111] border border-white/[0.07] rounded-2xl p-7 flex flex-col gap-4">
+              <div key={v.title} className="bg-[#0F0F0F] border border-white/[0.07] rounded-2xl p-7 flex flex-col gap-4">
                 <div className="w-12 h-12 rounded-xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/15 flex items-center justify-center text-2xl">
                   {v.icon}
                 </div>
@@ -198,7 +198,7 @@ export default function AboutPage() {
 
         {/* ── Newsletter CTA ─────────────────────────────────────── */}
         <section className="py-20 sm:py-28">
-          <div className="bg-[#111111] border border-white/[0.08] rounded-2xl p-8 sm:p-12 flex flex-col sm:flex-row sm:items-center gap-8">
+          <div className="bg-[#0F0F0F] border border-white/[0.08] rounded-2xl p-8 sm:p-12 flex flex-col sm:flex-row sm:items-center gap-8">
             <div className="flex-1">
               <span className="text-[#8B5CF6] text-xs font-semibold tracking-[0.22em] uppercase">Stay in the Loop</span>
               <h3 className="text-white text-2xl sm:text-3xl font-semibold tracking-tight mt-3 mb-3">

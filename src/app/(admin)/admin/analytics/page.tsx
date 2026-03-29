@@ -30,20 +30,20 @@ export default async function AnalyticsPage() {
       </div>
 
       {/* Revenue chart */}
-      <div className="bg-[#111111] border border-white/[0.07] rounded-2xl p-6">
+      <div className="bg-[#0F0F0F] border border-white/[0.07] rounded-2xl p-6">
         <p className="text-white/45 text-xs font-semibold tracking-[0.15em] uppercase mb-4">Revenue — Last 30 Days</p>
         <RevenueChart data={revenueData} />
       </div>
 
       {/* Orders bar chart */}
-      <div className="bg-[#111111] border border-white/[0.07] rounded-2xl p-6">
+      <div className="bg-[#0F0F0F] border border-white/[0.07] rounded-2xl p-6">
         <p className="text-white/45 text-xs font-semibold tracking-[0.15em] uppercase mb-4">Orders — Last 14 Days</p>
         <OrdersBarChart data={ordersData} />
       </div>
 
       {/* Low stock */}
       {overview.lowStockProducts.length > 0 && (
-        <div className="bg-[#111111] border border-white/[0.07] rounded-2xl p-6">
+        <div className="bg-[#0F0F0F] border border-white/[0.07] rounded-2xl p-6">
           <p className="text-white/45 text-xs font-semibold tracking-[0.15em] uppercase mb-4">Low Stock</p>
           <div className="flex flex-col gap-3">
             {overview.lowStockProducts.map((p: { id: string; name: string; stock: number }) => (

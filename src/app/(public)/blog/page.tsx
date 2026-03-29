@@ -32,7 +32,7 @@ function SearchIcon() {
 function BlogCard({ post }: { post: typeof POSTS[0] }) {
   return (
     <Link href={`/blog/${post.slug}`}
-      className="group flex flex-col rounded-2xl overflow-hidden border border-white/[0.08] hover:border-[#8B5CF6]/40 transition-all duration-300 bg-[#111111] hover:shadow-[0_8px_40px_rgba(139,92,246,0.10)] h-full">
+      className="group flex flex-col rounded-2xl overflow-hidden border border-white/[0.08] hover:border-[#8B5CF6]/40 transition-all duration-300 bg-[#0F0F0F] hover:shadow-[0_8px_40px_rgba(139,92,246,0.10)] h-full">
 
       {/* Thumbnail — fixed 16:9 */}
       <div className="relative aspect-[16/9] overflow-hidden shrink-0">
@@ -216,7 +216,7 @@ export default function BlogPage() {
         )}
 
         {/* ── Newsletter CTA ────────────────────────────────────── */}
-        <div className="mt-16 sm:mt-20 bg-[#111111] border border-white/[0.08] rounded-2xl p-8 sm:p-10 flex flex-col sm:flex-row sm:items-center gap-8">
+        <div className="mt-16 sm:mt-20 bg-[#0F0F0F] border border-white/[0.08] rounded-2xl p-8 sm:p-10 flex flex-col sm:flex-row sm:items-center gap-8">
           <div className="flex-1">
             <div className="inline-flex items-center gap-2 mb-3">
               <span className="text-[#8B5CF6] text-[10px] font-semibold tracking-[0.22em] uppercase">Newsletter</span>

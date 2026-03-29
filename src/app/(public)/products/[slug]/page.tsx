@@ -159,7 +159,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         </div>
 
         {/* ── Trust Bar ──────────────────────────────────────────── */}
-        <div className="flex flex-wrap items-center gap-3 sm:gap-0 divide-y sm:divide-y-0 sm:divide-x divide-white/[0.08] bg-[#111111] border border-white/[0.08] rounded-2xl px-4 sm:px-0 py-4 sm:py-0 mb-14 sm:mb-16">
+        <div className="flex flex-wrap items-center gap-3 sm:gap-0 divide-y sm:divide-y-0 sm:divide-x divide-white/[0.08] bg-[#0F0F0F] border border-white/[0.08] rounded-2xl px-4 sm:px-0 py-4 sm:py-0 mb-14 sm:mb-16">
           {[
             { icon: <ShieldIcon />, label: 'Lab Tested' },
             { icon: <ShieldIcon />, label: '3rd Party Verified' },
@@ -223,7 +223,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {product.benefits.map((b) => (
-              <div key={b.title} className="bg-[#111111] border border-white/[0.07] rounded-2xl p-6 flex flex-col gap-4">
+              <div key={b.title} className="bg-[#0F0F0F] border border-white/[0.07] rounded-2xl p-6 flex flex-col gap-4">
                 <div className="w-11 h-11 rounded-xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/15 flex items-center justify-center text-xl">
                   {b.icon}
                 </div>
@@ -237,7 +237,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         </section>
 
         {/* ── Why MycoZenith? ────────────────────────────────────── */}
-        <section className="mb-14 sm:mb-16 bg-[#111111] border border-white/[0.08] rounded-2xl p-8 sm:p-10">
+        <section className="mb-14 sm:mb-16 bg-[#0F0F0F] border border-white/[0.08] rounded-2xl p-8 sm:p-10">
           <div className="inline-flex items-center gap-2 mb-3">
             <span className="text-[#8B5CF6] text-xs font-semibold tracking-[0.22em] uppercase">Customer Stories</span>
           </div>
@@ -271,7 +271,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
           <div className="lg:col-span-8 flex flex-col gap-4">
             {product.howToUse.map((s, i) => (
-              <div key={s.step} className="flex gap-5 bg-[#111111] border border-white/[0.07] rounded-2xl p-6">
+              <div key={s.step} className="flex gap-5 bg-[#0F0F0F] border border-white/[0.07] rounded-2xl p-6">
                 <div className="w-8 h-8 rounded-full bg-[#8B5CF6]/15 border border-[#8B5CF6]/25 flex items-center justify-center shrink-0 mt-0.5">
                   <span className="text-[#8B5CF6] text-xs font-bold">{i + 1}</span>
                 </div>
@@ -313,7 +313,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         </section>
 
         {/* ── Newsletter CTA ─────────────────────────────────────── */}
-        <div className="bg-[#111111] border border-white/[0.08] rounded-2xl p-8 sm:p-10 flex flex-col sm:flex-row sm:items-center gap-8">
+        <div className="bg-[#0F0F0F] border border-white/[0.08] rounded-2xl p-8 sm:p-10 flex flex-col sm:flex-row sm:items-center gap-8">
           <div className="flex-1">
             <div className="inline-flex items-center gap-2 mb-3">
               <span className="text-[#8B5CF6] text-[10px] font-semibold tracking-[0.22em] uppercase">Newsletter</span>

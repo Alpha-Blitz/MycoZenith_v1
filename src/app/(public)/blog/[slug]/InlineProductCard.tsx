@@ -20,7 +20,7 @@ export default function InlineProductCard({ slug }: { slug: string }) {
   return (
     <Link
       href={`/products/${product.slug}`}
-      className="group flex items-center gap-4 bg-[#111111] border border-[#8B5CF6]/20 hover:border-[#8B5CF6]/50 rounded-2xl p-4 my-7 transition-all duration-200 hover:shadow-[0_4px_24px_rgba(139,92,246,0.12)]"
+      className="group flex items-center gap-4 bg-[#0F0F0F] border border-[#8B5CF6]/20 hover:border-[#8B5CF6]/50 rounded-2xl p-4 my-7 transition-all duration-200 hover:shadow-[0_4px_24px_rgba(139,92,246,0.12)]"
     >
       {/* Thumbnail */}
       <div className="relative w-16 h-16 rounded-xl overflow-hidden shrink-0">

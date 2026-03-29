@@ -98,7 +98,7 @@ function ReviewGrid({ reviews }: { reviews: Review[] }) {
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {shown.map((r, i) => (
-          <div key={i} className="bg-[#111111] border border-white/[0.07] rounded-2xl p-6 flex flex-col gap-3">
+          <div key={i} className="bg-[#0F0F0F] border border-white/[0.07] rounded-2xl p-6 flex flex-col gap-3">
             <div className="flex items-start justify-between gap-3">
               <Stars rating={r.rating} />
               <span className="text-white/25 text-xs shrink-0">{r.date}</span>
@@ -176,7 +176,7 @@ export default function ReviewSection({ initial }: { initial: Testimonial[] }) {
       </div>
 
       {/* Summary */}
-      <div className="flex flex-col sm:flex-row gap-8 bg-[#111111] border border-white/[0.07] rounded-2xl p-6 mb-6">
+      <div className="flex flex-col sm:flex-row gap-8 bg-[#0F0F0F] border border-white/[0.07] rounded-2xl p-6 mb-6">
         <div className="flex flex-col items-center justify-center gap-1 sm:pr-8 sm:border-r sm:border-white/[0.07]">
           <span className="text-5xl font-bold text-white tabular-nums">{avg.toFixed(1)}</span>
           <Stars rating={Math.round(avg)} size={16} />
@@ -191,7 +191,7 @@ export default function ReviewSection({ initial }: { initial: Testimonial[] }) {
 
       {/* Write a Review form */}
       {showForm && (
-        <div className="bg-[#111111] border border-[#F97316]/20 rounded-2xl p-6 mb-6">
+        <div className="bg-[#0F0F0F] border border-[#F97316]/20 rounded-2xl p-6 mb-6">
           <h3 className="text-white font-semibold mb-5">Your Review</h3>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div>

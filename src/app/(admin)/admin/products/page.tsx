@@ -23,12 +23,12 @@ export default async function AdminProductsPage() {
       </div>
 
       {products.length === 0 ? (
-        <div className="bg-[#111111] border border-white/[0.07] rounded-2xl p-16 flex flex-col items-center gap-4">
+        <div className="bg-[#0F0F0F] border border-white/[0.07] rounded-2xl p-16 flex flex-col items-center gap-4">
           <p className="text-white/40 text-base">No products yet.</p>
           <Link href="/admin/products/new" className="text-[#8B5CF6] text-sm hover:text-[#a78bfa] transition-colors duration-150">Add your first product →</Link>
         </div>
       ) : (
-        <div className="bg-[#111111] border border-white/[0.07] rounded-2xl overflow-hidden">
+        <div className="bg-[#0F0F0F] border border-white/[0.07] rounded-2xl overflow-hidden">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-white/[0.07]">

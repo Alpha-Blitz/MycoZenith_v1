@@ -57,13 +57,13 @@ export default function AdminLayout({ children, user }: { children: React.ReactN
   const isEdit = !isNew && pathname.split('/').length > 3
 
   return (
-    <div className="flex h-screen bg-[#0D0D0D] overflow-hidden">
+    <div className="flex h-screen bg-[#1C1C1C] overflow-hidden">
       <Sidebar />
 
       <div className="flex-1 flex flex-col overflow-hidden ml-[240px]">
 
         {/* Top bar */}
-        <header className="h-16 bg-[#0A0A0A]/80 backdrop-blur border-b border-white/[0.06] flex items-center justify-between px-6 shrink-0 gap-4">
+        <header className="h-16 bg-[#161616]/90 backdrop-blur border-b border-white/[0.06] flex items-center justify-between px-6 shrink-0 gap-4">
 
           {/* Left: title + breadcrumb */}
           <div className="flex flex-col justify-center min-w-0">
@@ -109,7 +109,7 @@ export default function AdminLayout({ children, user }: { children: React.ReactN
               </button>
 
               {avatarOpen && (
-                <div className="absolute right-0 top-full mt-2 w-56 bg-[#111111] border border-white/[0.1] rounded-xl shadow-[0_8px_40px_rgba(0,0,0,0.7)] z-50 overflow-hidden">
+                <div className="absolute right-0 top-full mt-2 w-56 bg-[#0F0F0F] border border-white/[0.1] rounded-xl shadow-[0_8px_40px_rgba(0,0,0,0.7)] z-50 overflow-hidden">
                   <div className="px-4 py-3 border-b border-white/[0.07]">
                     <p className="text-white text-sm font-medium truncate">{user.user_metadata?.full_name ?? 'Admin'}</p>
                     <p className="text-white/40 text-xs truncate mt-0.5">{user.email}</p>
@@ -133,7 +133,7 @@ export default function AdminLayout({ children, user }: { children: React.ReactN
         </header>
 
         {/* Page content */}
-        <main className="flex-1 overflow-y-auto p-6 bg-[#0D0D0D]">
+        <main className="flex-1 overflow-y-auto p-6 bg-[#1C1C1C]">
           {children}
         </main>
       </div>

@@ -7,7 +7,7 @@ const NUMBER_INPUT = INPUT + " admin-number-input"
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="bg-[#111111] border border-white/[0.07] rounded-2xl p-6">
+    <div className="bg-[#0F0F0F] border border-white/[0.07] rounded-2xl p-6">
       <h3 className="text-white font-semibold text-sm mb-4 pb-3 border-b border-white/[0.07]">{title}</h3>
       <div className="flex flex-col gap-4">{children}</div>
     </div>

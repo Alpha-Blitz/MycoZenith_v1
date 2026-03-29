@@ -7,7 +7,7 @@ interface DataPoint { date: string; count: number }
 function CustomTooltip({ active, payload, label }: { active?: boolean; payload?: { value: number }[]; label?: string }) {
   if (!active || !payload?.length) return null
   return (
-    <div className="bg-[#111111] border border-white/[0.1] rounded-xl px-4 py-3 shadow-xl">
+    <div className="bg-[#0F0F0F] border border-white/[0.1] rounded-xl px-4 py-3 shadow-xl">
       <p className="text-white/45 text-xs mb-1">{label}</p>
       <p className="text-white font-semibold text-sm">{payload[0].value} orders</p>
     </div>

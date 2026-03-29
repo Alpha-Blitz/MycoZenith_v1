@@ -92,7 +92,7 @@ export default function CommentSection({ slug }: { slug: string }) {
       </h2>
 
       {/* Comment form */}
-      <div className="bg-[#111111] border border-white/[0.07] rounded-2xl p-5 mb-8">
+      <div className="bg-[#0F0F0F] border border-white/[0.07] rounded-2xl p-5 mb-8">
         {user ? (
           <form onSubmit={handleSubmit} className="flex flex-col gap-3">
             <div className="flex items-center gap-3 mb-1">
@@ -142,7 +142,7 @@ export default function CommentSection({ slug }: { slug: string }) {
           {comments.map((c) => (
             <div key={c.id} className="flex gap-3">
               <Avatar name={c.user_name} />
-              <div className="flex-1 bg-[#111111] border border-white/[0.07] rounded-2xl px-4 py-3">
+              <div className="flex-1 bg-[#0F0F0F] border border-white/[0.07] rounded-2xl px-4 py-3">
                 <div className="flex items-center justify-between gap-2 mb-1.5">
                   <span className="text-white text-sm font-semibold">{c.user_name}</span>
                   <span className="text-white/25 text-xs">{formatDate(c.created_at)}</span>

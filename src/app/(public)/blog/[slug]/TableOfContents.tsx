@@ -77,7 +77,7 @@ export default function TableOfContents({ blocks, variant = 'both' }: { blocks: 
 
       {/* Mobile: collapsible */}
       {variant !== 'desktop' && (
-      <div className="lg:hidden bg-[#111111] border border-white/[0.08] rounded-xl mb-6">
+      <div className="lg:hidden bg-[#0F0F0F] border border-white/[0.08] rounded-xl mb-6">
         <button
           onClick={() => setOpen((v) => !v)}
           className="w-full flex items-center justify-between px-4 py-3 text-white/60 text-sm font-medium cursor-pointer"

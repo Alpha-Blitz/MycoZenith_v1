@@ -86,7 +86,7 @@ function ShareSheet({ onClose }: { onClose: () => void }) {
   return (
     <div
       ref={ref}
-      className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-52 bg-[#111111] border border-white/[0.1] rounded-2xl p-3 z-50 shadow-[0_8px_32px_rgba(0,0,0,0.5)] flex flex-col gap-1"
+      className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-52 bg-[#0F0F0F] border border-white/[0.1] rounded-2xl p-3 z-50 shadow-[0_8px_32px_rgba(0,0,0,0.5)] flex flex-col gap-1"
     >
       <button
         onClick={copyLink}

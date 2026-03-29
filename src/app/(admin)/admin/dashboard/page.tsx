@@ -60,12 +60,12 @@ export default async function DashboardPage() {
 
       {/* Revenue chart + Low stock */}
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-4">
-        <div className="bg-[#111111] border border-white/[0.07] rounded-2xl p-6">
+        <div className="bg-[#0F0F0F] border border-white/[0.07] rounded-2xl p-6">
           <p className="text-white/45 text-xs font-semibold tracking-[0.15em] uppercase mb-4">Revenue — Last 30 Days</p>
           <RevenueChart data={revenueData} />
         </div>
 
-        <div className="bg-[#111111] border border-white/[0.07] rounded-2xl p-6">
+        <div className="bg-[#0F0F0F] border border-white/[0.07] rounded-2xl p-6">
           <p className="text-white/45 text-xs font-semibold tracking-[0.15em] uppercase mb-4">Low Stock Alerts</p>
           {overview.lowStockProducts.length === 0 ? (
             <p className="text-white/30 text-sm">All products well stocked.</p>
@@ -85,7 +85,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* Recent orders */}
-      <div className="bg-[#111111] border border-white/[0.07] rounded-2xl p-6">
+      <div className="bg-[#0F0F0F] border border-white/[0.07] rounded-2xl p-6">
         <div className="flex items-center justify-between mb-5">
           <p className="text-white/45 text-xs font-semibold tracking-[0.15em] uppercase">Recent Orders</p>
           <Link href="/admin/orders" className="text-[#8B5CF6] text-xs hover:text-[#a78bfa] transition-colors duration-150">View all →</Link>

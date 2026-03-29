@@ -9,7 +9,7 @@ interface StatCardProps {
 
 export default function StatCard({ label, value, delta, deltaPositive, icon, sublabel }: StatCardProps) {
   return (
-    <div className="relative bg-[#111111] border border-white/[0.07] rounded-2xl p-5 overflow-hidden group hover:border-white/[0.12] transition-colors duration-200">
+    <div className="relative bg-[#0F0F0F] border border-white/[0.07] rounded-2xl p-5 overflow-hidden group hover:border-white/[0.12] transition-colors duration-200">
       {/* Subtle glow */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#8B5CF6]/[0.03] to-transparent pointer-events-none" />
 

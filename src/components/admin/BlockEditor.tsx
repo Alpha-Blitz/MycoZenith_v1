@@ -107,7 +107,7 @@ function BlockRow({ block, onChange, onDelete, onMove, isFirst, isLast }: {
             <div className="flex gap-2">
               <div className="relative shrink-0">
                 <select
-                  className={INPUT + ' admin-select w-20 shrink-0'}
+                  className={INPUT + ' admin-select w-24 shrink-0'}
                   value={block.level}
                   onChange={e => upd({ level: Number(e.target.value) as 2 | 3 })}
                 >
@@ -229,21 +229,19 @@ export default function BlockEditor({ value, onChange }: {
       ))}
 
       {/* Add block toolbar */}
-      <div className="flex items-center gap-2 pt-2 flex-wrap">
-        {(Object.keys(BLOCK_LABELS) as BlockType[]).map(t => (
-          <button key={t} onClick={() => setAddType(t)}
-            className={[
-              'px-2.5 py-1 rounded-full text-xs font-semibold border transition-all duration-150 cursor-pointer',
-              addType === t
-                ? BLOCK_COLORS[t]
-                : 'bg-transparent border-white/[0.08] text-white/40 hover:text-white/70 hover:border-white/20',
-            ].join(' ')}>
-            {BLOCK_LABELS[t]}
-          </button>
-        ))}
+      <div className="flex items-center gap-2 pt-2">
+        <select
+          value={addType}
+          onChange={e => setAddType(e.target.value as BlockType)}
+          className="flex-1 admin-select bg-white/[0.05] border border-white/[0.12] text-white/80 text-sm rounded-xl px-4 py-2.5 outline-none focus:border-[#8B5CF6]/50 transition-colors duration-150 cursor-pointer"
+        >
+          {(Object.keys(BLOCK_LABELS) as BlockType[]).map(t => (
+            <option key={t} value={t}>{BLOCK_LABELS[t]}</option>
+          ))}
+        </select>
         <button onClick={add}
-          className="ml-auto flex items-center gap-1.5 bg-[#8B5CF6] hover:bg-[#7c3aed] text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors duration-150 cursor-pointer">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          className="flex items-center gap-1.5 bg-[#8B5CF6] hover:bg-[#7c3aed] text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors duration-150 cursor-pointer shrink-0">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Add block
         </button>
       </div>
