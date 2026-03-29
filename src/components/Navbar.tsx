@@ -233,10 +233,23 @@ export default function Navbar() {
                   <div className="absolute right-0 top-full mt-2 w-44 bg-[#161616] border border-white/[0.1] rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.6)] overflow-hidden z-50">
                     <p className="px-4 pt-3 pb-2 text-white/40 text-xs truncate">{user.email}</p>
                     <div className="border-t border-white/[0.07]" />
+                    <Link
+                      href="/account"
+                      onClick={() => setAvatarOpen(false)}
+                      className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-white/75 hover:text-white hover:bg-white/[0.05] transition-colors duration-200"
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                      </svg>
+                      My Account
+                    </Link>
                     <button
                       onClick={() => { setAvatarOpen(false); signOut() }}
-                      className="w-full text-left px-4 py-3 text-sm text-white/75 hover:text-white hover:bg-white/[0.05] transition-colors duration-200 cursor-pointer"
+                      className="flex items-center gap-2.5 w-full text-left px-4 py-2.5 text-sm text-red-400/70 hover:text-red-400 hover:bg-red-500/[0.06] transition-colors duration-200 cursor-pointer"
                     >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+                      </svg>
                       Sign Out
                     </button>
                   </div>
@@ -317,15 +330,27 @@ export default function Navbar() {
             <CartIcon /><span className="text-xs tracking-wide">Cart</span>
           </button>
           {user ? (
-            <button
-              onClick={() => { setMobileOpen(false); signOut() }}
-              className="flex flex-col items-center gap-2 text-white/45 hover:text-[#8B5CF6] transition-colors duration-200"
-            >
-              <div className="w-[22px] h-[22px] rounded-full bg-[#8B5CF6]/20 border border-[#8B5CF6]/40 flex items-center justify-center text-[#8B5CF6] text-[10px] font-semibold">
-                {userInitial}
-              </div>
-              <span className="text-xs tracking-wide">Sign Out</span>
-            </button>
+            <>
+              <Link
+                href="/account"
+                onClick={() => setMobileOpen(false)}
+                className="flex flex-col items-center gap-2 text-white/45 hover:text-[#8B5CF6] transition-colors duration-200"
+              >
+                <div className="w-[22px] h-[22px] rounded-full bg-[#8B5CF6]/20 border border-[#8B5CF6]/40 flex items-center justify-center text-[#8B5CF6] text-[10px] font-semibold">
+                  {userInitial}
+                </div>
+                <span className="text-xs tracking-wide">Account</span>
+              </Link>
+              <button
+                onClick={() => { setMobileOpen(false); signOut() }}
+                className="flex flex-col items-center gap-2 text-white/45 hover:text-red-400 transition-colors duration-200"
+              >
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+                </svg>
+                <span className="text-xs tracking-wide">Sign Out</span>
+              </button>
+            </>
           ) : (
             <button
               onClick={() => { setMobileOpen(false); openModal() }}
