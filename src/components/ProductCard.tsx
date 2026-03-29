@@ -52,7 +52,7 @@ export default function ProductCard({ slug, image, name, tag, description, price
       </Link>
 
       {/* ── Card body ────────────────────────────────────── */}
-      <div className="p-4 pt-3 flex flex-col gap-2">
+      <div className="p-4 pt-3 flex flex-col flex-1 gap-2">
 
         {/* Name + price */}
         <div className="flex items-start justify-between gap-2">
@@ -67,10 +67,10 @@ export default function ProductCard({ slug, image, name, tag, description, price
         </div>
 
         {/* Description */}
-        <p className="text-white/58 text-sm leading-relaxed">{description}</p>
+        <p className="text-white/58 text-sm leading-relaxed flex-1">{description}</p>
 
         {/* ── Buttons ──────────────────────────────────── */}
-        <div className="grid grid-cols-2 gap-2.5 mt-2">
+        <div className="grid grid-cols-2 gap-2.5 mt-auto pt-2">
           <Link
             href={`/products/${slug}`}
             className="group/btn inline-flex items-center justify-center gap-1.5 bg-[#F97316] hover:bg-[#EA580C] text-white text-sm font-semibold px-4 py-3 rounded-xl transition-all duration-200 hover:scale-[1.03]"
