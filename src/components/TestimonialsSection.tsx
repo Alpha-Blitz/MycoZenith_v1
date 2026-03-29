@@ -32,7 +32,7 @@ function StarIcon() {
 
 export default function TestimonialsSection() {
   return (
-    <section className="bg-[#171717] py-16 sm:py-28 px-4 sm:px-6">
+    <section className="bg-[#1E1E1E] py-16 sm:py-28 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto border-t border-white/[0.07] pt-16 sm:pt-28">
 
         {/* Header */}
@@ -50,7 +50,7 @@ export default function TestimonialsSection() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
           {TESTIMONIALS.map(({ stars, quote, name, role, initials }) => (
             <div key={name}
-              className="flex flex-col gap-5 bg-[#161616] border border-white/[0.08] rounded-2xl p-6 sm:p-8 hover:border-white/[0.14] transition-colors duration-300">
+              className="flex flex-col gap-5 bg-[#0F0F0F] border border-white/[0.08] rounded-2xl p-6 sm:p-8 hover:border-white/[0.14] transition-colors duration-300">
               <div className="flex items-center gap-1">
                 {Array.from({ length: stars }).map((_, i) => <StarIcon key={i} />)}
               </div>

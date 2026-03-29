@@ -34,7 +34,7 @@ export default function ProductCard({ slug, image, name, tag, description, price
   }
 
   return (
-    <div className="group relative flex flex-col rounded-2xl overflow-hidden border border-white/[0.08] hover:border-[#8B5CF6]/40 bg-[#161616] transition-all duration-300 hover:shadow-[0_8px_40px_rgba(139,92,246,0.12)]">
+    <div className="group relative flex flex-col rounded-2xl overflow-hidden border border-white/[0.08] hover:border-[#8B5CF6]/40 bg-[#0F0F0F] transition-all duration-300 hover:shadow-[0_8px_40px_rgba(139,92,246,0.12)]">
 
       {/* ── Image (entire top is a link) ─────────────────── */}
       <Link href={`/products/${slug}`} className="relative block aspect-[3/4] overflow-hidden">
@@ -42,7 +42,7 @@ export default function ProductCard({ slug, image, name, tag, description, price
           className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.05]"
           sizes="(max-width: 768px) 100vw, 33vw" />
         {/* Bottom scrim */}
-        <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#161616] via-[#161616]/50 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#0F0F0F] via-[#0F0F0F]/50 to-transparent" />
         {/* Tag */}
         <div className="absolute top-4 left-4">
           <span className="inline-block bg-white/12 border border-white/20 text-white text-[10px] font-semibold tracking-[0.16em] uppercase px-3 py-1 rounded-full backdrop-blur-sm">

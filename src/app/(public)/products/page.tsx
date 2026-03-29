@@ -8,7 +8,7 @@ export default async function ProductsPage({
   const { q } = await searchParams
 
   return (
-    <div className="min-h-screen bg-[#171717] pt-24 sm:pt-28 pb-20 sm:pb-28 px-6 sm:px-10">
+    <div className="min-h-screen bg-[#1E1E1E] pt-24 sm:pt-28 pb-20 sm:pb-28 px-6 sm:px-10">
       <div className="max-w-7xl mx-auto">
 
         {/* Header */}

@@ -42,7 +42,7 @@ function ArrowRight({ size = 13 }: { size?: number }) {
 
 export default function BlogsSection() {
   return (
-    <section className="bg-[#171717] py-16 sm:py-28 px-4 sm:px-6">
+    <section className="bg-[#1E1E1E] py-16 sm:py-28 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto border-t border-white/[0.07] pt-16 sm:pt-28">
 
         {/* Header */}
@@ -66,14 +66,14 @@ export default function BlogsSection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
           {POSTS.map(({ slug, image, category, title, excerpt, date, readTime }) => (
             <Link key={slug} href={`/blog/${slug}`}
-              className="group flex flex-col rounded-2xl overflow-hidden border border-white/[0.08] hover:border-[#8B5CF6]/40 transition-all duration-300 bg-[#161616]">
+              className="group flex flex-col rounded-2xl overflow-hidden border border-white/[0.08] hover:border-[#8B5CF6]/40 transition-all duration-300 bg-[#0F0F0F]">
 
               {/* Thumbnail */}
               <div className="relative aspect-[16/9] overflow-hidden">
                 <Image src={image} alt={title} fill
                   className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, 33vw" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#161616]/60 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0F0F0F]/60 to-transparent" />
                 {/* Category badge over image */}
                 <div className="absolute bottom-3 left-4">
                   <span className="inline-block bg-[#8B5CF6]/20 border border-[#8B5CF6]/35 text-[#8B5CF6] text-[10px] font-semibold tracking-[0.16em] uppercase px-3 py-1 rounded-full backdrop-blur-sm">
