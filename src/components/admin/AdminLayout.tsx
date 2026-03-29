@@ -63,7 +63,7 @@ export default function AdminLayout({ children, user }: { children: React.ReactN
       <div className="flex-1 flex flex-col overflow-hidden ml-[240px]">
 
         {/* Top bar */}
-        <header className="h-16 bg-[#161616]/90 backdrop-blur border-b border-white/[0.06] flex items-center justify-between px-6 shrink-0 gap-4">
+        <header className="h-16 bg-[#161616]/90 backdrop-blur border-b border-white/[0.06] flex items-center justify-between px-6 shrink-0 gap-4 relative z-30">
 
           {/* Left: title + breadcrumb */}
           <div className="flex flex-col justify-center min-w-0">
