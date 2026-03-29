@@ -74,7 +74,7 @@ export default function Sidebar() {
         </div>
         <div className="flex flex-col leading-tight">
           <span style={{ fontFamily: 'var(--font-playfair)' }} className="font-semibold text-[17px] tracking-wide text-white leading-none">MycoZenith</span>
-          <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-[#8B5CF6]/70 mt-0.5">Admin Panel</span>
+          <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-[#8B5CF6]/70 mt-1.5">Admin Panel</span>
         </div>
       </div>
 
