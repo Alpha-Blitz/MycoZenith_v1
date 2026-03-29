@@ -158,7 +158,7 @@ export default function ProductsGrid({ initialQuery }: { initialQuery: string })
         <div className="grid grid-cols-8 gap-4">
 
           {/* Search — 1 card wide */}
-          <div className="col-span-2 flex items-stretch bg-white/[0.05] border border-white/[0.1] rounded-xl overflow-hidden focus-within:border-[#8B5CF6]/50 transition-colors duration-200">
+          <div className="col-span-2 flex items-stretch bg-[#0F0F0F] border border-white/[0.1] rounded-xl overflow-hidden focus-within:border-[#8B5CF6]/50 transition-colors duration-200">
             <span className="pl-3.5 pr-2 text-white/30 pointer-events-none shrink-0 flex items-center">
               <SearchIcon />
             </span>

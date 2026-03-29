@@ -95,7 +95,7 @@ export default function BlogPage() {
   const hasMore      = visible < filteredPosts.length
 
   return (
-    <div className="min-h-screen bg-[#171717]">
+    <div className="min-h-screen bg-[#1E1E1E]">
 
       {/* ── Content ───────────────────────────────────────────────── */}
       <div id="articles" className="max-w-7xl mx-auto px-6 sm:px-10 pt-24 sm:pt-28 pb-20 sm:pb-28">
@@ -169,7 +169,7 @@ export default function BlogPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search articles…"
-              className="w-full bg-white/[0.04] border border-white/[0.1] text-white text-sm placeholder-white/25 pl-9 pr-4 py-2 rounded-xl outline-none focus:border-[#8B5CF6] transition-colors duration-200"
+              className="w-full bg-[#0F0F0F] border border-white/[0.1] text-white text-sm placeholder-white/25 pl-9 pr-4 py-2 rounded-xl outline-none focus:border-[#8B5CF6] transition-colors duration-200"
             />
           </div>
         </div>
