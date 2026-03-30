@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
+import { PRODUCTS } from '@/lib/products'
 
 /* ─── Types ───────────────────────────────────────────────────────── */
 interface OrderItem { id: string; product_name: string; product_slug: string; unit_price: number; quantity: number; line_total: number }
@@ -564,21 +565,52 @@ export default function AccountClient({ user, orders, addresses: initAddresses, 
                   <Link href="/products" className="text-[#8B5CF6] text-sm hover:text-[#a78bfa] transition-colors duration-150">Browse products</Link>
                 </div>
               ) : (
-                <div className="flex flex-col gap-3">
-                  {favorites.map(fav => (
-                    <div key={fav.product_slug} className={CARD + ' px-5 py-4 flex items-center justify-between gap-4'}>
-                      <div className="min-w-0">
-                        <Link href={`/products/${fav.product_slug}`} className="text-white text-sm font-medium hover:text-[#FF6523] transition-colors duration-150 truncate block">
-                          {fav.product_slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {favorites.map(fav => {
+                    const product = PRODUCTS.find(p => p.slug === fav.product_slug)
+                    return (
+                      <div key={fav.product_slug} className={CARD + ' overflow-hidden flex flex-col'}>
+                        {/* Image */}
+                        <Link href={`/products/${fav.product_slug}`} className="relative block h-40 overflow-hidden">
+                          {product ? (
+                            <Image src={product.image} alt={product.name} fill
+                              className="object-cover transition-transform duration-500 hover:scale-[1.04]"
+                              sizes="(max-width: 640px) 100vw, 50vw" />
+                          ) : (
+                            <div className="w-full h-full bg-white/[0.04]" />
+                          )}
+                          <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#0F0F0F] to-transparent" />
+                          {product && (
+                            <span className="absolute top-3 left-3 inline-block bg-white/10 border border-white/20 text-white text-[10px] font-semibold tracking-[0.14em] uppercase px-2.5 py-0.5 rounded-full backdrop-blur-sm">
+                              {product.tag}
+                            </span>
+                          )}
                         </Link>
-                        <p className="text-white/35 text-xs mt-0.5">Favorited {formatDate(fav.saved_at)}</p>
+                        {/* Body */}
+                        <div className="p-4 flex flex-col gap-1.5 flex-1">
+                          <div className="flex items-start justify-between gap-3">
+                            <Link href={`/products/${fav.product_slug}`}
+                              className="text-white text-sm font-semibold leading-snug hover:text-white/80 transition-colors duration-150 line-clamp-1">
+                              {product?.name ?? fav.product_slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                            </Link>
+                            {product && (
+                              <span className="text-[#FF6523] text-sm font-bold tabular-nums shrink-0">{product.price}</span>
+                            )}
+                          </div>
+                          {product && (
+                            <p className="text-white/40 text-xs leading-relaxed line-clamp-2">{product.description}</p>
+                          )}
+                          <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/[0.06]">
+                            <p className="text-white/25 text-xs">Saved {formatDate(fav.saved_at)}</p>
+                            <button onClick={() => removeFavorite(fav.product_slug)}
+                              className="w-7 h-7 flex items-center justify-center text-red-400/40 hover:text-red-400 hover:bg-red-500/[0.08] rounded-lg transition-colors duration-150 cursor-pointer">
+                              {icons.trash}
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                      <button onClick={() => removeFavorite(fav.product_slug)}
-                        className="w-8 h-8 flex items-center justify-center text-red-400/50 hover:text-red-400 hover:bg-red-500/[0.08] rounded-lg transition-colors duration-150 cursor-pointer shrink-0">
-                        {icons.trash}
-                      </button>
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
               )
             )}

@@ -181,7 +181,7 @@ export default function ProductsGrid({ initialQuery }: { initialQuery: string })
             )}
             <button
               type="button"
-              className="border border-[#8B5CF6]/55 text-[#8B5CF6] hover:bg-[#8B5CF6]/10 text-xs font-semibold px-3 sm:px-4 py-2 m-1 rounded-lg transition-colors duration-150 cursor-pointer shrink-0 flex items-center gap-1.5"
+              className="border border-white/[0.18] text-white/70 hover:text-white hover:border-white/30 hover:bg-white/[0.06] text-xs font-semibold px-3 sm:px-4 py-2 m-1 rounded-lg transition-colors duration-150 cursor-pointer shrink-0 flex items-center gap-1.5"
             >
               <SearchIcon />
               <span className="hidden sm:inline">Search</span>

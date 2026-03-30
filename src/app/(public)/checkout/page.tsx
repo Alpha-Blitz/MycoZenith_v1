@@ -128,11 +128,11 @@ export default function CheckoutPage() {
   const selectAddrSuggestion = (item: NominatimResult) => {
     const a = item.address ?? {}
 
-    // addr1: road/street + optional house number
-    const streetPart = a.road ?? a.street ?? a.footway ?? a.pedestrian ?? a.path ?? ''
+    // addr1: house + road, fallback to first 3 parts of display_name
     const housePart  = a.house_number ?? a.house_name ?? ''
+    const streetPart = a.road ?? a.street ?? a.footway ?? a.pedestrian ?? a.path ?? ''
     const line1 = [housePart, streetPart].filter(Boolean).join(', ')
-      || item.display_name.split(',').slice(0, 2).join(',').trim()
+      || item.display_name.split(',').slice(0, 3).join(',').trim()
     setAddr1(line1)
 
     // addr2: locality / suburb / neighbourhood
