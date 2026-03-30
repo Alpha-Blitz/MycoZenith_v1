@@ -1,9 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useCart, parsePrice } from '@/context/CartContext'
+import { useAuth } from '@/context/AuthContext'
+import { createClient } from '@/lib/supabase/client'
 
 function CartIcon() {
   return (
@@ -54,12 +56,48 @@ type Props = {
 }
 
 export default function ProductActions({ slug, name, image, price, tag }: Props) {
-  const [qty,    setQty]    = useState(1)
-  const [added,  setAdded]  = useState(false)
-  const [copied, setCopied] = useState(false)
+  const [qty,       setQty]       = useState(1)
+  const [added,     setAdded]     = useState(false)
+  const [copied,    setCopied]    = useState(false)
+  const [favorited, setFavorited] = useState(false)
+  const [favLoading, setFavLoading] = useState(false)
 
   const { addItem } = useCart()
+  const { user, openModal } = useAuth()
   const router = useRouter()
+
+  /* Check if already favorited */
+  useEffect(() => {
+    if (!user) { setFavorited(false); return }
+    const supabase = createClient()
+    supabase
+      .from('favorite_products')
+      .select('product_slug')
+      .eq('user_id', user.id)
+      .eq('product_slug', slug)
+      .maybeSingle()
+      .then(({ data }) => setFavorited(!!data))
+  }, [user, slug])
+
+  const handleFavorite = async () => {
+    if (!user) { openModal(); return }
+    setFavLoading(true)
+    const supabase = createClient()
+    if (favorited) {
+      await supabase
+        .from('favorite_products')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('product_slug', slug)
+      setFavorited(false)
+    } else {
+      await supabase
+        .from('favorite_products')
+        .insert({ user_id: user.id, product_slug: slug })
+      setFavorited(true)
+    }
+    setFavLoading(false)
+  }
 
   const handleAddToCart = () => {
     addItem({ slug, name, image, price: parsePrice(price), tag, quantity: qty })
@@ -136,6 +174,25 @@ export default function ProductActions({ slug, name, image, price, tag }: Props)
           Subscribe &amp; Save
         </button>
       </div>
+
+      {/* Add to Favorites */}
+      <button
+        onClick={handleFavorite}
+        disabled={favLoading}
+        className={[
+          'w-full inline-flex items-center justify-center gap-2 text-sm font-medium px-4 py-3.5 rounded-xl border transition-all duration-200 cursor-pointer disabled:opacity-50',
+          favorited
+            ? 'bg-red-500/10 border-red-500/40 text-red-400 hover:bg-red-500/15'
+            : 'bg-white/[0.03] border-white/[0.12] text-white/60 hover:border-red-500/30 hover:text-red-400 hover:bg-red-500/[0.07]',
+        ].join(' ')}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+          fill={favorited ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2"
+          strokeLinecap="round" strokeLinejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        {favorited ? 'Saved to Favorites' : 'Add to Favorites'}
+      </button>
 
       {/* Secure checkout note + Share */}
       <div className="flex items-center justify-between gap-4">
