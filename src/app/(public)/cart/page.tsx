@@ -1,12 +1,11 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useCart, FREE_SHIPPING_THRESHOLD } from '@/context/CartContext'
+import { useCart, FREE_SHIPPING_THRESHOLD, parsePrice } from '@/context/CartContext'
 import { PRODUCTS } from '@/lib/products'
-import ProductCard from '@/components/ProductCard'
 
 /* ─── Icons ───────────────────────────────────────────────────── */
 function TrashIcon() {
@@ -58,6 +57,59 @@ function PackageIcon() {
   )
 }
 
+/* ─── Suggestion Card (Add to Cart only) ─────────────────────── */
+function SuggestionCard({ slug, name, image, tag, price }: typeof PRODUCTS[0]) {
+  const [added, setAdded] = useState(false)
+  const { addItem } = useCart()
+
+  const handleAdd = () => {
+    addItem({ slug, name, image, price: parsePrice(price), tag })
+    setAdded(true)
+    setTimeout(() => setAdded(false), 1800)
+  }
+
+  return (
+    <div className="group flex flex-col rounded-2xl overflow-hidden border border-white/[0.08] hover:border-[#8B5CF6]/40 bg-[#0F0F0F] transition-all duration-300 hover:shadow-[0_8px_32px_rgba(139,92,246,0.10)]">
+      <Link href={`/products/${slug}`} className="relative block aspect-[4/3] overflow-hidden">
+        <Image src={image} alt={name} fill
+          className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+          sizes="(max-width: 640px) 50vw, 25vw" />
+        <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#0F0F0F]/80 to-transparent" />
+        <div className="absolute top-3 left-3">
+          <span className="inline-block bg-white/10 border border-white/20 text-white text-[10px] font-semibold tracking-[0.14em] uppercase px-2.5 py-0.5 rounded-full backdrop-blur-sm">
+            {tag}
+          </span>
+        </div>
+      </Link>
+      <div className="p-3.5 flex flex-col gap-2.5">
+        <div className="flex items-start justify-between gap-2">
+          <Link href={`/products/${slug}`}>
+            <p className="text-white text-sm font-semibold leading-snug line-clamp-1 hover:text-white/80 transition-colors duration-200">{name}</p>
+          </Link>
+          <span className="text-[#F97316] text-sm font-bold tabular-nums shrink-0">{price}</span>
+        </div>
+        <button
+          onClick={handleAdd}
+          className={[
+            'w-full inline-flex items-center justify-center gap-1.5 text-xs font-semibold px-3 py-2.5 rounded-xl border transition-all duration-200 cursor-pointer',
+            added
+              ? 'bg-[#8B5CF6]/20 border-[#8B5CF6]/50 text-[#8B5CF6]'
+              : 'bg-white/[0.05] border-white/[0.12] text-white/80 hover:bg-white/[0.1] hover:border-white/[0.2] hover:text-white',
+          ].join(' ')}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+          {added ? 'Added!' : 'Add to Cart'}
+        </button>
+      </div>
+    </div>
+  )
+}
+
 /* ─── Promo codes ─────────────────────────────────────────────── */
 const PROMO_CODES: Record<string, number> = { MYCO10: 0.10 }
 
@@ -95,7 +147,7 @@ export default function CartPage() {
   /* "You might also like" */
   const suggestions = useMemo(() => {
     const inCart = new Set(items.map((i) => i.slug))
-    return PRODUCTS.filter((p) => !inCart.has(p.slug)).slice(0, 3)
+    return PRODUCTS.filter((p) => !inCart.has(p.slug)).slice(0, 4)
   }, [items])
 
   /* ── Empty cart ─────────────────────────────────────────────── */
@@ -166,15 +218,17 @@ export default function CartPage() {
                         ₹{item.price.toLocaleString('en-IN')} each
                       </span>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
                       <button onClick={() => saveForLater(item.slug)}
-                        className="text-white/30 hover:text-[#8B5CF6] text-xs transition-colors duration-150 cursor-pointer">
-                        Save for later
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/[0.1] text-white/50 hover:text-[#8B5CF6] hover:border-[#8B5CF6]/40 bg-white/[0.03] hover:bg-[#8B5CF6]/[0.06] text-xs font-medium transition-all duration-200 cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                        Save
                       </button>
                       <button onClick={() => removeItem(item.slug)}
-                        className="text-white/25 hover:text-red-400 transition-colors duration-150 cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/[0.08] text-white/35 hover:text-red-400 hover:border-red-500/30 bg-white/[0.02] hover:bg-red-500/[0.06] text-xs font-medium transition-all duration-200 cursor-pointer"
                         aria-label="Remove item">
                         <TrashIcon />
+                        Remove
                       </button>
                     </div>
                   </div>
@@ -215,8 +269,8 @@ export default function CartPage() {
                 <p className="text-white/30 text-xs font-semibold tracking-[0.18em] uppercase mb-5">
                   You Might Also Like
                 </p>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  {suggestions.map((p) => <ProductCard key={p.slug} {...p} />)}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                  {suggestions.map((p) => <SuggestionCard key={p.slug} {...p} />)}
                 </div>
               </div>
             )}

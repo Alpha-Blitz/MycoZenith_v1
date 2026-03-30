@@ -92,6 +92,43 @@ export default function CheckoutPage() {
   const [state,   setState]   = useState('')
   const [pincode, setPincode] = useState('')
 
+  /* Geolocation */
+  const [locating, setLocating] = useState(false)
+  const [locError, setLocError] = useState('')
+
+  const useMyLocation = () => {
+    if (!navigator.geolocation) { setLocError('Geolocation not supported by your browser.'); return }
+    setLocating(true)
+    setLocError('')
+    navigator.geolocation.getCurrentPosition(
+      async ({ coords }) => {
+        try {
+          const res  = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${coords.latitude}&lon=${coords.longitude}&format=json&addressdetails=1`,
+            { headers: { 'Accept-Language': 'en' } }
+          )
+          const data = await res.json()
+          const a    = data.address ?? {}
+          // Address Line 1: house number + road
+          const line1 = [a.house_number, a.road].filter(Boolean).join(' ')
+          if (line1) setAddr1(line1)
+          // Address Line 2: neighbourhood / suburb
+          const line2 = a.neighbourhood ?? a.suburb ?? a.quarter ?? ''
+          if (line2) setAddr2(line2)
+          if (a.city ?? a.town ?? a.village) setCity(a.city ?? a.town ?? a.village)
+          if (a.state) setState(a.state)
+          if (a.postcode) setPincode(a.postcode.replace(/\s/g, '').slice(0, 6))
+        } catch {
+          setLocError('Could not fetch address. Please fill in manually.')
+        } finally {
+          setLocating(false)
+        }
+      },
+      () => { setLocError('Location access denied. Please fill in manually.'); setLocating(false) },
+      { timeout: 10000 }
+    )
+  }
+
   /* Order state */
   const [placing,      setPlacing]      = useState(false)
   const [orderError,   setOrderError]   = useState('')
@@ -261,6 +298,35 @@ export default function CheckoutPage() {
                 <h2 className="text-white text-base font-semibold">Delivery Address</h2>
               </div>
               <div className="flex flex-col gap-3">
+                {/* Use my location */}
+                <button
+                  type="button"
+                  onClick={useMyLocation}
+                  disabled={locating}
+                  className="self-start inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-[#8B5CF6]/35 text-[#8B5CF6] hover:bg-[#8B5CF6]/10 disabled:opacity-50 disabled:cursor-not-allowed text-xs font-semibold transition-all duration-200 cursor-pointer"
+                >
+                  {locating ? (
+                    <>
+                      <svg className="animate-spin" xmlns="http://www.w3.org/2000/svg" width="13" height="13"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                        <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+                      </svg>
+                      Detecting location…
+                    </>
+                  ) : (
+                    <>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="6"/>
+                        <line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/>
+                        <line x1="18" y1="12" x2="22" y2="12"/>
+                      </svg>
+                      Use my location
+                    </>
+                  )}
+                </button>
+                {locError && <p className="text-red-400 text-xs -mt-1">{locError}</p>}
+
                 <Field label="Address Line 1" required>
                   <input type="text" value={addr1} onChange={(e) => setAddr1(e.target.value)}
                     placeholder="House / Flat / Building" className={INPUT} />
@@ -393,14 +459,14 @@ export default function CheckoutPage() {
                     </div>
                   ) : (
                     <div className="flex flex-col gap-1.5">
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 overflow-hidden">
                         <input type="text" value={promoInput}
                           onChange={(e) => { setPromoInput(e.target.value); setPromoError('') }}
                           onKeyDown={(e) => e.key === 'Enter' && applyPromo()}
                           placeholder="Promo code"
-                          className="flex-1 bg-[#111111] border border-white/[0.1] text-white text-sm placeholder-white/20 px-3 py-2 rounded-xl outline-none focus:border-[#8B5CF6] transition-colors duration-200" />
+                          className="min-w-0 flex-1 bg-[#111111] border border-white/[0.1] text-white text-sm placeholder-white/20 px-3 py-2 rounded-xl outline-none focus:border-[#8B5CF6] transition-colors duration-200" />
                         <button onClick={applyPromo}
-                          className="px-3 py-2 bg-white/[0.06] border border-white/[0.1] text-white/60 hover:text-white hover:bg-white/[0.1] text-xs font-medium rounded-xl transition-all duration-200 cursor-pointer shrink-0">
+                          className="px-3 py-2 bg-white/[0.06] border border-white/[0.1] text-white/60 hover:text-white hover:bg-white/[0.1] text-xs font-medium rounded-xl transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap">
                           Apply
                         </button>
                       </div>
