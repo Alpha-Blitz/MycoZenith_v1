@@ -181,8 +181,9 @@ export default function ProductsGrid({ initialQuery }: { initialQuery: string })
             )}
             <button
               type="button"
-              className="bg-[#0F0F0F] hover:bg-white/[0.05] text-[#8B5CF6] text-xs font-semibold px-3.5 transition-colors duration-150 cursor-pointer shrink-0 flex items-center border-l border-white/[0.1]"
+              className="bg-[#8B5CF6] hover:bg-[#7c3aed] text-white text-xs font-semibold px-4 py-2 m-1 rounded-lg transition-colors duration-150 cursor-pointer shrink-0 flex items-center gap-1.5"
             >
+              <SearchIcon />
               Search
             </button>
           </div>
