@@ -495,7 +495,7 @@ export default function CheckoutPage() {
                           placeholder="Promo code"
                           className="min-w-0 flex-1 bg-[#111111] border border-white/[0.1] text-white text-sm placeholder-white/20 px-3 py-2 rounded-xl outline-none focus:border-[#8B5CF6] transition-colors duration-200" />
                         <button onClick={applyPromo}
-                          className="px-3 py-2 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white text-xs font-semibold rounded-xl transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap">
+                          className="px-3 py-2 border border-[#8B5CF6]/60 text-[#8B5CF6] hover:bg-[#8B5CF6]/10 hover:border-[#8B5CF6] text-xs font-semibold rounded-xl transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap">
                           Apply
                         </button>
                       </div>
