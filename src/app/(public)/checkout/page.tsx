@@ -154,8 +154,7 @@ export default function CheckoutPage() {
     setShowAddrSuggestions(false)
   }
 
-  /* Payment + order state */
-  const [paymentMethod, setPaymentMethod] = useState<'cod' | 'razorpay'>('cod')
+  /* Order state */
   const [placing,      setPlacing]        = useState(false)
   const [orderError,   setOrderError]     = useState('')
   const [successOrder, setSuccessOrder]   = useState<string | null>(null)
@@ -264,92 +263,6 @@ export default function CheckoutPage() {
       const msg = e instanceof Error ? e.message : 'Failed to place order. Please try again.'
       setOrderError(msg)
     } finally {
-      setPlacing(false)
-    }
-  }
-
-  /* Razorpay payment */
-  const handleRazorpayPayment = async () => {
-    if (!name.trim() || !email.trim() || !phone.trim() || !addr1.trim() || !city.trim() || !state.trim() || !pincode.trim()) {
-      setOrderError('Please fill in all required fields.')
-      return
-    }
-    setPlacing(true)
-    setOrderError('')
-    try {
-      // 1. Create Razorpay order on server
-      const res = await fetch('/api/razorpay/create-order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: finalTotal, receipt: `mz_${Date.now()}` }),
-      })
-      const rzpOrder = await res.json()
-      if (!res.ok) throw new Error(rzpOrder.error ?? 'Failed to initiate payment')
-
-      // 2. Load Razorpay script if not already loaded
-      if (!document.getElementById('razorpay-script')) {
-        await new Promise<void>((resolve, reject) => {
-          const s = document.createElement('script')
-          s.id  = 'razorpay-script'
-          s.src = 'https://checkout.razorpay.com/v1/checkout.js'
-          s.onload  = () => resolve()
-          s.onerror = () => reject(new Error('Failed to load Razorpay'))
-          document.head.appendChild(s)
-        })
-      }
-
-      // 3. Open checkout modal
-      type RazorpayInstance = { open: () => void }
-      const RazorpayClass = (window as unknown as { Razorpay: new (opts: unknown) => RazorpayInstance }).Razorpay
-      const rzp = new RazorpayClass({
-        key:         process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        amount:      rzpOrder.amount,
-        currency:    rzpOrder.currency,
-        order_id:    rzpOrder.id,
-        name:        'MycoZenith',
-        description: 'Order Payment',
-        prefill:     { name: name.trim(), email: email.trim(), contact: phone.trim() },
-        theme:       { color: '#8B5CF6' },
-        handler: async (response: { razorpay_order_id: string; razorpay_payment_id: string; razorpay_signature: string }) => {
-          // 4. Verify + persist order on server
-          const verifyRes = await fetch('/api/razorpay/verify', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              ...response,
-              customerName:  name.trim(),
-              customerEmail: email.trim(),
-              customerPhone: phone.trim(),
-              addr1: addr1.trim(), addr2: addr2.trim(),
-              city: city.trim(), state: state.trim(), pincode: pincode.trim(),
-              subtotal, discount, shipping, total: finalTotal,
-              items,
-              userId: user?.id,
-            }),
-          })
-          const verifyData = await verifyRes.json()
-          if (!verifyRes.ok) throw new Error(verifyData.error ?? 'Payment verification failed')
-
-          gaEvent('purchase', {
-            transaction_id: verifyData.orderNumber,
-            value: finalTotal,
-            currency: 'INR',
-            payment_type: 'razorpay',
-            items: items.map(i => ({ item_id: i.slug, item_name: i.name, price: i.price, quantity: i.quantity })),
-          })
-
-          clearCart()
-          setSuccessOrder(verifyData.orderNumber)
-          setPlacing(false)
-        },
-      })
-      rzp.open()
-      // Note: setPlacing(false) on success is inside handler; on modal close without payment it stays true briefly
-      // Reset if user dismisses modal
-      setTimeout(() => setPlacing(false), 500)
-    } catch (e: unknown) {
-      const msg = e instanceof Error ? e.message : 'Payment failed. Please try again.'
-      setOrderError(msg)
       setPlacing(false)
     }
   }
@@ -496,41 +409,27 @@ export default function CheckoutPage() {
                 <h2 className="text-white text-base font-semibold">Payment Method</h2>
               </div>
               <div className="flex flex-col gap-2">
-                {/* COD */}
-                <label
-                  onClick={() => setPaymentMethod('cod')}
-                  className={['flex items-center gap-3 rounded-xl px-4 py-3.5 cursor-pointer transition-colors duration-150',
-                    paymentMethod === 'cod'
-                      ? 'bg-white/[0.03] border border-[#8B5CF6]/30'
-                      : 'bg-white/[0.02] border border-white/[0.08] hover:border-white/[0.15]',
-                  ].join(' ')}>
-                  <div className={['w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0',
-                    paymentMethod === 'cod' ? 'border-[#8B5CF6]' : 'border-white/25'].join(' ')}>
-                    {paymentMethod === 'cod' && <div className="w-2 h-2 rounded-full bg-[#8B5CF6]" />}
+                {/* COD — selected */}
+                <label className="flex items-center gap-3 bg-white/[0.03] border border-[#8B5CF6]/30 rounded-xl px-4 py-3.5 cursor-pointer">
+                  <div className="w-4 h-4 rounded-full border-2 border-[#8B5CF6] flex items-center justify-center shrink-0">
+                    <div className="w-2 h-2 rounded-full bg-[#8B5CF6]" />
                   </div>
                   <div>
                     <p className="text-white text-sm font-medium">Cash on Delivery</p>
                     <p className="text-white/35 text-xs">Pay when your order arrives</p>
                   </div>
                 </label>
-                {/* Razorpay */}
-                <label
-                  onClick={() => setPaymentMethod('razorpay')}
-                  className={['flex items-center gap-3 rounded-xl px-4 py-3.5 cursor-pointer transition-colors duration-150',
-                    paymentMethod === 'razorpay'
-                      ? 'bg-white/[0.03] border border-[#8B5CF6]/30'
-                      : 'bg-white/[0.02] border border-white/[0.08] hover:border-white/[0.15]',
-                  ].join(' ')}>
-                  <div className={['w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0',
-                    paymentMethod === 'razorpay' ? 'border-[#8B5CF6]' : 'border-white/25'].join(' ')}>
-                    {paymentMethod === 'razorpay' && <div className="w-2 h-2 rounded-full bg-[#8B5CF6]" />}
-                  </div>
+                {/* Razorpay — coming soon */}
+                <div className="flex items-center gap-3 bg-white/[0.02] border border-white/[0.06] rounded-xl px-4 py-3.5 opacity-50 select-none">
+                  <div className="w-4 h-4 rounded-full border-2 border-white/20 shrink-0" />
                   <div className="flex-1">
-                    <p className="text-white text-sm font-medium">Online Payment</p>
-                    <p className="text-white/35 text-xs">UPI, Card, Netbanking via Razorpay</p>
+                    <p className="text-white/50 text-sm font-medium">Online Payment</p>
+                    <p className="text-white/25 text-xs">UPI, Card, Netbanking</p>
                   </div>
-                  <img src="https://razorpay.com/favicon.ico" alt="Razorpay" className="w-5 h-5 opacity-70" />
-                </label>
+                  <span className="text-[10px] font-semibold bg-white/[0.07] border border-white/[0.1] text-white/40 px-2 py-0.5 rounded-full tracking-wide">
+                    Coming Soon
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -543,7 +442,7 @@ export default function CheckoutPage() {
 
             {/* Mobile CTA */}
             <button
-              onClick={paymentMethod === 'razorpay' ? handleRazorpayPayment : placeOrder}
+              onClick={placeOrder}
               disabled={placing || items.length === 0}
               className="lg:hidden w-full flex items-center justify-center gap-2 bg-[#FF6523] hover:bg-[#E5561E] disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-bold px-6 py-4 rounded-xl transition-all duration-200 hover:scale-[1.01] cursor-pointer tracking-wide"
             >
@@ -553,10 +452,10 @@ export default function CheckoutPage() {
                     viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                     <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
                   </svg>
-                  {paymentMethod === 'razorpay' ? 'Opening Payment…' : 'Placing Order…'}
+                  Placing Order…
                 </>
               ) : (
-                <>{paymentMethod === 'razorpay' ? 'PAY' : 'PLACE ORDER'} — ₹{finalTotal.toLocaleString('en-IN')} <ArrowRight /></>
+                <>PLACE ORDER — ₹{finalTotal.toLocaleString('en-IN')} <ArrowRight /></>
               )}
             </button>
           </div>
@@ -659,7 +558,7 @@ export default function CheckoutPage() {
 
               {/* Desktop CTA */}
               <button
-                onClick={paymentMethod === 'razorpay' ? handleRazorpayPayment : placeOrder}
+                onClick={placeOrder}
                 disabled={placing || items.length === 0}
                 className="hidden lg:flex w-full items-center justify-center gap-2 bg-[#FF6523] hover:bg-[#E5561E] disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-bold px-6 py-4 rounded-xl transition-all duration-200 hover:scale-[1.01] cursor-pointer tracking-wide"
               >
@@ -669,10 +568,10 @@ export default function CheckoutPage() {
                       viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                       <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
                     </svg>
-                    {paymentMethod === 'razorpay' ? 'Opening Payment…' : 'Placing Order…'}
+                    Placing Order…
                   </>
                 ) : (
-                  <>{paymentMethod === 'razorpay' ? 'PAY' : 'PLACE ORDER'} — ₹{finalTotal.toLocaleString('en-IN')} <ArrowRight /></>
+                  <>PLACE ORDER — ₹{finalTotal.toLocaleString('en-IN')} <ArrowRight /></>
                 )}
               </button>
 
