@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -92,41 +92,51 @@ export default function CheckoutPage() {
   const [state,   setState]   = useState('')
   const [pincode, setPincode] = useState('')
 
-  /* Geolocation */
-  const [locating, setLocating] = useState(false)
-  const [locError, setLocError] = useState('')
+  /* Address autocomplete */
+  type NominatimResult = { display_name: string; address: Record<string, string> }
+  const [addrSuggestions,     setAddrSuggestions]     = useState<NominatimResult[]>([])
+  const [showAddrSuggestions, setShowAddrSuggestions] = useState(false)
+  const addr1Ref = useRef<HTMLDivElement>(null)
 
-  const useMyLocation = () => {
-    if (!navigator.geolocation) { setLocError('Geolocation not supported by your browser.'); return }
-    setLocating(true)
-    setLocError('')
-    navigator.geolocation.getCurrentPosition(
-      async ({ coords }) => {
-        try {
-          const res  = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?lat=${coords.latitude}&lon=${coords.longitude}&format=json&addressdetails=1`,
-            { headers: { 'Accept-Language': 'en' } }
-          )
-          const data = await res.json()
-          const a    = data.address ?? {}
-          // Address Line 1: house number + road
-          const line1 = [a.house_number, a.road].filter(Boolean).join(' ')
-          if (line1) setAddr1(line1)
-          // Address Line 2: neighbourhood / suburb
-          const line2 = a.neighbourhood ?? a.suburb ?? a.quarter ?? ''
-          if (line2) setAddr2(line2)
-          if (a.city ?? a.town ?? a.village) setCity(a.city ?? a.town ?? a.village)
-          if (a.state) setState(a.state)
-          if (a.postcode) setPincode(a.postcode.replace(/\s/g, '').slice(0, 6))
-        } catch {
-          setLocError('Could not fetch address. Please fill in manually.')
-        } finally {
-          setLocating(false)
-        }
-      },
-      () => { setLocError('Location access denied. Please fill in manually.'); setLocating(false) },
-      { timeout: 10000 }
-    )
+  // Debounced Nominatim search
+  useEffect(() => {
+    if (addr1.length < 3) { setAddrSuggestions([]); return }
+    const timer = setTimeout(async () => {
+      try {
+        const res  = await fetch(
+          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(addr1)}&format=json&addressdetails=1&limit=5&countrycodes=in`,
+          { headers: { 'Accept-Language': 'en' } }
+        )
+        const data: NominatimResult[] = await res.json()
+        setAddrSuggestions(data)
+        if (data.length > 0) setShowAddrSuggestions(true)
+      } catch {}
+    }, 420)
+    return () => clearTimeout(timer)
+  }, [addr1])
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (addr1Ref.current && !addr1Ref.current.contains(e.target as Node))
+        setShowAddrSuggestions(false)
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
+
+  const selectAddrSuggestion = (item: NominatimResult) => {
+    const a    = item.address ?? {}
+    const road = [a.house_number, a.road].filter(Boolean).join(' ') || item.display_name.split(',')[0]
+    setAddr1(road)
+    const sub = a.neighbourhood ?? a.suburb ?? a.quarter ?? ''
+    if (sub) setAddr2(sub)
+    const c = a.city ?? a.town ?? a.village ?? ''
+    if (c) setCity(c)
+    if (a.state) setState(a.state)
+    if (a.postcode) setPincode(a.postcode.replace(/\s/g, '').slice(0, 6))
+    setAddrSuggestions([])
+    setShowAddrSuggestions(false)
   }
 
   /* Order state */
@@ -298,38 +308,37 @@ export default function CheckoutPage() {
                 <h2 className="text-white text-base font-semibold">Delivery Address</h2>
               </div>
               <div className="flex flex-col gap-3">
-                {/* Use my location */}
-                <button
-                  type="button"
-                  onClick={useMyLocation}
-                  disabled={locating}
-                  className="self-start inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-[#8B5CF6]/35 text-[#8B5CF6] hover:bg-[#8B5CF6]/10 disabled:opacity-50 disabled:cursor-not-allowed text-xs font-semibold transition-all duration-200 cursor-pointer"
-                >
-                  {locating ? (
-                    <>
-                      <svg className="animate-spin" xmlns="http://www.w3.org/2000/svg" width="13" height="13"
-                        viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                        <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
-                      </svg>
-                      Detecting location…
-                    </>
-                  ) : (
-                    <>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="6"/>
-                        <line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/>
-                        <line x1="18" y1="12" x2="22" y2="12"/>
-                      </svg>
-                      Use my location
-                    </>
-                  )}
-                </button>
-                {locError && <p className="text-red-400 text-xs -mt-1">{locError}</p>}
-
                 <Field label="Address Line 1" required>
-                  <input type="text" value={addr1} onChange={(e) => setAddr1(e.target.value)}
-                    placeholder="House / Flat / Building" className={INPUT} />
+                  <div ref={addr1Ref} className="relative">
+                    <input
+                      type="text"
+                      value={addr1}
+                      onChange={(e) => { setAddr1(e.target.value); setShowAddrSuggestions(true) }}
+                      onFocus={() => addrSuggestions.length > 0 && setShowAddrSuggestions(true)}
+                      placeholder="Start typing your address…"
+                      autoComplete="off"
+                      className={INPUT}
+                    />
+                    {showAddrSuggestions && addrSuggestions.length > 0 && (
+                      <ul className="absolute z-50 top-full mt-1 w-full bg-[#161616] border border-white/[0.1] rounded-xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
+                        {addrSuggestions.map((item, i) => (
+                          <li key={i}>
+                            <button
+                              type="button"
+                              onMouseDown={(e) => { e.preventDefault(); selectAddrSuggestion(item) }}
+                              className="w-full text-left px-4 py-2.5 text-sm text-white/70 hover:text-white hover:bg-white/[0.06] transition-colors duration-150 flex items-start gap-2.5 cursor-pointer"
+                            >
+                              <svg className="shrink-0 mt-0.5 text-white/30" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+                              </svg>
+                              <span className="line-clamp-2 text-xs leading-relaxed">{item.display_name}</span>
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
                 </Field>
                 <Field label="Address Line 2">
                   <input type="text" value={addr2} onChange={(e) => setAddr2(e.target.value)}

@@ -94,7 +94,7 @@ function SuggestionCard({ slug, name, image, tag, price }: typeof PRODUCTS[0]) {
             'w-full inline-flex items-center justify-center gap-1.5 text-xs font-semibold px-3 py-2.5 rounded-xl border transition-all duration-200 cursor-pointer',
             added
               ? 'bg-[#8B5CF6]/20 border-[#8B5CF6]/50 text-[#8B5CF6]'
-              : 'bg-white/[0.05] border-white/[0.12] text-white/80 hover:bg-white/[0.1] hover:border-white/[0.2] hover:text-white',
+              : 'bg-[#F97316]/[0.06] border-[#F97316]/40 text-[#F97316] hover:bg-[#F97316]/[0.14] hover:border-[#F97316]/60',
           ].join(' ')}
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
@@ -225,10 +225,9 @@ export default function CartPage() {
                         Save
                       </button>
                       <button onClick={() => removeItem(item.slug)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/[0.08] text-white/35 hover:text-red-400 hover:border-red-500/30 bg-white/[0.02] hover:bg-red-500/[0.06] text-xs font-medium transition-all duration-200 cursor-pointer"
+                        className="inline-flex items-center justify-center w-[30px] h-[30px] rounded-lg border border-white/[0.08] text-white/35 hover:text-red-400 hover:border-red-500/30 bg-white/[0.02] hover:bg-red-500/[0.06] transition-all duration-200 cursor-pointer"
                         aria-label="Remove item">
                         <TrashIcon />
-                        Remove
                       </button>
                     </div>
                   </div>
