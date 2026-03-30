@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useRef } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useRef, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
@@ -206,8 +206,14 @@ function AddressForm({ initial, onSave, onCancel }: {
 
 /* ─── Main ────────────────────────────────────────────────────────── */
 export default function AccountClient({ user, orders, addresses: initAddresses, savedPosts: initSaved, favorites: initFavs }: Props) {
-  const [activeTab, setActiveTab] = useState<Tab>('profile')
+  const searchParams = useSearchParams()
+  const [activeTab, setActiveTab] = useState<Tab>((searchParams.get('tab') as Tab) ?? 'profile')
   const router = useRouter()
+
+  useEffect(() => {
+    const tab = searchParams.get('tab') as Tab | null
+    if (tab && ['profile','orders','addresses','saved','settings'].includes(tab)) setActiveTab(tab)
+  }, [searchParams])
 
   /* ── Profile ── */
   const [name,        setName]        = useState(user.name)

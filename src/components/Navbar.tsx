@@ -246,6 +246,16 @@ export default function Navbar() {
                       </svg>
                       My Account
                     </Link>
+                    <Link
+                      href="/account?tab=orders"
+                      onClick={() => setAvatarOpen(false)}
+                      className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm text-white/75 hover:text-white hover:bg-white/[0.05] transition-colors duration-200"
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>
+                      </svg>
+                      My Orders
+                    </Link>
                     <button
                       onClick={() => { setAvatarOpen(false); signOut() }}
                       className="flex items-center gap-2.5 w-full text-left px-4 py-2.5 text-sm text-red-400/70 hover:text-red-400 hover:bg-red-500/[0.06] transition-colors duration-200 cursor-pointer"
