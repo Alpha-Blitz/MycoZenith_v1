@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useCart, parsePrice } from '@/context/CartContext'
 import { useAuth } from '@/context/AuthContext'
@@ -175,47 +174,45 @@ export default function ProductActions({ slug, name, image, price, tag }: Props)
         </button>
       </div>
 
-      {/* Add to Favorites */}
-      <button
-        onClick={handleFavorite}
-        disabled={favLoading}
-        className={[
-          'w-full inline-flex items-center justify-center gap-2 text-sm font-medium px-4 py-3.5 rounded-xl border transition-all duration-200 cursor-pointer disabled:opacity-50',
-          favorited
-            ? 'bg-red-500/10 border-red-500/40 text-red-400 hover:bg-red-500/15'
-            : 'bg-white/[0.03] border-white/[0.12] text-white/60 hover:border-red-500/30 hover:text-red-400 hover:bg-red-500/[0.07]',
-        ].join(' ')}
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
-          fill={favorited ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2"
-          strokeLinecap="round" strokeLinejoin="round">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-        </svg>
-        {favorited ? 'Saved to Favorites' : 'Add to Favorites'}
-      </button>
-
-      {/* Secure checkout note + Share */}
+      {/* Secure checkout note + Favorite + Share */}
       <div className="flex items-center justify-between gap-4">
         <p className="flex items-center gap-1.5 text-white/30 text-xs">
           <LockIcon />
           Secure checkout · Free shipping above ₹999
         </p>
-        <button
-          onClick={handleShare}
-          className="inline-flex items-center gap-1.5 text-white/35 hover:text-white/70 text-xs transition-colors duration-150 cursor-pointer shrink-0"
-        >
-          {copied ? (
-            <>
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              Copied!
-            </>
-          ) : (
-            <>
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
-              Share
-            </>
-          )}
-        </button>
+        <div className="flex items-center gap-3 shrink-0">
+          <button
+            onClick={handleFavorite}
+            disabled={favLoading}
+            aria-label={favorited ? 'Remove from favorites' : 'Add to favorites'}
+            className={[
+              'transition-all duration-200 cursor-pointer disabled:opacity-50 hover:scale-110',
+              favorited ? 'text-red-400' : 'text-white/35 hover:text-red-400',
+            ].join(' ')}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+              fill={favorited ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2"
+              strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </button>
+          <button
+            onClick={handleShare}
+            className="inline-flex items-center gap-1.5 text-white/35 hover:text-white/70 text-xs transition-colors duration-150 cursor-pointer"
+          >
+            {copied ? (
+              <>
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Copied!
+              </>
+            ) : (
+              <>
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+                Share
+              </>
+            )}
+          </button>
+        </div>
       </div>
     </div>
   )
