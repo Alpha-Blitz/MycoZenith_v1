@@ -111,11 +111,19 @@ export default function AuthModal() {
 
   async function handleGoogleSignIn() {
     setGLoading(true)
-    const supabase = createClient()
-    await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
-    })
+    setError(null)
+    try {
+      const supabase = createClient()
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: `${window.location.origin}/auth/callback` },
+      })
+      if (error) { setError(error.message); setGLoading(false) }
+      // On success the browser redirects — keep spinner until navigation
+    } catch {
+      setError('Google sign-in failed. Please try again.')
+      setGLoading(false)
+    }
   }
 
   async function handleForgotPassword() {

@@ -4,11 +4,11 @@ export default function Loading() {
 
       {/* Logo mark */}
       <div className="relative flex items-center justify-center">
-        {/* Outermost slow ring */}
-        <span className="absolute w-28 h-28 rounded-full border border-[#8B5CF6]/10"
+        {/* Outermost slow ring — orange tint */}
+        <span className="absolute w-28 h-28 rounded-full border border-[#F97316]/20"
           style={{ animation: 'spin 8s linear infinite' }} />
-        {/* Dashed orbit */}
-        <span className="absolute w-20 h-20 rounded-full border border-dashed border-[#8B5CF6]/20"
+        {/* Dashed orbit — purple */}
+        <span className="absolute w-20 h-20 rounded-full border border-dashed border-[#8B5CF6]/25"
           style={{ animation: 'spin 5s linear infinite reverse' }} />
         {/* Pulse ring */}
         <span className="absolute w-16 h-16 rounded-full border border-[#8B5CF6]/30"
@@ -27,12 +27,12 @@ export default function Loading() {
       <div className="flex flex-col items-center gap-1.5">
         <span
           style={{ fontFamily: 'var(--font-playfair)', animation: 'fadeIn 0.6s ease both 0.2s' }}
-          className="text-white text-xl font-semibold tracking-wide opacity-0"
+          className="text-white text-xl font-bold tracking-wide opacity-0"
         >
           MycoZenith
         </span>
         <span
-          className="text-[#8B5CF6]/60 text-[10px] font-semibold tracking-[0.3em] uppercase opacity-0"
+          className="text-[#8B5CF6] text-[10px] font-bold tracking-[0.3em] uppercase opacity-0"
           style={{ animation: 'fadeIn 0.6s ease both 0.4s' }}
         >
           Built on Evidence
@@ -44,7 +44,7 @@ export default function Loading() {
         {[0, 1, 2].map((i) => (
           <span
             key={i}
-            className="w-1.5 h-1.5 rounded-full bg-[#8B5CF6]"
+            className={`w-1.5 h-1.5 rounded-full ${i === 2 ? 'bg-[#F97316]' : 'bg-[#8B5CF6]'}`}
             style={{ animation: `dot-bounce 1.2s ease-in-out infinite`, animationDelay: `${i * 0.2}s` }}
           />
         ))}

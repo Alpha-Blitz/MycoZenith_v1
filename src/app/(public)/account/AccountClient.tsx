@@ -251,7 +251,8 @@ export default function AccountClient({ user, orders, addresses: initAddresses, 
     if (upErr) { setAvatarUploading(false); return }
     const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(path)
     await supabase.auth.updateUser({ data: { avatar_url: publicUrl } })
-    setAvatarUrl(publicUrl)
+    // Append timestamp so the same-path URL forces browser + Next Image to refetch
+    setAvatarUrl(`${publicUrl}?t=${Date.now()}`)
     setAvatarUploading(false)
   }
 
