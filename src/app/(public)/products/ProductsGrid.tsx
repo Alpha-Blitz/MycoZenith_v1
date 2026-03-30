@@ -155,7 +155,7 @@ export default function ProductsGrid({ initialQuery }: { initialQuery: string })
           col-span-1 of 8  =  half a card width
       */}
       <div className="flex flex-col gap-3 mb-6">
-        <div className="flex items-stretch gap-2 sm:gap-3">
+        <div className="flex items-stretch justify-between gap-2 sm:gap-3">
 
           {/* Search — fills remaining space */}
           <div className="w-full max-w-[50%] flex items-stretch bg-[#0F0F0F] border border-white/[0.1] rounded-xl overflow-hidden focus-within:border-[#8B5CF6]/50 transition-colors duration-200 min-w-0">
