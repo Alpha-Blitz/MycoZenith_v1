@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Confirm your MycoZenith account</title>
+</head>
+<body style="margin:0;padding:0;background:#0A0A0A;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#0A0A0A;padding:40px 16px;">
+    <tr>
+      <td align="center">
+        <table width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;">
+
+          <!-- Logo -->
+          <tr>
+            <td align="center" style="padding-bottom:32px;">
+              <span style="font-size:22px;font-weight:700;color:#ffffff;letter-spacing:0.04em;">MycoZenith</span>
+              <p style="margin:4px 0 0;font-size:11px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#8B5CF6;">Built on Evidence. Not on Hype.</p>
+            </td>
+          </tr>
+
+          <!-- Card -->
+          <tr>
+            <td style="background:#161616;border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;">
+
+              <!-- Top accent bar -->
+              <div style="height:3px;background:linear-gradient(90deg,#8B5CF6,#7c3aed);"></div>
+
+              <!-- Body -->
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="padding:40px 40px 0;">
+
+                    <!-- Icon -->
+                    <table cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
+                      <tr>
+                        <td style="background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.25);border-radius:14px;width:52px;height:52px;text-align:center;vertical-align:middle;">
+                          <span style="font-size:24px;">✉️</span>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <h1 style="margin:0 0 10px;font-size:24px;font-weight:700;color:#ffffff;letter-spacing:-0.02em;">Confirm your email</h1>
+                    <p style="margin:0 0 28px;font-size:15px;color:rgba(255,255,255,0.5);line-height:1.6;">
+                      Welcome to MycoZenith. Click the button below to verify your email address and activate your account.
+                    </p>
+
+                    <!-- CTA Button -->
+                    <table cellpadding="0" cellspacing="0" style="margin-bottom:32px;">
+                      <tr>
+                        <td style="background:#8B5CF6;border-radius:12px;">
+                          <a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:14px 32px;font-size:15px;font-weight:700;color:#ffffff;text-decoration:none;letter-spacing:0.01em;">
+                            Confirm Email Address
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <!-- Fallback link -->
+                    <p style="margin:0 0 8px;font-size:12px;color:rgba(255,255,255,0.3);">
+                      If the button doesn&apos;t work, copy and paste this link:
+                    </p>
+                    <p style="margin:0 0 32px;font-size:11px;color:#8B5CF6;word-break:break-all;">
+                      {{ .ConfirmationURL }}
+                    </p>
+
+                    <!-- Divider -->
+                    <div style="border-top:1px solid rgba(255,255,255,0.07);margin-bottom:28px;"></div>
+
+                    <!-- Note -->
+                    <p style="margin:0 0 40px;font-size:12px;color:rgba(255,255,255,0.25);line-height:1.6;">
+                      This link expires in 24 hours. If you did not create an account, you can safely ignore this email.
+                    </p>
+
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td align="center" style="padding-top:28px;">
+              <p style="margin:0;font-size:12px;color:rgba(255,255,255,0.2);">
+                &copy; 2026 MycoZenith &nbsp;&middot;&nbsp;
+                <a href="{{ .SiteURL }}/privacy" style="color:rgba(255,255,255,0.3);text-decoration:none;">Privacy</a>
+                &nbsp;&middot;&nbsp;
+                <a href="{{ .SiteURL }}/terms" style="color:rgba(255,255,255,0.3);text-decoration:none;">Terms</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

@@ -8,6 +8,7 @@ interface AuthContextValue {
   session:    Session | null
   user:       User    | null
   loading:    boolean
+  isAdmin:    boolean
   isOpen:     boolean
   openModal:  () => void
   closeModal: () => void
@@ -23,6 +24,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
+  const [isAdmin, setIsAdmin] = useState(false)
   const [isOpen,  setIsOpen]  = useState(false)
 
   useEffect(() => {
@@ -37,6 +39,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     return () => subscription.unsubscribe()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Check admin status whenever session changes
+  useEffect(() => {
+    const userId = session?.user?.id
+    if (!userId) { setIsAdmin(false); return }
+    supabase
+      .from('admin_users')
+      .select('user_id')
+      .eq('user_id', userId)
+      .maybeSingle()
+      .then(({ data }) => setIsAdmin(!!data))
+  }, [session?.user?.id]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const openModal  = useCallback(() => setIsOpen(true),  [])
   const closeModal = useCallback(() => setIsOpen(false), [])
@@ -64,6 +78,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       session,
       user:    session?.user ?? null,
       loading,
+      isAdmin,
       isOpen,
       openModal,
       closeModal,

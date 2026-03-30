@@ -87,7 +87,7 @@ export default function Navbar() {
   const avatarRef      = useRef<HTMLDivElement>(null)
   const pathname = usePathname()
   const router   = useRouter()
-  const { user, openModal, signOut } = useAuth()
+  const { user, isAdmin, openModal, signOut } = useAuth()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10)
@@ -212,7 +212,7 @@ export default function Navbar() {
               className="cursor-pointer text-white/55 hover:text-[#8B5CF6] hover:scale-110 transition-all duration-200">
               <CartIcon />
             </button>
-            {user && (
+            {isAdmin && (
               <Link href="/admin" aria-label="Admin panel"
                 className="cursor-pointer text-white/30 hover:text-[#8B5CF6] hover:scale-110 transition-all duration-200">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -230,8 +230,11 @@ export default function Navbar() {
                   {userInitial}
                 </button>
                 {avatarOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-44 bg-[#161616] border border-white/[0.1] rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.6)] overflow-hidden z-50">
-                    <p className="px-4 pt-3 pb-2 text-white/40 text-xs truncate">{user.email}</p>
+                  <div className="absolute right-0 top-full mt-2 w-48 bg-[#161616] border border-white/[0.1] rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.6)] overflow-hidden z-50">
+                    <div className="px-4 pt-3 pb-2.5">
+                      <p className="text-white text-sm font-medium truncate">{user.user_metadata?.full_name ?? 'Account'}</p>
+                      <p className="text-white/35 text-xs truncate mt-0.5">{user.email}</p>
+                    </div>
                     <div className="border-t border-white/[0.07]" />
                     <Link
                       href="/account"
