@@ -41,7 +41,7 @@ export default function FirstVisitPopup() {
     localStorage.setItem(STORAGE_KEY, '1')
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!email) return
     setDone(true)
@@ -52,7 +52,7 @@ export default function FirstVisitPopup() {
 
   return (
     <div
-      className="fixed bottom-5 left-5 z-[180] w-[360px] bg-[#161616] border border-white/[0.1] rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.6)] overflow-hidden"
+      className="fixed bottom-5 right-5 z-[180] w-[360px] bg-[#161616] border border-white/[0.1] rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.6)] overflow-hidden"
       style={{ animation: 'slideUp 0.4s cubic-bezier(0.16,1,0.3,1) both' }}
     >
       <style>{`

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Geist, Playfair_Display } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
 const geistSans = Geist({
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${geistSans.variable} ${playfair.variable}`}>
       <body className="min-h-screen bg-[#0A0A0A] text-white flex flex-col">
         {children}
+        <Analytics />
       </body>
     </html>
   )
