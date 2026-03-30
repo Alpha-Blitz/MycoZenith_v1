@@ -108,7 +108,7 @@ export default function CommentSection({ slug }: { slug: string }) {
               rows={3}
               className="w-full bg-white/[0.05] border border-white/[0.1] text-white text-sm placeholder-white/25 px-3.5 py-2.5 rounded-xl outline-none focus:border-[#8B5CF6]/50 transition-colors duration-200 resize-none"
             />
-            {error && <p className="text-[#F97316] text-xs">{error}</p>}
+            {error && <p className="text-[#FF6523] text-xs">{error}</p>}
             <button
               type="submit"
               disabled={posting}

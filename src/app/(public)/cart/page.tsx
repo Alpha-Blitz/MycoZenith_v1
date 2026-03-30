@@ -86,7 +86,7 @@ function SuggestionCard({ slug, name, image, tag, price }: typeof PRODUCTS[0]) {
           <Link href={`/products/${slug}`}>
             <p className="text-white text-sm font-semibold leading-snug line-clamp-1 hover:text-white/80 transition-colors duration-200">{name}</p>
           </Link>
-          <span className="text-[#F97316] text-sm font-bold tabular-nums shrink-0">{price}</span>
+          <span className="text-[#FF6523] text-sm font-bold tabular-nums shrink-0">{price}</span>
         </div>
         <button
           onClick={handleAdd}
@@ -94,7 +94,7 @@ function SuggestionCard({ slug, name, image, tag, price }: typeof PRODUCTS[0]) {
             'w-full inline-flex items-center justify-center gap-1.5 text-xs font-semibold px-3 py-2.5 rounded-xl border transition-all duration-200 cursor-pointer',
             added
               ? 'bg-[#8B5CF6]/20 border-[#8B5CF6]/50 text-[#8B5CF6]'
-              : 'bg-[#F97316]/[0.06] border-[#F97316]/40 text-[#F97316] hover:bg-[#F97316]/[0.14] hover:border-[#F97316]/60',
+              : 'bg-[#FF6523]/[0.06] border-[#FF6523]/40 text-[#FF6523] hover:bg-[#FF6523]/[0.14] hover:border-[#FF6523]/60',
           ].join(' ')}
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
@@ -161,7 +161,7 @@ export default function CartPage() {
         <h1 className="text-white text-2xl font-semibold tracking-tight mb-2">Your cart is empty</h1>
         <p className="text-white/40 text-sm mb-8">Explore our premium mushroom extracts to get started.</p>
         <Link href="/products"
-          className="inline-flex items-center gap-2 bg-[#F97316] hover:bg-[#EA580C] text-white text-sm font-bold px-8 py-3.5 rounded-xl transition-all duration-200 hover:scale-[1.02]">
+          className="inline-flex items-center gap-2 bg-[#FF6523] hover:bg-[#E5561E] text-white text-sm font-bold px-8 py-3.5 rounded-xl transition-all duration-200 hover:scale-[1.02]">
           Shop Now <ArrowRight />
         </Link>
       </div>
@@ -207,7 +207,7 @@ export default function CartPage() {
                       </Link>
                       <p className="text-white/35 text-xs mt-0.5">{item.tag}</p>
                     </div>
-                    <p className="text-[#F97316] text-sm font-bold tabular-nums shrink-0">
+                    <p className="text-[#FF6523] text-sm font-bold tabular-nums shrink-0">
                       ₹{(item.price * item.quantity).toLocaleString('en-IN')}
                     </p>
                   </div>
@@ -343,7 +343,7 @@ export default function CartPage() {
                 </div>
                 <div className="flex justify-between font-semibold text-white pt-2 border-t border-white/[0.06]">
                   <span>Total</span>
-                  <span className="tabular-nums text-[#F97316]">₹{total.toLocaleString('en-IN')}</span>
+                  <span className="tabular-nums text-[#FF6523]">₹{total.toLocaleString('en-IN')}</span>
                 </div>
               </div>
 
@@ -356,7 +356,7 @@ export default function CartPage() {
               <button
                 onClick={() => router.push('/checkout')}
                 disabled={items.length === 0}
-                className="w-full flex items-center justify-center gap-2 bg-[#F97316] hover:bg-[#EA580C] disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-bold px-6 py-4 rounded-xl transition-all duration-200 hover:scale-[1.01] cursor-pointer tracking-wide"
+                className="w-full flex items-center justify-center gap-2 bg-[#FF6523] hover:bg-[#E5561E] disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-bold px-6 py-4 rounded-xl transition-all duration-200 hover:scale-[1.01] cursor-pointer tracking-wide"
               >
                 Proceed to Checkout <ArrowRight />
               </button>

@@ -43,7 +43,7 @@ const STATUS_STYLES: Record<string, string> = {
   pending: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
   confirmed: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
   processing: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
-  shipped: 'bg-[#F97316]/10 text-[#F97316] border-[#F97316]/20',
+  shipped: 'bg-[#FF6523]/10 text-[#FF6523] border-[#FF6523]/20',
   delivered: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
   cancelled: 'bg-red-500/10 text-red-400 border-red-500/20',
   refunded: 'bg-red-500/10 text-red-400 border-red-500/20',
@@ -446,7 +446,7 @@ export default function AccountClient({ user, orders, addresses: initAddresses, 
                   <p className="text-white text-base font-semibold">No orders yet</p>
                   <p className="text-white/40 text-sm mt-1">Your order history will appear here.</p>
                 </div>
-                <Link href="/products" className="inline-flex items-center gap-2 bg-[#F97316] hover:bg-[#EA580C] text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors duration-150">
+                <Link href="/products" className="inline-flex items-center gap-2 bg-[#FF6523] hover:bg-[#E5561E] text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors duration-150">
                   Shop Now {icons.arrow}
                 </Link>
               </div>
@@ -559,7 +559,7 @@ export default function AccountClient({ user, orders, addresses: initAddresses, 
             {savedSubTab === 'products' && (
               favorites.length === 0 ? (
                 <div className={CARD + ' p-10 flex flex-col items-center text-center gap-3'}>
-                  <div className="w-12 h-12 rounded-xl bg-[#F97316]/10 border border-[#F97316]/20 flex items-center justify-center text-[#F97316]/50"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+                  <div className="w-12 h-12 rounded-xl bg-[#FF6523]/10 border border-[#FF6523]/20 flex items-center justify-center text-[#FF6523]/50"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
                   <p className="text-white/60 text-sm">No favorite products yet.</p>
                   <Link href="/products" className="text-[#8B5CF6] text-sm hover:text-[#a78bfa] transition-colors duration-150">Browse products</Link>
                 </div>
@@ -568,7 +568,7 @@ export default function AccountClient({ user, orders, addresses: initAddresses, 
                   {favorites.map(fav => (
                     <div key={fav.product_slug} className={CARD + ' px-5 py-4 flex items-center justify-between gap-4'}>
                       <div className="min-w-0">
-                        <Link href={`/products/${fav.product_slug}`} className="text-white text-sm font-medium hover:text-[#F97316] transition-colors duration-150 truncate block">
+                        <Link href={`/products/${fav.product_slug}`} className="text-white text-sm font-medium hover:text-[#FF6523] transition-colors duration-150 truncate block">
                           {fav.product_slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
                         </Link>
                         <p className="text-white/35 text-xs mt-0.5">Favorited {formatDate(fav.saved_at)}</p>

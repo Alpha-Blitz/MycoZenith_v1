@@ -5,7 +5,7 @@ const STYLES: Record<string, string> = {
   pending:    'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
   confirmed:  'bg-blue-500/10 text-blue-400 border-blue-500/20',
   processing: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
-  shipped:    'bg-[#F97316]/10 text-[#F97316] border-[#F97316]/20',
+  shipped:    'bg-[#FF6523]/10 text-[#FF6523] border-[#FF6523]/20',
   delivered:  'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
   cancelled:  'bg-red-500/10 text-red-400 border-red-500/20',
   refunded:   'bg-red-500/10 text-red-400 border-red-500/20',

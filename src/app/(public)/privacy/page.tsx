@@ -20,8 +20,8 @@ export default function PrivacyPolicyPage() {
         <div className="mb-10 pb-10 border-b border-white/[0.07]">
           <nav className="flex items-center gap-2 text-sm text-[#8B5CF6]/60 mb-8">
             <Link href="/" className="hover:text-[#8B5CF6] transition-colors duration-200">Home</Link>
-            <span className="text-[#F97316]/60">›</span>
-            <span className="text-[#F97316]">Privacy Policy</span>
+            <span className="text-[#FF6523]/60">›</span>
+            <span className="text-[#FF6523]">Privacy Policy</span>
           </nav>
           <span className="text-[#8B5CF6] text-xs font-semibold tracking-[0.22em] uppercase">Legal</span>
           <h1 className="text-4xl sm:text-5xl font-semibold text-white tracking-tight mt-3 mb-3">Privacy Policy</h1>

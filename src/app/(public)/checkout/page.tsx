@@ -54,7 +54,7 @@ function Field({ label, required, children }: { label: string; required?: boolea
   return (
     <div className="flex flex-col gap-1.5">
       <label className="text-white/50 text-xs font-semibold tracking-[0.12em] uppercase">
-        {label}{required && <span className="text-[#F97316] ml-0.5">*</span>}
+        {label}{required && <span className="text-[#FF6523] ml-0.5">*</span>}
       </label>
       {children}
     </div>
@@ -417,7 +417,7 @@ export default function CheckoutPage() {
             <button
               onClick={placeOrder}
               disabled={placing || items.length === 0}
-              className="lg:hidden w-full flex items-center justify-center gap-2 bg-[#F97316] hover:bg-[#EA580C] disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-bold px-6 py-4 rounded-xl transition-all duration-200 hover:scale-[1.01] cursor-pointer tracking-wide"
+              className="lg:hidden w-full flex items-center justify-center gap-2 bg-[#FF6523] hover:bg-[#E5561E] disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-bold px-6 py-4 rounded-xl transition-all duration-200 hover:scale-[1.01] cursor-pointer tracking-wide"
             >
               {placing ? (
                 <>
@@ -524,7 +524,7 @@ export default function CheckoutPage() {
                   </div>
                   <div className="flex justify-between font-semibold text-white pt-2 border-t border-white/[0.06]">
                     <span>Total</span>
-                    <span className="tabular-nums text-[#F97316]">₹{finalTotal.toLocaleString('en-IN')}</span>
+                    <span className="tabular-nums text-[#FF6523]">₹{finalTotal.toLocaleString('en-IN')}</span>
                   </div>
                 </div>
               </div>
@@ -533,7 +533,7 @@ export default function CheckoutPage() {
               <button
                 onClick={placeOrder}
                 disabled={placing || items.length === 0}
-                className="hidden lg:flex w-full items-center justify-center gap-2 bg-[#F97316] hover:bg-[#EA580C] disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-bold px-6 py-4 rounded-xl transition-all duration-200 hover:scale-[1.01] cursor-pointer tracking-wide"
+                className="hidden lg:flex w-full items-center justify-center gap-2 bg-[#FF6523] hover:bg-[#E5561E] disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-bold px-6 py-4 rounded-xl transition-all duration-200 hover:scale-[1.01] cursor-pointer tracking-wide"
               >
                 {placing ? (
                   <>

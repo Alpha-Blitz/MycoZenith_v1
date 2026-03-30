@@ -55,8 +55,8 @@ export default async function BlogArticlePage({
           <Link href="/"     className="hover:text-[#8B5CF6] transition-colors duration-200">Home</Link>
           <span className="text-[#8B5CF6]/35">›</span>
           <Link href="/blog" className="hover:text-[#8B5CF6] transition-colors duration-200">Blog</Link>
-          <span className="text-[#F97316]/60">›</span>
-          <span className="text-[#F97316] line-clamp-1">{post.title}</span>
+          <span className="text-[#FF6523]/60">›</span>
+          <span className="text-[#FF6523] line-clamp-1">{post.title}</span>
         </nav>
 
         {/* ── Main grid: article + sidebar ────────────────────────── */}

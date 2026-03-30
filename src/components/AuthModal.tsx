@@ -179,7 +179,7 @@ export default function AuthModal() {
             <button key={t} onClick={() => setTab(t)}
               className={[
                 'pb-2.5 mr-6 text-sm font-medium border-b-2 transition-colors duration-200 cursor-pointer',
-                tab === t ? 'text-white border-[#F97316]' : 'text-white/40 border-transparent hover:text-white/70',
+                tab === t ? 'text-white border-[#FF6523]' : 'text-white/40 border-transparent hover:text-white/70',
               ].join(' ')}>
               {t === 'signin' ? 'Sign In' : 'Create Account'}
             </button>
@@ -201,7 +201,7 @@ export default function AuthModal() {
               Click it to activate your account.
             </p>
             <button onClick={closeModal}
-              className="mt-6 text-sm text-[#F97316] hover:text-[#EA580C] transition-colors duration-200 cursor-pointer">
+              className="mt-6 text-sm text-[#FF6523] hover:text-[#E5561E] transition-colors duration-200 cursor-pointer">
               Done
             </button>
           </div>
@@ -219,7 +219,7 @@ export default function AuthModal() {
               Check <span className="text-white/75">{email}</span> for a password reset link.
             </p>
             <button onClick={closeModal}
-              className="mt-6 text-sm text-[#F97316] hover:text-[#EA580C] transition-colors duration-200 cursor-pointer">
+              className="mt-6 text-sm text-[#FF6523] hover:text-[#E5561E] transition-colors duration-200 cursor-pointer">
               Done
             </button>
           </div>
@@ -287,10 +287,10 @@ export default function AuthModal() {
               </div>
             </div>
 
-            {error && <p className="text-[#F97316] text-xs leading-relaxed -mt-1">{error}</p>}
+            {error && <p className="text-[#FF6523] text-xs leading-relaxed -mt-1">{error}</p>}
 
             <button type="submit" disabled={loading}
-              className="mt-1 w-full inline-flex items-center justify-center gap-2 bg-[#F97316] hover:bg-[#EA580C] disabled:opacity-60 text-white text-sm font-semibold py-3.5 rounded-xl transition-all duration-200 hover:scale-[1.02] cursor-pointer">
+              className="mt-1 w-full inline-flex items-center justify-center gap-2 bg-[#FF6523] hover:bg-[#E5561E] disabled:opacity-60 text-white text-sm font-semibold py-3.5 rounded-xl transition-all duration-200 hover:scale-[1.02] cursor-pointer">
               {loading && <Spinner />}
               {loading
                 ? (tab === 'signin' ? 'Signing in…' : 'Creating account…')

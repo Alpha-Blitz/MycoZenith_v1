@@ -5,7 +5,7 @@ export default function Loading() {
       {/* Logo mark */}
       <div className="relative flex items-center justify-center">
         {/* Outermost slow ring — orange tint */}
-        <span className="absolute w-28 h-28 rounded-full border border-[#F97316]/20"
+        <span className="absolute w-28 h-28 rounded-full border border-[#FF6523]/20"
           style={{ animation: 'spin 8s linear infinite' }} />
         {/* Dashed orbit — purple */}
         <span className="absolute w-20 h-20 rounded-full border border-dashed border-[#8B5CF6]/25"
@@ -44,7 +44,7 @@ export default function Loading() {
         {[0, 1, 2].map((i) => (
           <span
             key={i}
-            className={`w-1.5 h-1.5 rounded-full ${i === 2 ? 'bg-[#F97316]' : 'bg-[#8B5CF6]'}`}
+            className={`w-1.5 h-1.5 rounded-full ${i === 2 ? 'bg-[#FF6523]' : 'bg-[#8B5CF6]'}`}
             style={{ animation: `dot-bounce 1.2s ease-in-out infinite`, animationDelay: `${i * 0.2}s` }}
           />
         ))}

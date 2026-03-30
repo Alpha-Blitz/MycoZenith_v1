@@ -9,7 +9,7 @@ type Review = Testimonial & { title?: string; date: string }
 /* ─── Star components ─────────────────────────────────────── */
 function StarFilled({ size = 14 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="#F97316" stroke="#F97316" strokeWidth="1">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="#FF6523" stroke="#FF6523" strokeWidth="1">
       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
     </svg>
   )
@@ -69,7 +69,7 @@ function RatingBar({ count, total, label }: { count: number; total: number; labe
       <span className="text-white/40 text-xs w-3 text-right">{label}</span>
       <StarFilled size={10} />
       <div className="flex-1 h-1.5 bg-white/[0.07] rounded-full overflow-hidden">
-        <div className="h-full bg-[#F97316] rounded-full transition-all duration-500" style={{ width: `${pct}%` }} />
+        <div className="h-full bg-[#FF6523] rounded-full transition-all duration-500" style={{ width: `${pct}%` }} />
       </div>
       <span className="text-white/30 text-xs w-4">{count}</span>
     </div>
@@ -169,7 +169,7 @@ export default function ReviewSection({ initial }: { initial: Testimonial[] }) {
         <h2 className="text-2xl sm:text-3xl font-semibold text-white tracking-tight">Customer Reviews</h2>
         <button
           onClick={() => { setShowForm((v) => !v); setSubmitted(false) }}
-          className="inline-flex items-center gap-2 bg-[#F97316] hover:bg-[#EA580C] text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-200 hover:scale-[1.02] cursor-pointer"
+          className="inline-flex items-center gap-2 bg-[#FF6523] hover:bg-[#E5561E] text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-200 hover:scale-[1.02] cursor-pointer"
         >
           {showForm ? 'Cancel' : '+ Write a Review'}
         </button>
@@ -191,7 +191,7 @@ export default function ReviewSection({ initial }: { initial: Testimonial[] }) {
 
       {/* Write a Review form */}
       {showForm && (
-        <div className="bg-[#0F0F0F] border border-[#F97316]/20 rounded-2xl p-6 mb-6">
+        <div className="bg-[#0F0F0F] border border-[#FF6523]/20 rounded-2xl p-6 mb-6">
           <h3 className="text-white font-semibold mb-5">Your Review</h3>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div>
@@ -205,7 +205,7 @@ export default function ReviewSection({ initial }: { initial: Testimonial[] }) {
                   value={form.name}
                   onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
                   placeholder="e.g. Arjun M."
-                  className="w-full bg-white/[0.05] border border-white/[0.1] text-white text-sm placeholder-white/25 px-3.5 py-2.5 rounded-xl outline-none focus:border-[#F97316]/50 transition-colors duration-200"
+                  className="w-full bg-white/[0.05] border border-white/[0.1] text-white text-sm placeholder-white/25 px-3.5 py-2.5 rounded-xl outline-none focus:border-[#FF6523]/50 transition-colors duration-200"
                 />
               </div>
               <div>
@@ -214,7 +214,7 @@ export default function ReviewSection({ initial }: { initial: Testimonial[] }) {
                   value={form.title}
                   onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
                   placeholder="e.g. Genuinely works"
-                  className="w-full bg-white/[0.05] border border-white/[0.1] text-white text-sm placeholder-white/25 px-3.5 py-2.5 rounded-xl outline-none focus:border-[#F97316]/50 transition-colors duration-200"
+                  className="w-full bg-white/[0.05] border border-white/[0.1] text-white text-sm placeholder-white/25 px-3.5 py-2.5 rounded-xl outline-none focus:border-[#FF6523]/50 transition-colors duration-200"
                 />
               </div>
             </div>
@@ -225,13 +225,13 @@ export default function ReviewSection({ initial }: { initial: Testimonial[] }) {
                 onChange={(e) => setForm((f) => ({ ...f, body: e.target.value }))}
                 placeholder="Share your experience..."
                 rows={4}
-                className="w-full bg-white/[0.05] border border-white/[0.1] text-white text-sm placeholder-white/25 px-3.5 py-2.5 rounded-xl outline-none focus:border-[#F97316]/50 transition-colors duration-200 resize-none"
+                className="w-full bg-white/[0.05] border border-white/[0.1] text-white text-sm placeholder-white/25 px-3.5 py-2.5 rounded-xl outline-none focus:border-[#FF6523]/50 transition-colors duration-200 resize-none"
               />
             </div>
-            {error && <p className="text-[#F97316] text-xs">{error}</p>}
+            {error && <p className="text-[#FF6523] text-xs">{error}</p>}
             <button
               type="submit"
-              className="self-start bg-[#F97316] hover:bg-[#EA580C] text-white text-sm font-bold px-6 py-3 rounded-xl transition-all duration-200 hover:scale-[1.02] cursor-pointer"
+              className="self-start bg-[#FF6523] hover:bg-[#E5561E] text-white text-sm font-bold px-6 py-3 rounded-xl transition-all duration-200 hover:scale-[1.02] cursor-pointer"
             >
               Submit Review
             </button>

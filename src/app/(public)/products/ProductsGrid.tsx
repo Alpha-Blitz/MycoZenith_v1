@@ -158,7 +158,7 @@ export default function ProductsGrid({ initialQuery }: { initialQuery: string })
         <div className="flex items-stretch gap-2 sm:gap-3">
 
           {/* Search — fills remaining space */}
-          <div className="flex-1 flex items-stretch bg-[#0F0F0F] border border-white/[0.1] rounded-xl overflow-hidden focus-within:border-[#8B5CF6]/50 transition-colors duration-200 min-w-0">
+          <div className="w-full max-w-[50%] flex items-stretch bg-[#0F0F0F] border border-white/[0.1] rounded-xl overflow-hidden focus-within:border-[#8B5CF6]/50 transition-colors duration-200 min-w-0">
             <span className="pl-3 pr-2 text-white/30 pointer-events-none shrink-0 flex items-center">
               <SearchIcon />
             </span>
@@ -181,7 +181,7 @@ export default function ProductsGrid({ initialQuery }: { initialQuery: string })
             )}
             <button
               type="button"
-              className="bg-[#8B5CF6] hover:bg-[#7c3aed] text-white text-xs font-semibold px-3 sm:px-4 py-2 m-1 rounded-lg transition-colors duration-150 cursor-pointer shrink-0 flex items-center gap-1.5"
+              className="border border-[#8B5CF6]/55 text-[#8B5CF6] hover:bg-[#8B5CF6]/10 text-xs font-semibold px-3 sm:px-4 py-2 m-1 rounded-lg transition-colors duration-150 cursor-pointer shrink-0 flex items-center gap-1.5"
             >
               <SearchIcon />
               <span className="hidden sm:inline">Search</span>

@@ -121,7 +121,7 @@ export default function BlogPage() {
             </div>
             <div className="absolute inset-0 flex flex-col justify-end sm:justify-center p-6 sm:p-10 max-w-[580px]">
               <div className="flex items-center gap-3 mb-4">
-                <span className="inline-block bg-[#F97316]/15 border border-[#F97316]/35 text-[#F97316] text-[10px] font-semibold tracking-[0.18em] uppercase px-3 py-1 rounded-full">
+                <span className="inline-block bg-[#FF6523]/15 border border-[#FF6523]/35 text-[#FF6523] text-[10px] font-semibold tracking-[0.18em] uppercase px-3 py-1 rounded-full">
                   Featured
                 </span>
                 <span className="inline-block bg-white/10 border border-white/20 text-white text-[10px] font-semibold tracking-[0.16em] uppercase px-3 py-1 rounded-full">
@@ -134,7 +134,7 @@ export default function BlogPage() {
               <p className="text-white/50 text-sm leading-relaxed mb-5 hidden sm:line-clamp-2">{featuredPost.excerpt}</p>
               <div className="flex items-center gap-5">
                 <span className="text-white/35 text-xs">{featuredPost.readTime} · {featuredPost.date}</span>
-                <span className="inline-flex items-center gap-1.5 text-[#F97316] text-xs font-semibold group-hover:gap-2.5 transition-all duration-200">
+                <span className="inline-flex items-center gap-1.5 text-[#FF6523] text-xs font-semibold group-hover:gap-2.5 transition-all duration-200">
                   Read Article <ArrowRight size={11} />
                 </span>
               </div>

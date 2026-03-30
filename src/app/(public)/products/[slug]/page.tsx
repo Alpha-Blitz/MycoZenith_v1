@@ -25,7 +25,7 @@ function ArrowRight({ size = 13 }: { size?: number }) {
 function StarIcon({ filled }: { filled: boolean }) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-      fill={filled ? '#F97316' : 'none'} stroke="#F97316" strokeWidth="1.5"
+      fill={filled ? '#FF6523' : 'none'} stroke="#FF6523" strokeWidth="1.5"
       strokeLinecap="round" strokeLinejoin="round">
       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
     </svg>
@@ -80,7 +80,7 @@ function RelatedCard({ slug, image, name, tag, price }: { slug: string; image: s
       <div className="p-4 flex items-center justify-between gap-2">
         <div>
           <h4 className="text-white font-semibold text-base tracking-tight group-hover:text-white/80 transition-colors duration-200">{name}</h4>
-          <span className="text-[#F97316] text-sm font-bold tabular-nums">{price}</span>
+          <span className="text-[#FF6523] text-sm font-bold tabular-nums">{price}</span>
         </div>
         <span className="text-white/30 group-hover:text-[#8B5CF6] transition-colors duration-200 shrink-0">
           <ArrowRight size={14} />
@@ -107,8 +107,8 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           <Link href="/" className="hover:text-[#8B5CF6] transition-colors duration-200">Shop</Link>
           <span className="text-[#8B5CF6]/35 text-base">›</span>
           <Link href="/products" className="hover:text-[#8B5CF6] transition-colors duration-200">Products</Link>
-          <span className="text-[#F97316]/60 text-base">›</span>
-          <span className="text-[#F97316]">{product.name}</span>
+          <span className="text-[#FF6523]/60 text-base">›</span>
+          <span className="text-[#FF6523]">{product.name}</span>
         </nav>
 
         {/* ── Hero ───────────────────────────────────────────────── */}
@@ -120,7 +120,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           </div>
 
           {/* Info */}
-          <div className="flex flex-col gap-5 lg:pt-2">
+          <div className="flex flex-col gap-5">
 
             {/* Name */}
             <div>
@@ -130,7 +130,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
               {/* Rating */}
               <div className="flex items-center gap-2.5">
                 <Stars rating={product.rating} />
-                <span className="text-[#F97316] text-sm font-semibold">{product.rating}/5</span>
+                <span className="text-[#FF6523] text-sm font-semibold">{product.rating}/5</span>
                 <span className="text-white/30 text-sm">·</span>
                 <span className="text-white/45 text-sm">{product.reviewCount}+ reviews</span>
               </div>
@@ -148,7 +148,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
             {/* Price */}
             <div>
-              <span className="text-[#F97316] text-3xl font-bold tabular-nums">{product.price}</span>
+              <span className="text-[#FF6523] text-3xl font-bold tabular-nums">{product.price}</span>
               <span className="text-white/30 text-sm ml-2">/ 60 capsules</span>
             </div>
 
@@ -177,7 +177,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             </div>
           ))}
           <div className="sm:flex-1 sm:py-4 sm:text-center">
-            <a href="#" className="flex items-center gap-1.5 text-[#F97316] text-sm font-medium hover:text-[#FB923C] transition-colors duration-200 sm:justify-center">
+            <a href="#" className="flex items-center gap-1.5 text-[#FF6523] text-sm font-medium hover:text-[#FB923C] transition-colors duration-200 sm:justify-center">
               View Lab Report <ArrowRight size={11} />
             </a>
           </div>

@@ -109,7 +109,7 @@ export default function AboutPage() {
                 The result is a small, focused range of mushroom supplements with verifiable potency, transparent sourcing, and dosages calibrated to what the research actually supports — not what sounds impressive on a label.
               </p>
               <Link href="/products"
-                className="group inline-flex items-center gap-2 bg-[#F97316] hover:bg-[#EA580C] text-white text-sm font-semibold px-7 py-3.5 rounded-xl transition-all duration-200 hover:scale-[1.02]">
+                className="group inline-flex items-center gap-2 bg-[#FF6523] hover:bg-[#E5561E] text-white text-sm font-semibold px-7 py-3.5 rounded-xl transition-all duration-200 hover:scale-[1.02]">
                 Shop the Range
                 <span className="inline-block transition-transform duration-200 group-hover:translate-x-1"><ArrowRight /></span>
               </Link>

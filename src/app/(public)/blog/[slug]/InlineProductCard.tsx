@@ -39,11 +39,11 @@ export default function InlineProductCard({ slug }: { slug: string }) {
           {product.tag}
         </span>
         <p className="text-white font-semibold text-sm truncate">{product.name}</p>
-        <p className="text-[#F97316] text-sm font-bold">{product.price}</p>
+        <p className="text-[#FF6523] text-sm font-bold">{product.price}</p>
       </div>
 
       {/* CTA */}
-      <span className="inline-flex items-center gap-1.5 bg-[#F97316] hover:bg-[#EA580C] text-white text-xs font-semibold px-3.5 py-2 rounded-xl transition-colors duration-150 shrink-0">
+      <span className="inline-flex items-center gap-1.5 bg-[#FF6523] hover:bg-[#E5561E] text-white text-xs font-semibold px-3.5 py-2 rounded-xl transition-colors duration-150 shrink-0">
         Shop Now <ArrowRight />
       </span>
     </Link>

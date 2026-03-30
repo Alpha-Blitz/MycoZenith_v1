@@ -40,7 +40,7 @@ export default function OrdersBarChart({ data }: { data: DataPoint[] }) {
           allowDecimals={false}
         />
         <Tooltip content={<CustomTooltip />} />
-        <Bar dataKey="count" fill="#F97316" radius={[4, 4, 0, 0]} maxBarSize={32} />
+        <Bar dataKey="count" fill="#FF6523" radius={[4, 4, 0, 0]} maxBarSize={32} />
       </BarChart>
     </ResponsiveContainer>
   )

@@ -63,7 +63,7 @@ export default function FirstVisitPopup() {
       `}</style>
 
       {/* Orange accent bar */}
-      <div className="h-1 bg-gradient-to-r from-[#F97316] to-[#EA580C]" />
+      <div className="h-1 bg-gradient-to-r from-[#FF6523] to-[#E5561E]" />
 
       <div className="p-5">
         {/* Close */}
@@ -78,7 +78,7 @@ export default function FirstVisitPopup() {
         {!done ? (
           <>
             {/* Badge */}
-            <div className="inline-flex items-center gap-1.5 bg-[#F97316]/15 border border-[#F97316]/30 text-[#F97316] text-[10px] font-bold tracking-[0.18em] uppercase px-2.5 py-1 rounded-full mb-4">
+            <div className="inline-flex items-center gap-1.5 bg-[#FF6523]/15 border border-[#FF6523]/30 text-[#FF6523] text-[10px] font-bold tracking-[0.18em] uppercase px-2.5 py-1 rounded-full mb-4">
               Limited Offer
             </div>
 
@@ -96,11 +96,11 @@ export default function FirstVisitPopup() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="your@email.com"
                 required
-                className="w-full bg-white/[0.05] border border-white/[0.1] text-white text-sm placeholder-white/25 px-3.5 py-2.5 rounded-xl outline-none focus:border-[#F97316]/60 transition-colors duration-200"
+                className="w-full bg-white/[0.05] border border-white/[0.1] text-white text-sm placeholder-white/25 px-3.5 py-2.5 rounded-xl outline-none focus:border-[#FF6523]/60 transition-colors duration-200"
               />
               <button
                 type="submit"
-                className="w-full flex items-center justify-center gap-2 bg-[#F97316] hover:bg-[#EA580C] text-white text-sm font-bold py-2.5 rounded-xl transition-all duration-200 hover:scale-[1.02] cursor-pointer"
+                className="w-full flex items-center justify-center gap-2 bg-[#FF6523] hover:bg-[#E5561E] text-white text-sm font-bold py-2.5 rounded-xl transition-all duration-200 hover:scale-[1.02] cursor-pointer"
               >
                 Claim 10% Off <ArrowRight />
               </button>
@@ -118,7 +118,7 @@ export default function FirstVisitPopup() {
             <div className="text-3xl mb-3">🎉</div>
             <h3 className="text-white font-semibold mb-1">You're in!</h3>
             <p className="text-white/50 text-sm leading-relaxed mb-1">
-              Check your inbox for your <span className="text-[#F97316] font-semibold">10% off</span> code.
+              Check your inbox for your <span className="text-[#FF6523] font-semibold">10% off</span> code.
             </p>
             <p className="text-white/30 text-xs">Valid on your first order only.</p>
             <button

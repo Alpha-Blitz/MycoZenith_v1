@@ -214,7 +214,7 @@ export default function Navbar() {
               className="relative cursor-pointer text-white/55 hover:text-[#8B5CF6] hover:scale-110 transition-all duration-200">
               <CartIcon />
               {totalItems > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-[#F97316] text-white text-[11px] font-bold flex items-center justify-center pointer-events-none">
+                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-[#FF6523] text-white text-[11px] font-bold flex items-center justify-center pointer-events-none">
                   {totalItems > 9 ? '9+' : totalItems}
                 </span>
               )}
@@ -351,7 +351,7 @@ export default function Navbar() {
             <span className="relative">
               <CartIcon />
               {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1.5 w-4 h-4 rounded-full bg-[#F97316] text-white text-[11px] font-bold flex items-center justify-center">
+                <span className="absolute -top-1 -right-1.5 w-4 h-4 rounded-full bg-[#FF6523] text-white text-[11px] font-bold flex items-center justify-center">
                   {totalItems > 9 ? '9+' : totalItems}
                 </span>
               )}

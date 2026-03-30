@@ -64,7 +64,7 @@ export default function ProductCard({ slug, image, name, tag, description, price
               {name}
             </h3>
           </Link>
-          <span className="text-[#F97316] text-base font-bold tracking-tight shrink-0 tabular-nums">
+          <span className="text-[#FF6523] text-base font-bold tracking-tight shrink-0 tabular-nums">
             {price}
           </span>
         </div>
@@ -76,7 +76,7 @@ export default function ProductCard({ slug, image, name, tag, description, price
         <div className="flex flex-col gap-2 mt-auto pt-2 sm:grid sm:grid-cols-2 sm:gap-2.5">
           <Link
             href={`/products/${slug}`}
-            className="group/btn inline-flex items-center justify-center gap-1.5 bg-[#F97316] hover:bg-[#EA580C] text-white text-sm font-semibold px-4 py-2.5 sm:py-3 rounded-xl transition-all duration-200 hover:scale-[1.03]"
+            className="group/btn inline-flex items-center justify-center gap-1.5 bg-[#FF6523] hover:bg-[#E5561E] text-white text-sm font-semibold px-4 py-2.5 sm:py-3 rounded-xl transition-all duration-200 hover:scale-[1.03]"
           >
             Shop Now
             <span className="inline-block transition-transform duration-200 group-hover/btn:translate-x-1">

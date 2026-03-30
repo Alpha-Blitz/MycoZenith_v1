@@ -42,8 +42,8 @@ export default function CookieConsent() {
       <div className="bg-[#161616] border border-white/[0.1] rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.6)] px-8 py-6 flex flex-col items-center text-center gap-5">
 
         {/* Cookie icon */}
-        <div className="w-11 h-11 rounded-xl bg-[#F97316]/10 border border-[#F97316]/20 flex items-center justify-center shrink-0">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F97316" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <div className="w-11 h-11 rounded-xl bg-[#FF6523]/10 border border-[#FF6523]/20 flex items-center justify-center shrink-0">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF6523" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/>
             <path d="M8.5 8.5v.01M16 15.5v.01M12 12v.01"/>
           </svg>
@@ -70,7 +70,7 @@ export default function CookieConsent() {
           </button>
           <button
             onClick={accept}
-            className="text-sm font-semibold bg-[#F97316] hover:bg-[#EA580C] text-white px-6 py-2.5 rounded-xl transition-colors duration-150 cursor-pointer"
+            className="text-sm font-semibold bg-[#FF6523] hover:bg-[#E5561E] text-white px-6 py-2.5 rounded-xl transition-colors duration-150 cursor-pointer"
           >
             Accept All
           </button>
