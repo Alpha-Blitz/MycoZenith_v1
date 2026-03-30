@@ -6,6 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { PRODUCTS } from '@/lib/products'
+import { POSTS } from '@/lib/blog'
 
 /* ─── Types ───────────────────────────────────────────────────────── */
 interface OrderItem { id: string; product_name: string; product_slug: string; unit_price: number; quantity: number; line_total: number }
@@ -538,21 +539,50 @@ export default function AccountClient({ user, orders, addresses: initAddresses, 
                   <Link href="/blog" className="text-[#8B5CF6] text-sm hover:text-[#a78bfa] transition-colors duration-150">Browse articles</Link>
                 </div>
               ) : (
-                <div className="flex flex-col gap-3">
-                  {savedPosts.map(sp => (
-                    <div key={sp.post_slug} className={CARD + ' px-5 py-4 flex items-center justify-between gap-4'}>
-                      <div className="min-w-0">
-                        <Link href={`/blog/${sp.post_slug}`} className="text-white text-sm font-medium hover:text-[#8B5CF6] transition-colors duration-150 truncate block">
-                          {sp.post_slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {savedPosts.map(sp => {
+                    const post = POSTS.find(p => p.slug === sp.post_slug)
+                    return (
+                      <div key={sp.post_slug} className={CARD + ' overflow-hidden flex flex-col'}>
+                        {/* Cover image */}
+                        <Link href={`/blog/${sp.post_slug}`} className="relative block h-40 overflow-hidden">
+                          {post ? (
+                            <Image src={post.image} alt={post.title} fill
+                              className="object-cover transition-transform duration-500 hover:scale-[1.04]"
+                              sizes="(max-width: 640px) 100vw, 50vw" />
+                          ) : (
+                            <div className="w-full h-full bg-white/[0.04] flex items-center justify-center text-white/20">{icons.bookmark}</div>
+                          )}
+                          {post && (
+                            <span className="absolute top-2.5 left-2.5 bg-black/60 backdrop-blur-sm text-white/80 text-[10px] font-semibold px-2 py-0.5 rounded-full">
+                              {post.category}
+                            </span>
+                          )}
                         </Link>
-                        <p className="text-white/35 text-xs mt-0.5">Saved {formatDate(sp.saved_at)}</p>
+                        {/* Body */}
+                        <div className="p-4 flex flex-col gap-1.5 flex-1">
+                          <Link href={`/blog/${sp.post_slug}`}
+                            className="text-white text-sm font-semibold leading-snug hover:text-white/80 transition-colors duration-150 line-clamp-2">
+                            {post?.title ?? sp.post_slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                          </Link>
+                          {post && (
+                            <div className="flex items-center gap-2 mt-0.5">
+                              <span className="text-white/40 text-xs">{post.readTime}</span>
+                              <span className="text-white/20 text-xs">·</span>
+                              <span className="text-white/40 text-xs">{post.author.name}</span>
+                            </div>
+                          )}
+                          <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/[0.06]">
+                            <p className="text-white/25 text-xs">Saved {formatDate(sp.saved_at)}</p>
+                            <button onClick={() => removeSavedPost(sp.post_slug)}
+                              className="w-7 h-7 flex items-center justify-center text-red-400/40 hover:text-red-400 hover:bg-red-500/[0.08] rounded-lg transition-colors duration-150 cursor-pointer">
+                              {icons.trash}
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                      <button onClick={() => removeSavedPost(sp.post_slug)}
-                        className="w-8 h-8 flex items-center justify-center text-red-400/50 hover:text-red-400 hover:bg-red-500/[0.08] rounded-lg transition-colors duration-150 cursor-pointer shrink-0">
-                        {icons.trash}
-                      </button>
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
               )
             )}

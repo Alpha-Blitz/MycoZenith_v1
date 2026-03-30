@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
 import { useCart } from '@/context/CartContext'
+import { PRODUCTS } from '@/lib/products'
+import { POSTS } from '@/lib/blog'
 
 const NAV_LINKS = [
   { href: '/',         label: 'Home'     },
@@ -85,7 +87,18 @@ export default function Navbar() {
   const [avatarOpen,    setAvatarOpen]    = useState(false)
 
   const searchInputRef = useRef<HTMLInputElement>(null)
+  const searchFormRef  = useRef<HTMLDivElement>(null)
   const avatarRef      = useRef<HTMLDivElement>(null)
+
+  // Derived search results
+  const q = searchQuery.trim().toLowerCase()
+  const matchedProducts = q.length >= 2
+    ? PRODUCTS.filter(p => p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q)).slice(0, 4)
+    : []
+  const matchedPosts = q.length >= 2
+    ? POSTS.filter(p => p.title.toLowerCase().includes(q) || p.excerpt.toLowerCase().includes(q) || p.category.toLowerCase().includes(q)).slice(0, 3)
+    : []
+  const hasResults = matchedProducts.length > 0 || matchedPosts.length > 0
   const pathname = usePathname()
   const router   = useRouter()
   const { user, isAdmin, openModal, signOut } = useAuth()
@@ -117,6 +130,16 @@ export default function Navbar() {
     if (avatarOpen) document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
   }, [avatarOpen])
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (searchFormRef.current && !searchFormRef.current.contains(e.target as Node)) {
+        setSearchOpen(false); setSearchQuery('')
+      }
+    }
+    if (searchOpen) document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [searchOpen])
 
   const closeSearch = () => { setSearchOpen(false); setSearchQuery('') }
 
@@ -180,35 +203,81 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-5">
 
             {/* Expandable search */}
-            <form onSubmit={handleSearchSubmit} className="flex items-center gap-2">
-              <div
-                style={{ maxWidth: searchOpen ? '200px' : '0px' }}
-                className="overflow-hidden transition-[max-width,opacity] duration-300 ease-in-out"
-                aria-hidden={!searchOpen}
-              >
-                <input
-                  ref={searchInputRef}
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Escape' && closeSearch()}
-                  placeholder="Search products…"
-                  tabIndex={searchOpen ? 0 : -1}
-                  className="w-[200px] bg-white/[0.06] border border-white/[0.1] text-white text-sm placeholder-white/30 px-3 py-1.5 rounded-md outline-none focus:border-[#8B5CF6] transition-colors duration-200"
-                />
-              </div>
-              {searchOpen ? (
-                <button type="button" onClick={closeSearch} aria-label="Close search"
-                  className="cursor-pointer text-white/55 hover:text-[#8B5CF6] hover:scale-110 transition-all duration-200">
-                  <CloseSmIcon />
-                </button>
-              ) : (
-                <button type="button" onClick={() => setSearchOpen(true)} aria-label="Search"
-                  className="cursor-pointer text-white/55 hover:text-[#8B5CF6] hover:scale-110 transition-all duration-200">
-                  <SearchIcon />
-                </button>
+            <div ref={searchFormRef} className="relative">
+              <form onSubmit={handleSearchSubmit} className="flex items-center gap-2">
+                <div
+                  style={{ maxWidth: searchOpen ? '220px' : '0px' }}
+                  className="overflow-hidden transition-[max-width,opacity] duration-300 ease-in-out"
+                  aria-hidden={!searchOpen}
+                >
+                  <input
+                    ref={searchInputRef}
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Escape' && closeSearch()}
+                    placeholder="Search products & articles…"
+                    tabIndex={searchOpen ? 0 : -1}
+                    className="w-[220px] bg-white/[0.06] border border-white/[0.1] text-white text-sm placeholder-white/30 px-3 py-1.5 rounded-md outline-none focus:border-[#8B5CF6] transition-colors duration-200"
+                  />
+                </div>
+                {searchOpen ? (
+                  <button type="button" onClick={closeSearch} aria-label="Close search"
+                    className="cursor-pointer text-white/55 hover:text-[#8B5CF6] hover:scale-110 transition-all duration-200">
+                    <CloseSmIcon />
+                  </button>
+                ) : (
+                  <button type="button" onClick={() => setSearchOpen(true)} aria-label="Search"
+                    className="cursor-pointer text-white/55 hover:text-[#8B5CF6] hover:scale-110 transition-all duration-200">
+                    <SearchIcon />
+                  </button>
+                )}
+              </form>
+
+              {/* Search results dropdown */}
+              {searchOpen && hasResults && (
+                <div className="absolute right-0 top-full mt-2 w-[320px] bg-[#0F0F0F] border border-white/[0.1] rounded-2xl overflow-hidden z-50 shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
+                  {matchedProducts.length > 0 && (
+                    <div>
+                      <p className="text-white/30 text-[10px] font-semibold tracking-[0.18em] uppercase px-4 pt-3 pb-1.5">Products</p>
+                      {matchedProducts.map(p => (
+                        <Link key={p.slug} href={`/products/${p.slug}`}
+                          onClick={closeSearch}
+                          className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/[0.05] transition-colors duration-100">
+                          <img src={p.image} alt={p.name} className="w-8 h-8 rounded-lg object-cover shrink-0 opacity-90" />
+                          <div className="min-w-0">
+                            <p className="text-white text-sm font-medium truncate">{p.name}</p>
+                            <p className="text-white/35 text-xs">{p.price}</p>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                  {matchedPosts.length > 0 && (
+                    <div className={matchedProducts.length > 0 ? 'border-t border-white/[0.06]' : ''}>
+                      <p className="text-white/30 text-[10px] font-semibold tracking-[0.18em] uppercase px-4 pt-3 pb-1.5">Articles</p>
+                      {matchedPosts.map(p => (
+                        <Link key={p.slug} href={`/blog/${p.slug}`}
+                          onClick={closeSearch}
+                          className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/[0.05] transition-colors duration-100">
+                          <img src={p.image} alt={p.title} className="w-8 h-8 rounded-lg object-cover shrink-0 opacity-90" />
+                          <div className="min-w-0">
+                            <p className="text-white text-sm font-medium truncate">{p.title}</p>
+                            <p className="text-white/35 text-xs">{p.category} · {p.readTime}</p>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                  <div className="border-t border-white/[0.06] px-4 py-2.5">
+                    <button type="button" onClick={() => { router.push(`/products?q=${encodeURIComponent(searchQuery.trim())}`); closeSearch() }}
+                      className="text-[#8B5CF6] text-xs hover:text-[#a78bfa] transition-colors duration-150 cursor-pointer">
+                      See all results for &ldquo;{searchQuery.trim()}&rdquo; →
+                    </button>
+                  </div>
+                </div>
               )}
-            </form>
+            </div>
 
             <Link href="/cart" aria-label="Cart"
               className="relative cursor-pointer text-white/55 hover:text-[#8B5CF6] hover:scale-110 transition-all duration-200">
