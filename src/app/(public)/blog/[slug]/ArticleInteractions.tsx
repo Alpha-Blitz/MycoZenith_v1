@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '@/context/AuthContext'
+import { createClient } from '@/lib/supabase/client'
 
 /* ─── Icons ───────────────────────────────────────────────────── */
 function HeartIcon({ filled }: { filled: boolean }) {
@@ -144,7 +145,11 @@ export default function ArticleInteractions({
   useEffect(() => {
     if (!user) return
     setLiked(localStorage.getItem(`like:${user.id}:${slug}`) === '1')
-    setSaved(localStorage.getItem(`save:${user.id}:${slug}`) === '1')
+    // Check Supabase for saved state
+    const supabase = createClient()
+    supabase.from('saved_posts').select('post_slug')
+      .eq('user_id', user.id).eq('post_slug', slug).maybeSingle()
+      .then(({ data }) => setSaved(!!data))
   }, [user, slug])
 
   const toggleLike = () => {
@@ -155,12 +160,16 @@ export default function ArticleInteractions({
     else       localStorage.removeItem(`like:${user.id}:${slug}`)
   }
 
-  const toggleSave = () => {
+  const toggleSave = async () => {
     if (!user) { openModal(); return }
     const next = !saved
     setSaved(next)
-    if (next) localStorage.setItem(`save:${user.id}:${slug}`, '1')
-    else       localStorage.removeItem(`save:${user.id}:${slug}`)
+    const supabase = createClient()
+    if (next) {
+      await supabase.from('saved_posts').insert({ user_id: user.id, post_slug: slug })
+    } else {
+      await supabase.from('saved_posts').delete().eq('user_id', user.id).eq('post_slug', slug)
+    }
   }
 
   const handleShare = () => {
@@ -172,7 +181,7 @@ export default function ArticleInteractions({
     document.getElementById('comments')?.scrollIntoView({ behavior: 'smooth' })
   }
 
-  const btnBase = 'inline-flex items-center gap-2 text-sm font-medium px-4 py-2.5 rounded-xl border transition-all duration-150 cursor-pointer select-none'
+  const btnBase = 'inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl border transition-all duration-150 cursor-pointer select-none'
 
   return (
     <div className="flex items-center gap-3 flex-wrap py-6 border-t border-b border-white/[0.07] my-10">

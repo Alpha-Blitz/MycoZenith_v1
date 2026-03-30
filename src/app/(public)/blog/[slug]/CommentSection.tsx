@@ -28,7 +28,7 @@ function Avatar({ name }: { name: string }) {
 
 export default function CommentSection({ slug }: { slug: string }) {
   const { user, openModal } = useAuth()
-  const supabase = createClient()
+  const supabase = createClient() // stable — createClient is a factory, not a hook
 
   const [comments, setComments] = useState<Comment[]>([])
   const [body,     setBody]     = useState('')
@@ -56,7 +56,7 @@ export default function CommentSection({ slug }: { slug: string }) {
     setError('')
     setPosting(true)
 
-    const userName = user.user_metadata?.name ?? user.email?.split('@')[0] ?? 'Anonymous'
+    const userName = user.user_metadata?.full_name ?? user.user_metadata?.name ?? user.email?.split('@')[0] ?? 'Anonymous'
     const newComment: Comment = {
       id:         crypto.randomUUID(),
       post_slug:  slug,
@@ -96,9 +96,9 @@ export default function CommentSection({ slug }: { slug: string }) {
         {user ? (
           <form onSubmit={handleSubmit} className="flex flex-col gap-3">
             <div className="flex items-center gap-3 mb-1">
-              <Avatar name={user.user_metadata?.name ?? user.email ?? 'U'} />
+              <Avatar name={user.user_metadata?.full_name ?? user.user_metadata?.name ?? user.email ?? 'U'} />
               <span className="text-white/60 text-sm">
-                {user.user_metadata?.name ?? user.email}
+                {user.user_metadata?.full_name ?? user.user_metadata?.name ?? user.email}
               </span>
             </div>
             <textarea
