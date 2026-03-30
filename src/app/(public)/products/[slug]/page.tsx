@@ -153,7 +153,13 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             </div>
 
             {/* Quantity + CTAs (client island) */}
-            <ProductActions slug={product.slug} />
+            <ProductActions
+              slug={product.slug}
+              name={product.name}
+              image={product.image}
+              price={product.price}
+              tag={product.tag}
+            />
 
           </div>
         </div>

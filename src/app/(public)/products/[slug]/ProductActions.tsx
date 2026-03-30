@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useCart, parsePrice } from '@/context/CartContext'
 
 function CartIcon() {
   return (
@@ -43,14 +45,31 @@ function LockIcon() {
   )
 }
 
-export default function ProductActions({ slug }: { slug: string }) {
-  const [qty,      setQty]      = useState(1)
-  const [added,    setAdded]    = useState(false)
-  const [copied,   setCopied]   = useState(false)
+type Props = {
+  slug: string
+  name: string
+  image: string
+  price: string
+  tag: string
+}
+
+export default function ProductActions({ slug, name, image, price, tag }: Props) {
+  const [qty,    setQty]    = useState(1)
+  const [added,  setAdded]  = useState(false)
+  const [copied, setCopied] = useState(false)
+
+  const { addItem } = useCart()
+  const router = useRouter()
 
   const handleAddToCart = () => {
+    addItem({ slug, name, image, price: parsePrice(price), tag, quantity: qty })
     setAdded(true)
     setTimeout(() => setAdded(false), 1800)
+  }
+
+  const handleBuyNow = () => {
+    addItem({ slug, name, image, price: parsePrice(price), tag, quantity: qty })
+    router.push('/cart')
   }
 
   async function handleShare() {
@@ -90,7 +109,7 @@ export default function ProductActions({ slug }: { slug: string }) {
 
       {/* Row 1: primary Buy Now */}
       <button
-        onClick={handleAddToCart}
+        onClick={handleBuyNow}
         className="w-full flex items-center justify-center gap-2 bg-[#F97316] hover:bg-[#EA580C] text-white text-sm font-bold px-6 py-4 rounded-xl transition-all duration-200 hover:scale-[1.01] cursor-pointer tracking-wide"
       >
         BUY NOW <ArrowRight />

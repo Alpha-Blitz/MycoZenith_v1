@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 import type { Product } from '@/lib/products'
+import { useCart, parsePrice } from '@/context/CartContext'
 
 function ArrowRight({ size = 13 }: { size?: number }) {
   return (
@@ -27,8 +28,10 @@ function CartPlusIcon() {
 
 export default function ProductCard({ slug, image, name, tag, description, price }: Product) {
   const [added, setAdded] = useState(false)
+  const { addItem } = useCart()
 
   const handleAddToCart = () => {
+    addItem({ slug, name, image, price: parsePrice(price), tag })
     setAdded(true)
     setTimeout(() => setAdded(false), 1800)
   }

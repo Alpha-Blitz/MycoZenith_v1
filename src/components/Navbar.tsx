@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
+import { useCart } from '@/context/CartContext'
 
 const NAV_LINKS = [
   { href: '/',         label: 'Home'     },
@@ -88,6 +89,7 @@ export default function Navbar() {
   const pathname = usePathname()
   const router   = useRouter()
   const { user, isAdmin, openModal, signOut } = useAuth()
+  const { totalItems } = useCart()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10)
@@ -208,10 +210,15 @@ export default function Navbar() {
               )}
             </form>
 
-            <button aria-label="Cart"
-              className="cursor-pointer text-white/55 hover:text-[#8B5CF6] hover:scale-110 transition-all duration-200">
+            <Link href="/cart" aria-label="Cart"
+              className="relative cursor-pointer text-white/55 hover:text-[#8B5CF6] hover:scale-110 transition-all duration-200">
               <CartIcon />
-            </button>
+              {totalItems > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-[#F97316] text-white text-[9px] font-bold flex items-center justify-center pointer-events-none">
+                  {totalItems > 9 ? '9+' : totalItems}
+                </span>
+              )}
+            </Link>
             {isAdmin && (
               <Link href="/admin" aria-label="Admin panel"
                 className="cursor-pointer text-white/30 hover:text-[#8B5CF6] hover:scale-110 transition-all duration-200">
@@ -339,9 +346,18 @@ export default function Navbar() {
         </nav>
 
         <div className="flex items-center justify-center gap-10 px-6 pb-12 border-t border-white/[0.05] pt-8">
-          <button className="flex flex-col items-center gap-2 text-white/45 hover:text-[#8B5CF6] transition-colors duration-200">
-            <CartIcon /><span className="text-xs tracking-wide">Cart</span>
-          </button>
+          <Link href="/cart" onClick={() => setMobileOpen(false)}
+            className="relative flex flex-col items-center gap-2 text-white/45 hover:text-[#8B5CF6] transition-colors duration-200">
+            <span className="relative">
+              <CartIcon />
+              {totalItems > 0 && (
+                <span className="absolute -top-1 -right-1.5 w-4 h-4 rounded-full bg-[#F97316] text-white text-[9px] font-bold flex items-center justify-center">
+                  {totalItems > 9 ? '9+' : totalItems}
+                </span>
+              )}
+            </span>
+            <span className="text-xs tracking-wide">Cart</span>
+          </Link>
           {user ? (
             <>
               <Link
