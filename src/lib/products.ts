@@ -203,8 +203,8 @@ export const PRODUCTS: Product[] = [
   },
   {
     slug:        'turkey-tail',
-    image:       '/psilo.jpeg',
-    images:      ['/psilo.jpeg', '/hero.jpeg', '/neuro.webp'],
+    image:       '/turkeytail.jpeg',
+    images:      ['/turkeytail.jpeg', '/hero.jpeg', '/neuro.webp'],
     name:        'Turkey Tail',
     tag:         'Immunity + Recovery',
     description: 'Nature\'s most clinically researched immune mushroom. PSK & PSP polysaccharides activate deep immune defence.',
@@ -254,8 +254,8 @@ export const PRODUCTS: Product[] = [
   },
   {
     slug:        'chaga',
-    image:       '/psilo.jpeg',
-    images:      ['/psilo.jpeg', '/vo2.webp', '/reishi.jpeg'],
+    image:       '/chaga.jpeg',
+    images:      ['/chaga.jpeg', '/vo2.webp', '/reishi.jpeg'],
     name:        'Chaga',
     tag:         'Antioxidant + Longevity',
     description: 'The highest ORAC score of any natural food. Chaga\'s melanin complex neutralises free radicals and supports cellular longevity.',

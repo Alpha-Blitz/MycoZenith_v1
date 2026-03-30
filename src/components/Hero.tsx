@@ -22,7 +22,7 @@ export default function Hero() {
 
       {/* Background */}
       <div className="absolute inset-0">
-        <Image src="/hero1.jpeg" alt="Cordyceps mushroom backdrop"
+        <Image src="/hero1.PNG" alt="Mushroom backdrop"
           fill priority className="object-cover object-center" sizes="100vw" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0A] via-[#0A0A0A]/88 to-[#0A0A0A]/25" />
         <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#0A0A0A] to-transparent" />
