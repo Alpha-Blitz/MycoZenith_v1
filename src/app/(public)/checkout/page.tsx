@@ -126,15 +126,29 @@ export default function CheckoutPage() {
   }, [])
 
   const selectAddrSuggestion = (item: NominatimResult) => {
-    const a    = item.address ?? {}
-    const road = [a.house_number, a.road].filter(Boolean).join(' ') || item.display_name.split(',')[0]
-    setAddr1(road)
-    const sub = a.neighbourhood ?? a.suburb ?? a.quarter ?? ''
-    if (sub) setAddr2(sub)
-    const c = a.city ?? a.town ?? a.village ?? ''
-    if (c) setCity(c)
+    const a = item.address ?? {}
+
+    // addr1: road/street + optional house number
+    const streetPart = a.road ?? a.street ?? a.footway ?? a.pedestrian ?? a.path ?? ''
+    const housePart  = a.house_number ?? a.house_name ?? ''
+    const line1 = [housePart, streetPart].filter(Boolean).join(', ')
+      || item.display_name.split(',').slice(0, 2).join(',').trim()
+    setAddr1(line1)
+
+    // addr2: locality / suburb / neighbourhood
+    const line2 = a.neighbourhood ?? a.suburb ?? a.quarter ?? a.locality ?? a.village ?? ''
+    if (line2 && line2 !== (a.city ?? a.town ?? '')) setAddr2(line2)
+
+    // city: try multiple keys used in Indian results
+    const cityVal = a.city ?? a.town ?? a.county ?? a.district ?? a['city_district'] ?? ''
+    if (cityVal) setCity(cityVal)
+
+    // state
     if (a.state) setState(a.state)
-    if (a.postcode) setPincode(a.postcode.replace(/\s/g, '').slice(0, 6))
+
+    // pincode: strip spaces, keep first 6 digits
+    if (a.postcode) setPincode(a.postcode.replace(/\D/g, '').slice(0, 6))
+
     setAddrSuggestions([])
     setShowAddrSuggestions(false)
   }
@@ -427,8 +441,14 @@ export default function CheckoutPage() {
               <div className="bg-[#0F0F0F] border border-white/[0.08] rounded-2xl p-5 sm:p-6 flex flex-col gap-4">
                 <div className="flex items-center justify-between">
                   <p className="text-white text-sm font-semibold">Order Summary</p>
-                  <Link href="/cart" className="text-[#8B5CF6] text-xs hover:text-[#a78bfa] transition-colors duration-150">
-                    Edit cart
+                  <Link href="/cart"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-[#8B5CF6]/30 text-[#8B5CF6] hover:bg-[#8B5CF6]/10 hover:border-[#8B5CF6]/50 text-xs font-semibold transition-all duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24"
+                      fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                    </svg>
+                    Edit Cart
                   </Link>
                 </div>
 
@@ -475,7 +495,7 @@ export default function CheckoutPage() {
                           placeholder="Promo code"
                           className="min-w-0 flex-1 bg-[#111111] border border-white/[0.1] text-white text-sm placeholder-white/20 px-3 py-2 rounded-xl outline-none focus:border-[#8B5CF6] transition-colors duration-200" />
                         <button onClick={applyPromo}
-                          className="px-3 py-2 bg-white/[0.06] border border-white/[0.1] text-white/60 hover:text-white hover:bg-white/[0.1] text-xs font-medium rounded-xl transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap">
+                          className="px-3 py-2 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white text-xs font-semibold rounded-xl transition-all duration-200 cursor-pointer shrink-0 whitespace-nowrap">
                           Apply
                         </button>
                       </div>
