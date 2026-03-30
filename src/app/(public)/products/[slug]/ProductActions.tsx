@@ -43,13 +43,25 @@ function LockIcon() {
   )
 }
 
-export default function ProductActions() {
-  const [qty,   setQty]   = useState(1)
-  const [added, setAdded] = useState(false)
+export default function ProductActions({ slug }: { slug: string }) {
+  const [qty,      setQty]      = useState(1)
+  const [added,    setAdded]    = useState(false)
+  const [copied,   setCopied]   = useState(false)
 
   const handleAddToCart = () => {
     setAdded(true)
     setTimeout(() => setAdded(false), 1800)
+  }
+
+  async function handleShare() {
+    const url = `${window.location.origin}/products/${slug}`
+    if (navigator.share) {
+      try { await navigator.share({ title: document.title, url }) } catch { /* user cancelled */ }
+    } else {
+      await navigator.clipboard.writeText(url)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    }
   }
 
   return (
@@ -106,11 +118,29 @@ export default function ProductActions() {
         </button>
       </div>
 
-      {/* Secure checkout note */}
-      <p className="flex items-center gap-1.5 text-white/30 text-xs">
-        <LockIcon />
-        Secure checkout · Free shipping above ₹999
-      </p>
+      {/* Secure checkout note + Share */}
+      <div className="flex items-center justify-between gap-4">
+        <p className="flex items-center gap-1.5 text-white/30 text-xs">
+          <LockIcon />
+          Secure checkout · Free shipping above ₹999
+        </p>
+        <button
+          onClick={handleShare}
+          className="inline-flex items-center gap-1.5 text-white/35 hover:text-white/70 text-xs transition-colors duration-150 cursor-pointer shrink-0"
+        >
+          {copied ? (
+            <>
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Copied!
+            </>
+          ) : (
+            <>
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+              Share
+            </>
+          )}
+        </button>
+      </div>
     </div>
   )
 }

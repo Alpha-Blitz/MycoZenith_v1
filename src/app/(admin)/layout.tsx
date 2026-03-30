@@ -12,7 +12,7 @@ export default async function AdminRootLayout({ children }: { children: React.Re
     .from('admin_users')
     .select('user_id')
     .eq('user_id', user.id)
-    .single()
+    .maybeSingle()
 
   if (!adminRow) redirect('/')
 

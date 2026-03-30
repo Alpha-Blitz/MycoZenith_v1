@@ -28,7 +28,7 @@ export async function middleware(request: NextRequest) {
     .from('admin_users')
     .select('user_id')
     .eq('user_id', user.id)
-    .single()
+    .maybeSingle()
 
   if (!adminRow) return NextResponse.redirect(new URL('/', request.url))
 

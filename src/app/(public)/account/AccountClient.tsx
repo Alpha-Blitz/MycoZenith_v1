@@ -355,7 +355,7 @@ export default function AccountClient({ user, orders, addresses: initAddresses, 
 
             {/* Avatar + identity */}
             <div className={CARD + ' p-6 flex items-center gap-5'}>
-              <div className="relative shrink-0">
+              <div className="relative w-16 h-16 shrink-0">
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#8B5CF6]/30 to-[#7c3aed]/20 border border-[#8B5CF6]/30 flex items-center justify-center text-[#8B5CF6] text-2xl font-bold overflow-hidden">
                   {avatarUrl ? (
                     <Image src={avatarUrl} alt="Avatar" fill className="object-cover rounded-full" sizes="64px" />
@@ -552,7 +552,7 @@ export default function AccountClient({ user, orders, addresses: initAddresses, 
             {savedSubTab === 'products' && (
               favorites.length === 0 ? (
                 <div className={CARD + ' p-10 flex flex-col items-center text-center gap-3'}>
-                  <div className="w-12 h-12 rounded-xl bg-[#F97316]/10 border border-[#F97316]/20 flex items-center justify-center text-[#F97316]/50">{icons.bookmark}</div>
+                  <div className="w-12 h-12 rounded-xl bg-[#F97316]/10 border border-[#F97316]/20 flex items-center justify-center text-[#F97316]/50"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
                   <p className="text-white/60 text-sm">No favorite products yet.</p>
                   <Link href="/products" className="text-[#8B5CF6] text-sm hover:text-[#a78bfa] transition-colors duration-150">Browse products</Link>
                 </div>
