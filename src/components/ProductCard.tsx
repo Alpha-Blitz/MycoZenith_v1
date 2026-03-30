@@ -70,10 +70,10 @@ export default function ProductCard({ slug, image, name, tag, description, price
         <p className="text-white/58 text-sm leading-relaxed flex-1">{description}</p>
 
         {/* ── Buttons ──────────────────────────────────── */}
-        <div className="grid grid-cols-2 gap-2.5 mt-auto pt-2">
+        <div className="flex flex-col gap-2 mt-auto pt-2 sm:grid sm:grid-cols-2 sm:gap-2.5">
           <Link
             href={`/products/${slug}`}
-            className="group/btn inline-flex items-center justify-center gap-1.5 bg-[#F97316] hover:bg-[#EA580C] text-white text-sm font-semibold px-4 py-3 rounded-xl transition-all duration-200 hover:scale-[1.03]"
+            className="group/btn inline-flex items-center justify-center gap-1.5 bg-[#F97316] hover:bg-[#EA580C] text-white text-sm font-semibold px-4 py-2.5 sm:py-3 rounded-xl transition-all duration-200 hover:scale-[1.03]"
           >
             Shop Now
             <span className="inline-block transition-transform duration-200 group-hover/btn:translate-x-1">
@@ -83,7 +83,7 @@ export default function ProductCard({ slug, image, name, tag, description, price
           <button
             onClick={handleAddToCart}
             className={[
-              'inline-flex items-center justify-center gap-1.5 text-sm font-medium px-4 py-3 rounded-xl border transition-all duration-200 cursor-pointer',
+              'inline-flex items-center justify-center gap-1.5 text-sm font-medium px-4 py-2.5 sm:py-3 rounded-xl border transition-all duration-200 cursor-pointer',
               added
                 ? 'bg-[#8B5CF6]/20 border-[#8B5CF6]/50 text-[#8B5CF6]'
                 : 'bg-white/[0.05] border-white/[0.12] text-white/80 hover:bg-white/[0.1] hover:border-white/[0.2] hover:text-white',

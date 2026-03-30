@@ -42,7 +42,7 @@ export default function Hero() {
           </div>
 
           {/* Headline */}
-          <h1 className="text-[42px] sm:text-5xl md:text-6xl lg:text-[68px] font-semibold text-white leading-[1.04] tracking-[-0.02em] mb-5 sm:mb-6">
+          <h1 className="text-[28px] sm:text-[42px] md:text-5xl lg:text-6xl xl:text-[68px] font-semibold text-white leading-[1.08] sm:leading-[1.04] tracking-[-0.02em] mb-5 sm:mb-6">
             Nature's Intelligence.
             <br />
             <span className="text-white/50">Engineered for</span>
@@ -51,7 +51,7 @@ export default function Hero() {
           </h1>
 
           {/* Subheadline */}
-          <p className="text-white/62 text-[17px] leading-[1.75] mb-10 max-w-[440px]">
+          <p className="text-white/62 text-[15px] sm:text-[17px] leading-[1.75] mb-8 sm:mb-10 max-w-[440px]">
             Cordyceps-powered supplements designed to enhance energy,
             endurance, and mental clarity.
           </p>

@@ -147,7 +147,7 @@ function AddressForm({ initial, onSave, onCancel }: {
 
   return (
     <form onSubmit={submit} className="flex flex-col gap-3">
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div className="flex flex-col gap-1.5">
           <label className="text-white/50 text-xs">Label</label>
           <select value={form.label} onChange={e => set('label', e.target.value)}
@@ -172,7 +172,7 @@ function AddressForm({ initial, onSave, onCancel }: {
         <label className="text-white/50 text-xs">Address Line 2</label>
         <input className={INPUT} value={form.line2 ?? ''} onChange={e => set('line2', e.target.value)} placeholder="Street / Area / Landmark" />
       </div>
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div className="flex flex-col gap-1.5">
           <label className="text-white/50 text-xs">City *</label>
           <input className={INPUT} value={form.city} onChange={e => set('city', e.target.value)} required placeholder="Mumbai" />

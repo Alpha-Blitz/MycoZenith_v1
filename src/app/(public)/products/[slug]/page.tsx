@@ -100,7 +100,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
   return (
     <div className="min-h-screen bg-[#171717]">
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 pt-24 sm:pt-28 pb-20 sm:pb-28">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pt-20 sm:pt-28 pb-16 sm:pb-28">
 
         {/* ── Breadcrumb ─────────────────────────────────────────── */}
         <nav className="flex items-center gap-2 text-sm text-[#8B5CF6]/60 mb-10">
@@ -112,7 +112,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         </nav>
 
         {/* ── Hero ───────────────────────────────────────────────── */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 mb-12 sm:mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10 lg:gap-14 mb-12 sm:mb-16">
 
           {/* Image carousel */}
           <div>
@@ -237,7 +237,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         </section>
 
         {/* ── Why MycoZenith? ────────────────────────────────────── */}
-        <section className="mb-14 sm:mb-16 bg-[#0F0F0F] border border-white/[0.08] rounded-2xl p-8 sm:p-10">
+        <section className="mb-14 sm:mb-16 bg-[#0F0F0F] border border-white/[0.08] rounded-2xl p-5 sm:p-8 lg:p-10">
           <div className="inline-flex items-center gap-2 mb-3">
             <span className="text-[#8B5CF6] text-xs font-semibold tracking-[0.22em] uppercase">Customer Stories</span>
           </div>

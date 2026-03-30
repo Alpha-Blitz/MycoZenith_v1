@@ -155,11 +155,11 @@ export default function ProductsGrid({ initialQuery }: { initialQuery: string })
           col-span-1 of 8  =  half a card width
       */}
       <div className="flex flex-col gap-3 mb-6">
-        <div className="grid grid-cols-8 gap-4">
+        <div className="flex items-stretch gap-2 sm:gap-3">
 
-          {/* Search — 1 card wide */}
-          <div className="col-span-2 flex items-stretch bg-[#0F0F0F] border border-white/[0.1] rounded-xl overflow-hidden focus-within:border-[#8B5CF6]/50 transition-colors duration-200">
-            <span className="pl-3.5 pr-2 text-white/30 pointer-events-none shrink-0 flex items-center">
+          {/* Search — fills remaining space */}
+          <div className="flex-1 flex items-stretch bg-[#0F0F0F] border border-white/[0.1] rounded-xl overflow-hidden focus-within:border-[#8B5CF6]/50 transition-colors duration-200 min-w-0">
+            <span className="pl-3 pr-2 text-white/30 pointer-events-none shrink-0 flex items-center">
               <SearchIcon />
             </span>
             <input
@@ -181,15 +181,15 @@ export default function ProductsGrid({ initialQuery }: { initialQuery: string })
             )}
             <button
               type="button"
-              className="bg-[#8B5CF6] hover:bg-[#7c3aed] text-white text-xs font-semibold px-4 py-2 m-1 rounded-lg transition-colors duration-150 cursor-pointer shrink-0 flex items-center gap-1.5"
+              className="bg-[#8B5CF6] hover:bg-[#7c3aed] text-white text-xs font-semibold px-3 sm:px-4 py-2 m-1 rounded-lg transition-colors duration-150 cursor-pointer shrink-0 flex items-center gap-1.5"
             >
               <SearchIcon />
-              Search
+              <span className="hidden sm:inline">Search</span>
             </button>
           </div>
 
-          {/* Sort — half a card wide, pinned to the right */}
-          <div className="col-span-1 col-start-8">
+          {/* Sort — fixed width */}
+          <div className="w-[130px] sm:w-[160px] shrink-0">
             <SortDropdown value={sort} onChange={setSort} />
           </div>
 
@@ -235,7 +235,7 @@ export default function ProductsGrid({ initialQuery }: { initialQuery: string })
 
       {/* ── Grid or empty state ───────────────────────────── */}
       {paginated.length > 0 ? (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
           {paginated.map((product) => (
             <ProductCard key={product.slug} {...product} />
           ))}
@@ -260,9 +260,9 @@ export default function ProductsGrid({ initialQuery }: { initialQuery: string })
           <button
             onClick={() => setPage((p) => p - 1)}
             disabled={page === 1}
-            className="inline-flex items-center gap-1.5 text-sm font-medium px-4 py-2.5 rounded-xl border border-white/[0.1] text-white/50 hover:text-white hover:border-white/[0.2] disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-150 cursor-pointer"
+            className="inline-flex items-center gap-1.5 text-sm font-medium px-3 sm:px-4 py-2.5 rounded-xl border border-white/[0.1] text-white/50 hover:text-white hover:border-white/[0.2] disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-150 cursor-pointer"
           >
-            <ArrowLeft /> Prev
+            <ArrowLeft /> <span className="hidden sm:inline">Prev</span>
           </button>
 
           {Array.from({ length: totalPages }, (_, i) => (
@@ -283,9 +283,9 @@ export default function ProductsGrid({ initialQuery }: { initialQuery: string })
           <button
             onClick={() => setPage((p) => p + 1)}
             disabled={page === totalPages}
-            className="inline-flex items-center gap-1.5 text-sm font-medium px-4 py-2.5 rounded-xl border border-white/[0.1] text-white/50 hover:text-white hover:border-white/[0.2] disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-150 cursor-pointer"
+            className="inline-flex items-center gap-1.5 text-sm font-medium px-3 sm:px-4 py-2.5 rounded-xl border border-white/[0.1] text-white/50 hover:text-white hover:border-white/[0.2] disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-150 cursor-pointer"
           >
-            Next <ArrowRight />
+            <span className="hidden sm:inline">Next</span> <ArrowRight />
           </button>
         </div>
       )}
