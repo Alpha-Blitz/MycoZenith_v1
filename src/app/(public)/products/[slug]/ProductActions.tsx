@@ -52,6 +52,7 @@ type Props = {
   image: string
   price: string
   tag: string
+  outOfStock?: boolean
 }
 
 /* ─── Share Sheet ─────────────────────────────────────────────── */
@@ -108,7 +109,7 @@ function ShareSheet({ slug, onClose }: { slug: string; onClose: () => void }) {
   )
 }
 
-export default function ProductActions({ slug, name, image, price, tag }: Props) {
+export default function ProductActions({ slug, name, image, price, tag, outOfStock = false }: Props) {
   const [qty,        setQty]        = useState(1)
   const [added,      setAdded]      = useState(false)
   const [shareOpen,  setShareOpen]  = useState(false)
@@ -192,19 +193,26 @@ export default function ProductActions({ slug, name, image, price, tag }: Props)
       </div>
 
       {/* Row 1: primary Buy Now */}
-      <button
-        onClick={handleBuyNow}
-        className="w-full flex items-center justify-center gap-2 bg-[#FF6523] hover:bg-[#E5561E] text-white text-sm font-bold px-6 py-4 rounded-xl transition-all duration-200 hover:scale-[1.01] cursor-pointer tracking-wide"
-      >
-        BUY NOW <ArrowRight />
-      </button>
+      {outOfStock ? (
+        <div className="w-full flex items-center justify-center gap-2 bg-white/[0.05] border border-orange-500/25 text-orange-400/70 text-sm font-bold px-6 py-4 rounded-xl tracking-wide select-none">
+          Out of Stock
+        </div>
+      ) : (
+        <button
+          onClick={handleBuyNow}
+          className="w-full flex items-center justify-center gap-2 bg-[#FF6523] hover:bg-[#E5561E] text-white text-sm font-bold px-6 py-4 rounded-xl transition-all duration-200 hover:scale-[1.01] cursor-pointer tracking-wide"
+        >
+          BUY NOW <ArrowRight />
+        </button>
+      )}
 
       {/* Row 2: Add to Cart + Subscribe & Save */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <button
           onClick={handleAddToCart}
+          disabled={outOfStock}
           className={[
-            'inline-flex items-center justify-center gap-2 text-sm font-medium px-4 py-3.5 rounded-xl border transition-all duration-200 cursor-pointer',
+            'inline-flex items-center justify-center gap-2 text-sm font-medium px-4 py-3.5 rounded-xl border transition-all duration-200 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed',
             added
               ? 'bg-[#8B5CF6]/20 border-[#8B5CF6]/50 text-[#8B5CF6]'
               : 'bg-white/[0.05] border-white/[0.15] text-white/80 hover:bg-white/[0.1] hover:border-white/25 hover:text-white',
@@ -215,7 +223,8 @@ export default function ProductActions({ slug, name, image, price, tag }: Props)
         </button>
         <button
           onClick={handleAddToCart}
-          className="inline-flex items-center justify-center gap-1.5 border border-[#FF6523]/50 text-[#FF6523] hover:bg-[#FF6523]/10 text-sm font-semibold px-4 py-3.5 rounded-xl transition-all duration-200 cursor-pointer">
+          disabled={outOfStock}
+          className="inline-flex items-center justify-center gap-1.5 border border-[#FF6523]/50 text-[#FF6523] hover:bg-[#FF6523]/10 text-sm font-semibold px-4 py-3.5 rounded-xl transition-all duration-200 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">
           <RefreshIcon />
           Subscribe &amp; Save
         </button>

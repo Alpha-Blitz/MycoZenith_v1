@@ -11,6 +11,7 @@ import { event as gaEvent } from '@/lib/gtag'
 
 /* ─── Promo codes ─────────────────────────────────────────────── */
 const PROMO_CODES: Record<string, number> = { MYCO10: 0.10 }
+const GST_RATE = 0.18   // 18% GST inclusive on food supplements (HSN 2106)
 
 /* ─── Icons ───────────────────────────────────────────────────── */
 function ArrowLeft() {
@@ -82,6 +83,11 @@ export default function CheckoutPage() {
 
   const discount   = appliedPromo ? Math.round(subtotal * PROMO_CODES[appliedPromo]) : 0
   const finalTotal = subtotal - discount + shipping
+  // GST is inclusive in product prices (18% GST, HSN 2106)
+  const taxableValue = Math.round(finalTotal / (1 + GST_RATE))
+  const gstTotal     = finalTotal - taxableValue
+  const cgst         = Math.round(gstTotal / 2)
+  const sgst         = gstTotal - cgst
 
   /* Form fields */
   const [name,    setName]    = useState('')
@@ -220,7 +226,14 @@ export default function CheckoutPage() {
     setOrderError('')
     try {
       const supabase = createClient()
-      const orderNumber = `MZ-${Date.now().toString(36).toUpperCase()}`
+      // Generate sequential order number: MZ-{YEAR}-{NNNN}
+      const year = new Date().getFullYear()
+      const { count: orderCount } = await supabase
+        .from('orders')
+        .select('*', { count: 'exact', head: true })
+        .like('order_number', `MZ-${year}-%`)
+      const seq = ((orderCount ?? 0) + 1).toString().padStart(4, '0')
+      const orderNumber = `MZ-${year}-${seq}`
 
       const { data: order, error: orderErr } = await supabase
         .from('orders')
@@ -240,6 +253,9 @@ export default function CheckoutPage() {
           discount,
           shipping,
           total: finalTotal,
+          taxable_value:  taxableValue,
+          cgst,
+          sgst,
           currency:       'INR',
           payment_method: 'cod',
           status:         'pending',
@@ -634,8 +650,23 @@ export default function CheckoutPage() {
                       ? <span className="text-emerald-400 font-medium">Free</span>
                       : <span className="tabular-nums">₹{shipping}</span>}
                   </div>
+                  {/* GST breakdown */}
+                  <div className="flex flex-col gap-1.5 pt-2 border-t border-white/[0.06]">
+                    <div className="flex justify-between text-xs text-white/35">
+                      <span>Taxable Value</span>
+                      <span className="tabular-nums">₹{taxableValue.toLocaleString('en-IN')}</span>
+                    </div>
+                    <div className="flex justify-between text-xs text-white/35">
+                      <span>CGST (9%)</span>
+                      <span className="tabular-nums">₹{cgst.toLocaleString('en-IN')}</span>
+                    </div>
+                    <div className="flex justify-between text-xs text-white/35">
+                      <span>SGST (9%)</span>
+                      <span className="tabular-nums">₹{sgst.toLocaleString('en-IN')}</span>
+                    </div>
+                  </div>
                   <div className="flex justify-between font-semibold text-white pt-2 border-t border-white/[0.06]">
-                    <span>Total</span>
+                    <span>Total <span className="text-white/30 text-[10px] font-normal">(incl. 18% GST)</span></span>
                     <span className="tabular-nums text-[#FF6523]">₹{finalTotal.toLocaleString('en-IN')}</span>
                   </div>
                 </div>

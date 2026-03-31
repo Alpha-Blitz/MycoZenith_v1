@@ -1,4 +1,5 @@
 import ProductsGrid from './ProductsGrid'
+import { createClient } from '@/lib/supabase/server'
 
 export default async function ProductsPage({
   searchParams,
@@ -6,6 +7,17 @@ export default async function ProductsPage({
   searchParams: Promise<{ q?: string }>
 }) {
   const { q } = await searchParams
+
+  // Fetch out-of-stock slugs from admin DB
+  let outOfStockSlugs: string[] = []
+  try {
+    const supabase = await createClient()
+    const { data } = await supabase
+      .from('products')
+      .select('slug')
+      .eq('status', 'out_of_stock')
+    outOfStockSlugs = data?.map(d => d.slug) ?? []
+  } catch { /* ignore */ }
 
   return (
     <div className="min-h-screen bg-[#1E1E1E] pt-20 sm:pt-28 pb-16 sm:pb-28 px-4 sm:px-6 lg:px-10">
@@ -18,7 +30,7 @@ export default async function ProductsPage({
           <p className="text-white/40 text-sm mt-2">Premium functional mushroom extracts — formulated for real results.</p>
         </div>
 
-        <ProductsGrid initialQuery={q ?? ''} />
+        <ProductsGrid initialQuery={q ?? ''} outOfStockSlugs={outOfStockSlugs} />
 
       </div>
     </div>

@@ -7,6 +7,7 @@ import ProductActions from './ProductActions'
 import FAQAccordion from './FAQAccordion'
 import ImageCarousel from './ImageCarousel'
 import ReviewSection from './ReviewSection'
+import { createClient } from '@/lib/supabase/server'
 
 export function generateStaticParams() {
   return PRODUCTS.map((p) => ({ slug: p.slug }))
@@ -96,6 +97,20 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const product = PRODUCTS.find((p) => p.slug === slug)
   if (!product) notFound()
 
+  // Check admin-set status from DB (overrides static data)
+  let dbStatus: string | null = null
+  try {
+    const supabase = await createClient()
+    const { data: dbProduct } = await supabase
+      .from('products')
+      .select('status')
+      .eq('slug', product.slug)
+      .maybeSingle()
+    dbStatus = dbProduct?.status ?? null
+  } catch { /* ignore — static data is fallback */ }
+
+  const isOutOfStock = dbStatus === 'out_of_stock'
+
   const related = PRODUCTS.filter((p) => p.slug !== slug)
 
   return (
@@ -124,6 +139,11 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
             {/* Name */}
             <div>
+              {isOutOfStock && (
+                <div className="inline-flex items-center gap-1.5 bg-orange-500/10 border border-orange-500/25 text-orange-400 text-[11px] font-semibold tracking-wide uppercase px-3 py-1 rounded-full mb-3">
+                  Out of Stock
+                </div>
+              )}
               <h1 className="text-4xl sm:text-5xl font-semibold text-white tracking-tight leading-tight mb-3">
                 {product.name}
               </h1>
@@ -159,6 +179,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
               image={product.image}
               price={product.price}
               tag={product.tag}
+              outOfStock={isOutOfStock}
             />
 
           </div>

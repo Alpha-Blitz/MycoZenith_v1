@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import ImageUpload from './ImageUpload'
+import ScrollToTop from './ScrollToTop'
 
 type ListItem = Record<string, string>
 
@@ -146,7 +147,7 @@ export default function ProductForm({ initialData, id }: { initialData?: Partial
               { val: 'active',        label: 'Active',       activeClass: 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400' },
               { val: 'out_of_stock',  label: 'Out of Stock', activeClass: 'bg-orange-500/15 border-orange-500/30 text-orange-400' },
             ] as const).map(({ val, label, activeClass }) => (
-              <button key={val} onClick={() => set('status', val)}
+              <button key={val} type="button" onClick={() => set('status', val)}
                 className={['px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all duration-150 cursor-pointer',
                   data.status === val ? activeClass : 'bg-transparent border-white/[0.08] text-white/30 hover:text-white/60',
                 ].join(' ')}>{label}</button>
@@ -313,6 +314,7 @@ export default function ProductForm({ initialData, id }: { initialData?: Partial
           <textarea value={data.meta_description} onChange={e => set('meta_description', e.target.value)} rows={2} className={TEXTAREA} />
         </Field>
       </Section>
+      <ScrollToTop />
     </div>
   )
 }

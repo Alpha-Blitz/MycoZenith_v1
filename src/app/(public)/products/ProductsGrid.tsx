@@ -113,7 +113,7 @@ function SortDropdown({ value, onChange }: { value: SortKey; onChange: (v: SortK
   )
 }
 
-export default function ProductsGrid({ initialQuery }: { initialQuery: string }) {
+export default function ProductsGrid({ initialQuery, outOfStockSlugs = [] }: { initialQuery: string; outOfStockSlugs?: string[] }) {
   const [query, setQuery]         = useState(initialQuery)
   const [activeTag, setActiveTag] = useState<string | null>(null)
   const [sort, setSort]           = useState<SortKey>('featured')
@@ -237,7 +237,14 @@ export default function ProductsGrid({ initialQuery }: { initialQuery: string })
       {paginated.length > 0 ? (
         <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
           {paginated.map((product) => (
-            <ProductCard key={product.slug} {...product} />
+            <div key={product.slug} className="relative">
+              <ProductCard {...product} />
+              {outOfStockSlugs.includes(product.slug) && (
+                <div className="absolute top-3 right-3 z-10 inline-flex items-center bg-orange-500/90 text-white text-[10px] font-semibold tracking-wide uppercase px-2.5 py-1 rounded-full shadow-md pointer-events-none">
+                  Out of Stock
+                </div>
+              )}
+            </div>
           ))}
         </div>
       ) : (

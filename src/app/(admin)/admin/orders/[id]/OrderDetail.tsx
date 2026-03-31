@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import StatusBadge from '@/components/admin/StatusBadge'
 import Image from 'next/image'
+import ScrollToTop from '@/components/admin/ScrollToTop'
 
 const ORDER_STATUSES = ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled', 'refunded']
 
@@ -171,7 +172,7 @@ export default function OrderDetail({ order }: { order: Order }) {
           </div>
         </div>
       </div>
-
+      <ScrollToTop />
     </div>
   )
 }
