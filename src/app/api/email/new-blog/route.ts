@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
     const results = await Promise.allSettled(
       d.recipientEmails.map(to =>
         resend.emails.send({
-          from:    'MycoZenith Research <onboarding@resend.dev>',
+          from:    'MycoZenith Research <research@mycozenith.com>',
           to,
           subject: `New Article: ${d.postTitle}`,
           html,

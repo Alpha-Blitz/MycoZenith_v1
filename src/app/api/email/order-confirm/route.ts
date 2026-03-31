@@ -106,7 +106,7 @@ export async function POST(req: NextRequest) {
     }
 
     const { error } = await resend.emails.send({
-      from:    'MycoZenith <onboarding@resend.dev>',
+      from:    'MycoZenith <hello@mycozenith.com>',
       to:      body.customerEmail,
       subject: `Order Confirmed — #${body.orderNumber}`,
       html:    buildHtml(body),

@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
     `
 
     const { error } = await resend.emails.send({
-      from:    'MycoZenith <onboarding@resend.dev>',
+      from:    'MycoZenith <hello@mycozenith.com>',
       to:      email,
       subject: 'Reset your MycoZenith password',
       html:    emailShell({
