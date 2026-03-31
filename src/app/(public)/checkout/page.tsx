@@ -253,9 +253,6 @@ export default function CheckoutPage() {
           discount,
           shipping,
           total: finalTotal,
-          taxable_value:  taxableValue,
-          cgst,
-          sgst,
           currency:       'INR',
           payment_method: 'cod',
           status:         'pending',
@@ -425,7 +422,7 @@ export default function CheckoutPage() {
                               {[addr.line1, addr.line2, addr.city, addr.state, addr.pincode].filter(Boolean).join(', ')}
                             </p>
                           </div>
-                          <div className={['w-4 h-4 rounded-full border-2 shrink-0 mt-0.5 flex items-center justify-center transition-colors duration-150',
+                          <div className={['w-4 h-4 rounded-full border-2 shrink-0 flex items-center justify-center transition-colors duration-150',
                             selectedSavedId === addr.id ? 'border-[#8B5CF6]' : 'border-white/20'].join(' ')}>
                             {selectedSavedId === addr.id && <div className="w-2 h-2 rounded-full bg-[#8B5CF6]" />}
                           </div>

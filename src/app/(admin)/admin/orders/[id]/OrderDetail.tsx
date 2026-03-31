@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import StatusBadge from '@/components/admin/StatusBadge'
 import Image from 'next/image'
 import ScrollToTop from '@/components/admin/ScrollToTop'
+import InvoiceButton from './InvoiceButton'
 
 const ORDER_STATUSES = ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled', 'refunded']
 
@@ -97,7 +98,10 @@ export default function OrderDetail({ order }: { order: Order }) {
             {new Date(order.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
           </p>
         </div>
-        <StatusBadge status={order.status} />
+        <div className="flex items-center gap-3">
+          <InvoiceButton order={order} />
+          <StatusBadge status={order.status} />
+        </div>
       </div>
 
       {/* Items */}

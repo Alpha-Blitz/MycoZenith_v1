@@ -45,8 +45,8 @@ export default async function AdminProductsPage() {
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-3">
                       <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-white/[0.05] shrink-0">
-                        {p.image && (
-                          <Image src={p.image} alt={p.name} fill className="object-cover" />
+                        {(p.image || p.images?.[0]) && (
+                          <Image src={p.image || p.images[0]} alt={p.name} fill className="object-contain p-0.5" sizes="40px" />
                         )}
                       </div>
                       <div>
