@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { POSTS } from '@/lib/blog'
+import { createClient } from '@/lib/supabase/server'
 import NewsletterForm from '@/components/NewsletterForm'
 import ReadProgress    from './ReadProgress'
 import BackToTop      from './BackToTop'
@@ -33,6 +34,14 @@ export default async function BlogArticlePage({
   const post = POSTS.find((p) => p.slug === slug)
   if (!post) notFound()
 
+  // Fetch real comment count from Supabase
+  const supabase = await createClient()
+  const { count: commentCount } = await supabase
+    .from('blog_comments')
+    .select('*', { count: 'exact', head: true })
+    .eq('post_slug', slug)
+  const liveCommentCount = commentCount ?? post.commentCount
+
   const relatedPosts = (() => {
     const explicit = post.relatedPostSlugs
       .map((s) => POSTS.find((p) => p.slug === s))
@@ -51,11 +60,11 @@ export default async function BlogArticlePage({
       <div className="max-w-7xl mx-auto px-6 sm:px-10 pt-24 sm:pt-28 pb-20 sm:pb-28">
 
         {/* ── Breadcrumb ──────────────────────────────────────────── */}
-        <nav className="flex items-center gap-2 text-sm text-[#8B5CF6]/60 mb-10">
+        <nav className="flex items-center gap-2 text-sm font-medium text-[#8B5CF6]/60 mb-10">
           <Link href="/"     className="hover:text-[#8B5CF6] transition-colors duration-200">Home</Link>
-          <span className="text-[#8B5CF6]/35">›</span>
+          <span className="text-[#8B5CF6]/35 font-normal">›</span>
           <Link href="/blog" className="hover:text-[#8B5CF6] transition-colors duration-200">Blog</Link>
-          <span className="text-[#FF6523]/60">›</span>
+          <span className="text-[#FF6523]/60 font-normal">›</span>
           <span className="text-[#FF6523] line-clamp-1">{post.title}</span>
         </nav>
 
@@ -150,7 +159,7 @@ export default async function BlogArticlePage({
             <ArticleInteractions
               slug={post.slug}
               likeCount={post.likeCount}
-              commentCount={post.commentCount}
+              commentCount={liveCommentCount}
             />
 
             {/* ── About the Author ──────────────────────────────── */}

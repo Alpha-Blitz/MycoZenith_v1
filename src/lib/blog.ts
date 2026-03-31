@@ -161,6 +161,9 @@ export const POSTS: Post[] = [
       { type: 'paragraph', text: 'A legitimate mushroom supplement will state "fruiting body" on the label, list a specific extract ratio (e.g., 10:1), and provide a beta-glucan percentage. If you see "mycelium biomass" or "full-spectrum" without a beta-glucan percentage, treat it with scepticism.' },
       { type: 'divider' },
       { type: 'paragraph', text: 'At MycoZenith, every product is 100% fruiting body — dual extracted with hot water and ethanol to capture both water-soluble polysaccharides (beta-glucans) and fat-soluble triterpenes and hericenones. Our beta-glucan content is third-party verified on every batch.' },
+      { type: 'product', slug: 'lions-mane' },
+      { type: 'product', slug: 'cordyceps' },
+      { type: 'product', slug: 'reishi' },
     ],
   },
   {
