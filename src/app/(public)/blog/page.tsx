@@ -122,7 +122,8 @@ export default function BlogPage() {
               <div className="absolute inset-0 sm:hidden bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/80 to-[#0A0A0A]/20" />
               <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#0A0A0A]/90 to-transparent" />
             </div>
-            <div className="absolute inset-0 flex flex-col justify-end sm:justify-center p-5 sm:p-10 max-w-[580px]">
+            {/* On mobile: anchor to bottom so content never gets clipped. On desktop: centred within the full overlay. */}
+            <div className="absolute inset-x-0 bottom-0 sm:inset-0 flex flex-col sm:justify-center p-5 sm:p-10 sm:max-w-[580px]">
               <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
                 <span className="inline-block bg-[#FF6523]/15 border border-[#FF6523]/35 text-[#FF6523] text-[10px] font-semibold tracking-[0.18em] uppercase px-3 py-1 rounded-full">
                   Featured
