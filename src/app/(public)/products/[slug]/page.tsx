@@ -112,10 +112,10 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         </nav>
 
         {/* ── Hero ───────────────────────────────────────────────── */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10 lg:gap-14 mb-12 sm:mb-16 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10 lg:gap-14 mb-12 sm:mb-16">
 
           {/* Image carousel */}
-          <div>
+          <div className="h-full">
             <ImageCarousel images={product.images} name={product.name} tag={product.tag} />
           </div>
 

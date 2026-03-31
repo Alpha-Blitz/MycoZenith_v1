@@ -28,10 +28,10 @@ export default function ImageCarousel({ images, name, tag }: { images: string[];
   const next = () => setActive((i) => (i + 1) % images.length)
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 h-full">
 
       {/* Main image */}
-      <div className="group relative h-[460px] sm:h-[520px] rounded-2xl overflow-hidden border border-white/[0.08] bg-[#0D0D0D]">
+      <div className="group relative flex-1 min-h-[360px] rounded-2xl overflow-hidden border border-white/[0.08] bg-[#0D0D0D]">
         <Image
           key={active}
           src={images[active]}
