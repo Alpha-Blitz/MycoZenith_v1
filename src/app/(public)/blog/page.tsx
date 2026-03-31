@@ -116,11 +116,14 @@ export default function BlogPage() {
               <Image src={featuredPost.image} alt={featuredPost.title} fill
                 className="object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]"
                 sizes="100vw" />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0A]/95 via-[#0A0A0A]/65 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#0A0A0A]/70 to-transparent" />
+              {/* Desktop: left-to-right gradient */}
+              <div className="absolute inset-0 hidden sm:block bg-gradient-to-r from-[#0A0A0A]/95 via-[#0A0A0A]/65 to-transparent" />
+              {/* Mobile: full bottom-to-top gradient so title always readable */}
+              <div className="absolute inset-0 sm:hidden bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/80 to-[#0A0A0A]/20" />
+              <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#0A0A0A]/90 to-transparent" />
             </div>
-            <div className="absolute inset-0 flex flex-col justify-end sm:justify-center p-6 sm:p-10 max-w-[580px]">
-              <div className="flex items-center gap-3 mb-4">
+            <div className="absolute inset-0 flex flex-col justify-end sm:justify-center p-5 sm:p-10 max-w-[580px]">
+              <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
                 <span className="inline-block bg-[#FF6523]/15 border border-[#FF6523]/35 text-[#FF6523] text-[10px] font-semibold tracking-[0.18em] uppercase px-3 py-1 rounded-full">
                   Featured
                 </span>
@@ -128,7 +131,7 @@ export default function BlogPage() {
                   {featuredPost.category}
                 </span>
               </div>
-              <h2 className="text-white text-xl sm:text-2xl md:text-[28px] font-semibold leading-tight tracking-tight mb-3 line-clamp-2 group-hover:text-white/90 transition-colors duration-200">
+              <h2 className="text-white text-lg sm:text-2xl md:text-[28px] font-semibold leading-snug tracking-tight mb-2 sm:mb-3 line-clamp-3 sm:line-clamp-2 group-hover:text-white/90 transition-colors duration-200">
                 {featuredPost.title}
               </h2>
               <p className="text-white/50 text-sm leading-relaxed mb-5 hidden sm:line-clamp-2">{featuredPost.excerpt}</p>
