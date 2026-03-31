@@ -15,15 +15,14 @@ export default function CookieConsent() {
     }
   }, [])
 
-  function accept() {
-    localStorage.setItem(STORAGE_KEY, 'accepted')
+  function resolve(choice: 'accepted' | 'declined') {
+    localStorage.setItem(STORAGE_KEY, choice)
     setVisible(false)
+    window.dispatchEvent(new Event('mz:cookie-resolved'))
   }
 
-  function decline() {
-    localStorage.setItem(STORAGE_KEY, 'declined')
-    setVisible(false)
-  }
+  const accept  = () => resolve('accepted')
+  const decline = () => resolve('declined')
 
   if (!visible) return null
 

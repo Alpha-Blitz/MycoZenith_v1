@@ -15,6 +15,16 @@ export function generateStaticParams() {
   return POSTS.map((p) => ({ slug: p.slug }))
 }
 
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const post = POSTS.find((p) => p.slug === slug)
+  if (!post) return {}
+  return {
+    title: `${post.title} — MycoZenith`,
+    description: post.excerpt,
+  }
+}
+
 function ArrowRight({ size = 13 }: { size?: number }) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24"

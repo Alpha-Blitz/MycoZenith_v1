@@ -30,9 +30,29 @@ export default function FirstVisitPopup() {
 
   useEffect(() => {
     setMounted(true)
-    if (!localStorage.getItem(STORAGE_KEY)) {
+    if (localStorage.getItem(STORAGE_KEY)) return
+
+    function showAfterDelay() {
+      if (localStorage.getItem(STORAGE_KEY)) return
+      const t = setTimeout(() => setVisible(true), 600)
+      return t
+    }
+
+    // If cookie consent already handled, show after normal delay
+    if (localStorage.getItem('mz_cookie_consent')) {
       const t = setTimeout(() => setVisible(true), 1800)
       return () => clearTimeout(t)
+    }
+
+    // Otherwise wait for cookie popup to be resolved first
+    let timer: ReturnType<typeof setTimeout> | undefined
+    function onCookieResolved() {
+      timer = showAfterDelay()
+    }
+    window.addEventListener('mz:cookie-resolved', onCookieResolved)
+    return () => {
+      window.removeEventListener('mz:cookie-resolved', onCookieResolved)
+      if (timer) clearTimeout(timer)
     }
   }, [])
 
