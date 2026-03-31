@@ -77,49 +77,51 @@ function ShareSheet({ onClose }: { onClose: () => void }) {
     } catch { /* fallback: select text */ }
   }
 
-  const shareNative = async () => {
-    if (navigator.share) {
-      await navigator.share({ url })
-      onClose()
-    }
-  }
+  const linkCls = "flex items-center gap-3 text-sm text-white/70 hover:text-white px-3 py-2.5 rounded-xl hover:bg-white/[0.06] transition-colors duration-100 cursor-pointer"
 
   return (
     <div
       ref={ref}
-      className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-52 bg-[#0F0F0F] border border-white/[0.1] rounded-2xl p-3 z-50 shadow-[0_8px_32px_rgba(0,0,0,0.5)] flex flex-col gap-1"
+      className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-56 bg-[#0F0F0F] border border-white/[0.1] rounded-2xl p-2 z-50 shadow-[0_8px_32px_rgba(0,0,0,0.5)] flex flex-col"
     >
-      <button
-        onClick={copyLink}
-        className="flex items-center gap-2.5 text-sm text-white/70 hover:text-white px-3 py-2.5 rounded-xl hover:bg-white/[0.06] transition-colors duration-100 cursor-pointer"
-      >
-        {copied ? <><CheckIcon /> <span className="text-[#8B5CF6]">Copied!</span></> : '🔗 Copy link'}
+      {/* Copy link */}
+      <button onClick={copyLink} className={linkCls}>
+        <span className="w-7 h-7 rounded-lg bg-white/[0.07] flex items-center justify-center text-base">🔗</span>
+        {copied ? <span className="text-[#8B5CF6] font-medium">Copied!</span> : 'Copy Link'}
       </button>
-      {typeof navigator !== 'undefined' && 'share' in navigator && (
-        <button
-          onClick={shareNative}
-          className="flex items-center gap-2.5 text-sm text-white/70 hover:text-white px-3 py-2.5 rounded-xl hover:bg-white/[0.06] transition-colors duration-100 cursor-pointer"
-        >
-          📤 Share…
-        </button>
-      )}
-      <a
-        href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={onClose}
-        className="flex items-center gap-2.5 text-sm text-white/70 hover:text-white px-3 py-2.5 rounded-xl hover:bg-white/[0.06] transition-colors duration-100"
-      >
-        𝕏 Share on X
+
+      {/* Instagram — mobile deep link, opens app */}
+      <a href={`instagram://share?url=${encodeURIComponent(url)}`} onClick={onClose} className={linkCls}>
+        <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400 flex items-center justify-center text-white text-xs font-bold">IG</span>
+        Instagram
       </a>
-      <a
-        href={`https://wa.me/?text=${encodeURIComponent(url)}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={onClose}
-        className="flex items-center gap-2.5 text-sm text-white/70 hover:text-white px-3 py-2.5 rounded-xl hover:bg-white/[0.06] transition-colors duration-100"
-      >
-        💬 WhatsApp
+
+      {/* WhatsApp */}
+      <a href={`https://wa.me/?text=${encodeURIComponent(url)}`} target="_blank" rel="noopener noreferrer" onClick={onClose} className={linkCls}>
+        <span className="w-7 h-7 rounded-lg bg-[#25D366] flex items-center justify-center">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.882l6.186-1.443A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.368l-.36-.214-3.722.868.936-3.613-.235-.371A9.818 9.818 0 1112 21.818z"/></svg>
+        </span>
+        WhatsApp
+      </a>
+
+      {/* X (Twitter) */}
+      <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}`} target="_blank" rel="noopener noreferrer" onClick={onClose} className={linkCls}>
+        <span className="w-7 h-7 rounded-lg bg-black border border-white/10 flex items-center justify-center text-white text-xs font-black">𝕏</span>
+        Share on X
+      </a>
+
+      {/* Facebook */}
+      <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`} target="_blank" rel="noopener noreferrer" onClick={onClose} className={linkCls}>
+        <span className="w-7 h-7 rounded-lg bg-[#1877F2] flex items-center justify-center text-white text-sm font-bold">f</span>
+        Facebook
+      </a>
+
+      {/* Gmail */}
+      <a href={`https://mail.google.com/mail/?view=cm&su=Check%20this%20out&body=${encodeURIComponent(url)}`} target="_blank" rel="noopener noreferrer" onClick={onClose} className={linkCls}>
+        <span className="w-7 h-7 rounded-lg bg-white flex items-center justify-center">
+          <svg width="14" height="14" viewBox="0 0 24 24"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 010 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L12 9.548l8.073-6.055C21.69 2.28 24 3.434 24 5.457z" fill="#EA4335"/></svg>
+        </span>
+        Gmail
       </a>
     </div>
   )
