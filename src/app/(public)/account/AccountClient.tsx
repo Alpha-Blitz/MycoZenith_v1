@@ -9,8 +9,8 @@ import { PRODUCTS } from '@/lib/products'
 import { POSTS } from '@/lib/blog'
 
 /* ─── Types ───────────────────────────────────────────────────────── */
-interface OrderItem { id: string; product_name: string; product_slug: string; unit_price: number; quantity: number; line_total: number }
-interface Order { id: string; order_number: string; status: string; total: number; currency: string; tracking_id: string | null; tracking_url: string | null; created_at: string; order_items: OrderItem[] }
+interface OrderItem { id: string; product_name: string; product_slug: string; product_image?: string; unit_price: number; quantity: number; line_total: number }
+interface Order { id: string; order_number: string; status: string; total: number; subtotal: number; discount: number; shipping: number; currency: string; payment_method?: string; tracking_id: string | null; tracking_url: string | null; created_at: string; order_items: OrderItem[] }
 interface Address { id: string; label: string; full_name: string; phone?: string; line1: string; line2?: string; city: string; state: string; pincode: string; country: string; is_default: boolean }
 interface SavedPost { post_slug: string; saved_at: string }
 interface FavoriteProduct { product_slug: string; saved_at: string }
@@ -77,51 +77,184 @@ const TABS: { id: Tab; label: string; icon: React.ReactNode }[] = [
   { id: 'settings',  label: 'Settings',  icon: icons.settings },
 ]
 
+/* ─── Status timeline ─────────────────────────────────────────────── */
+const STATUS_STEPS = ['pending', 'confirmed', 'processing', 'shipped', 'delivered'] as const
+const STEP_LABELS: Record<string, string> = { pending: 'Placed', confirmed: 'Confirmed', processing: 'Packing', shipped: 'Shipped', delivered: 'Delivered' }
+
+function StatusTimeline({ status }: { status: string }) {
+  const s = status.toLowerCase()
+  const isCancelled = s === 'cancelled' || s === 'refunded'
+  const activeIdx = STATUS_STEPS.indexOf(s as typeof STATUS_STEPS[number])
+  if (isCancelled) return (
+    <div className="flex items-center gap-2">
+      <div className="w-2 h-2 rounded-full bg-red-400/80" />
+      <span className="text-red-400 text-xs font-semibold capitalize">{status}</span>
+    </div>
+  )
+  return (
+    <div className="flex items-end gap-0 w-full">
+      {STATUS_STEPS.map((step, i) => {
+        const done = activeIdx >= i
+        const active = activeIdx === i
+        return (
+          <div key={step} className="flex-1 flex flex-col items-center gap-1.5 relative">
+            {i < STATUS_STEPS.length - 1 && (
+              <div className={['absolute top-[5px] left-1/2 w-full h-px transition-colors duration-300', done && activeIdx > i ? 'bg-[#8B5CF6]/60' : 'bg-white/[0.1]'].join(' ')} />
+            )}
+            <div className={[
+              'w-2.5 h-2.5 rounded-full border-2 z-10 transition-all duration-300',
+              done ? 'bg-[#8B5CF6] border-[#8B5CF6]' : 'bg-[#0F0F0F] border-white/[0.2]',
+              active ? 'ring-2 ring-[#8B5CF6]/30 ring-offset-[2px] ring-offset-[#0F0F0F]' : '',
+            ].join(' ')} />
+            <span className={['text-[9px] font-medium whitespace-nowrap', done ? 'text-[#8B5CF6]' : 'text-white/25'].join(' ')}>
+              {STEP_LABELS[step]}
+            </span>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
 /* ─── Order row ───────────────────────────────────────────────────── */
-function OrderRow({ order }: { order: Order }) {
+function OrderRow({ order, onCancel }: { order: Order; onCancel: (id: string) => Promise<void> }) {
   const [open, setOpen] = useState(false)
+  const [confirming, setConfirming] = useState(false)
+  const [cancelling, setCancelling] = useState(false)
+
+  const canCancel = ['pending', 'confirmed'].includes(order.status.toLowerCase())
+
+  async function handleCancel() {
+    setCancelling(true)
+    await onCancel(order.id)
+    setCancelling(false)
+    setConfirming(false)
+  }
+
+  const payLabel = order.payment_method?.toUpperCase() === 'COD'
+    ? 'Cash on Delivery'
+    : order.payment_method
+      ? order.payment_method.charAt(0).toUpperCase() + order.payment_method.slice(1)
+      : 'COD'
+
   return (
     <div className={CARD + ' overflow-hidden'}>
+      {/* Header row */}
       <button onClick={() => setOpen(v => !v)}
-        className="w-full flex items-center justify-between gap-4 p-5 text-left cursor-pointer hover:bg-white/[0.02] transition-colors duration-150">
-        <div className="flex items-center gap-4 min-w-0">
+        className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left cursor-pointer hover:bg-white/[0.02] transition-colors duration-150">
+        <div className="flex items-center gap-3 min-w-0">
           <div className="shrink-0">
-            <p className="text-white text-sm font-semibold">#{order.order_number}</p>
+            <p className="text-white text-sm font-semibold">{order.order_number}</p>
             <p className="text-white/40 text-xs mt-0.5">{formatDate(order.created_at)}</p>
           </div>
           <div className="hidden sm:block"><StatusBadge status={order.status} /></div>
         </div>
-        <div className="flex items-center gap-4 shrink-0">
+        <div className="flex items-center gap-3 shrink-0">
           <div className="sm:hidden"><StatusBadge status={order.status} /></div>
-          <span className="text-white font-semibold tabular-nums">{formatCurrency(order.total, order.currency)}</span>
+          <span className="text-white font-semibold tabular-nums text-sm">{formatCurrency(order.total, order.currency)}</span>
           <span className={['text-white/40 transition-transform duration-200', open ? 'rotate-180' : ''].join(' ')}>{icons.chevron}</span>
         </div>
       </button>
+
+      {/* Expanded body */}
       {open && (
-        <div className="border-t border-white/[0.07] px-5 pb-5 pt-4 flex flex-col gap-3">
-          {order.order_items.map(item => (
-            <div key={item.id} className="flex items-center justify-between gap-3">
-              <div className="min-w-0">
-                <p className="text-white/80 text-sm font-medium truncate">{item.product_name}</p>
-                <p className="text-white/35 text-xs mt-0.5">Qty: {item.quantity}</p>
+        <div className="border-t border-white/[0.07]">
+
+          {/* Status timeline */}
+          <div className="px-5 pt-4 pb-5">
+            <StatusTimeline status={order.status} />
+          </div>
+
+          {/* Items */}
+          <div className="border-t border-white/[0.07] px-5 pt-4 pb-4 flex flex-col gap-3">
+            <p className="text-white/40 text-xs font-semibold uppercase tracking-wider mb-1">
+              {order.order_items.length} item{order.order_items.length !== 1 ? 's' : ''}
+            </p>
+            {order.order_items.map(item => (
+              <div key={item.id} className="flex items-center gap-3">
+                {item.product_image ? (
+                  <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-white/[0.05] shrink-0">
+                    <Image src={item.product_image} alt={item.product_name} fill className="object-cover" sizes="40px" unoptimized={item.product_image.startsWith('http')} />
+                  </div>
+                ) : (
+                  <div className="w-10 h-10 rounded-lg bg-white/[0.05] shrink-0 flex items-center justify-center text-white/20">
+                    {icons.package}
+                  </div>
+                )}
+                <div className="min-w-0 flex-1">
+                  <Link href={`/products/${item.product_slug}`}
+                    className="text-white/85 text-sm font-medium truncate hover:text-white transition-colors duration-150 block">
+                    {item.product_name}
+                  </Link>
+                  <p className="text-white/35 text-xs mt-0.5">Qty {item.quantity} × {formatCurrency(item.unit_price, order.currency)}</p>
+                </div>
+                <span className="text-white/70 text-sm tabular-nums font-medium shrink-0">{formatCurrency(item.line_total, order.currency)}</span>
               </div>
-              <span className="text-white/70 text-sm tabular-nums shrink-0">{formatCurrency(item.line_total, order.currency)}</span>
-            </div>
-          ))}
-          {order.tracking_id && (
-            <div className="mt-1 pt-3 border-t border-white/[0.07] flex items-center justify-between gap-2">
-              <div>
-                <p className="text-white/40 text-xs">Tracking ID</p>
-                <p className="text-white/70 text-sm font-mono mt-0.5">{order.tracking_id}</p>
+            ))}
+          </div>
+
+          {/* Price breakdown + tracking + payment */}
+          <div className="border-t border-white/[0.07] px-5 pt-4 pb-4 flex flex-col sm:flex-row gap-5">
+            {/* Left: breakdown */}
+            <div className="flex-1 flex flex-col gap-1.5">
+              <div className="flex justify-between text-xs text-white/45">
+                <span>Subtotal</span><span className="tabular-nums">{formatCurrency(order.subtotal, order.currency)}</span>
               </div>
-              {order.tracking_url && (
-                <a href={order.tracking_url} target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-[#8B5CF6] text-xs font-semibold hover:text-[#a78bfa] transition-colors duration-150">
-                  Track {icons.arrow}
-                </a>
+              {order.discount > 0 && (
+                <div className="flex justify-between text-xs text-emerald-400/80">
+                  <span>Discount</span><span className="tabular-nums">− {formatCurrency(order.discount, order.currency)}</span>
+                </div>
               )}
+              <div className="flex justify-between text-xs text-white/45">
+                <span>Shipping</span><span className="tabular-nums">{order.shipping === 0 ? 'Free' : formatCurrency(order.shipping, order.currency)}</span>
+              </div>
+              <div className="flex justify-between text-sm font-semibold text-white pt-1.5 border-t border-white/[0.07] mt-0.5">
+                <span>Total (incl. 18% GST)</span><span className="tabular-nums">{formatCurrency(order.total, order.currency)}</span>
+              </div>
+              <p className="text-white/30 text-xs mt-0.5">{payLabel}</p>
             </div>
-          )}
+
+            {/* Right: tracking */}
+            {order.tracking_id && (
+              <div className="sm:border-l sm:border-white/[0.07] sm:pl-5 flex flex-col gap-1">
+                <p className="text-white/40 text-xs font-semibold uppercase tracking-wider mb-0.5">Tracking</p>
+                <p className="text-white/70 text-sm font-mono">{order.tracking_id}</p>
+                {order.tracking_url && (
+                  <a href={order.tracking_url} target="_blank" rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-[#8B5CF6] text-xs font-semibold hover:text-[#a78bfa] transition-colors duration-150 mt-1">
+                    Track shipment {icons.arrow}
+                  </a>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Actions */}
+          <div className="border-t border-white/[0.07] px-5 py-3.5 flex items-center justify-between gap-3">
+            <Link href="/products"
+              className="text-xs text-white/45 hover:text-white/70 transition-colors duration-150">
+              Reorder →
+            </Link>
+            {canCancel && !confirming && (
+              <button onClick={() => setConfirming(true)}
+                className="text-xs text-red-400/60 hover:text-red-400 border border-red-500/20 hover:border-red-500/40 px-3 py-1.5 rounded-lg transition-all duration-150 cursor-pointer">
+                Cancel Order
+              </button>
+            )}
+            {confirming && (
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-white/50">Cancel this order?</span>
+                <button onClick={handleCancel} disabled={cancelling}
+                  className="text-xs text-red-400 font-semibold bg-red-500/10 hover:bg-red-500/20 border border-red-500/25 px-3 py-1.5 rounded-lg transition-all duration-150 cursor-pointer disabled:opacity-50">
+                  {cancelling ? 'Cancelling…' : 'Yes, cancel'}
+                </button>
+                <button onClick={() => setConfirming(false)}
+                  className="text-xs text-white/40 hover:text-white/60 transition-colors duration-150 cursor-pointer">
+                  Keep
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>
@@ -228,6 +361,15 @@ export default function AccountClient({ user, orders, addresses: initAddresses, 
   const [resetSending, setResetSending] = useState(false)
   const [resetMsg,     setResetMsg]   = useState<{ ok: boolean; text: string } | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  /* ── Orders ── */
+  const [orderList,   setOrderList]   = useState<Order[]>(orders)
+
+  async function handleCancelOrder(orderId: string) {
+    const supabase = createClient()
+    const { error } = await supabase.from('orders').update({ status: 'cancelled' }).eq('id', orderId).eq('user_id', user.id)
+    if (!error) setOrderList(prev => prev.map(o => o.id === orderId ? { ...o, status: 'cancelled' } : o))
+  }
 
   /* ── Addresses ── */
   const [addresses,   setAddresses]   = useState<Address[]>(initAddresses)
@@ -348,8 +490,8 @@ export default function AccountClient({ user, orders, addresses: initAddresses, 
               ].join(' ')}>
               <span className={activeTab === id ? 'text-[#8B5CF6]' : ''}>{icon}</span>
               {label}
-              {id === 'orders' && orders.length > 0 && (
-                <span className="bg-[#8B5CF6]/20 text-[#8B5CF6] text-[10px] font-semibold px-1.5 py-0.5 rounded-full">{orders.length}</span>
+              {id === 'orders' && orderList.length > 0 && (
+                <span className="bg-[#8B5CF6]/20 text-[#8B5CF6] text-[10px] font-semibold px-1.5 py-0.5 rounded-full">{orderList.length}</span>
               )}
               {id === 'saved' && savedCount > 0 && (
                 <span className="bg-[#8B5CF6]/20 text-[#8B5CF6] text-[10px] font-semibold px-1.5 py-0.5 rounded-full">{savedCount}</span>
@@ -441,7 +583,7 @@ export default function AccountClient({ user, orders, addresses: initAddresses, 
         {/* ── ORDERS TAB ───────────────────────────────────────── */}
         {activeTab === 'orders' && (
           <div className="flex flex-col gap-3">
-            {orders.length === 0 ? (
+            {orderList.length === 0 ? (
               <div className={CARD + ' p-12 flex flex-col items-center text-center gap-4'}>
                 <div className="w-14 h-14 rounded-2xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 flex items-center justify-center text-[#8B5CF6]/60">{icons.package}</div>
                 <div>
@@ -453,7 +595,7 @@ export default function AccountClient({ user, orders, addresses: initAddresses, 
                 </Link>
               </div>
             ) : (
-              orders.map(o => <OrderRow key={o.id} order={o} />)
+              orderList.map(o => <OrderRow key={o.id} order={o} onCancel={handleCancelOrder} />)
             )}
           </div>
         )}
