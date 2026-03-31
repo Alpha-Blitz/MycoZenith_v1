@@ -666,7 +666,7 @@ export default function CheckoutPage() {
                     </div>
                   </div>
                   <div className="flex justify-between font-semibold text-white pt-2 border-t border-white/[0.06]">
-                    <span>Total <span className="text-white/30 text-[10px] font-normal">(incl. 18% GST)</span></span>
+                    <span>Total <span className="text-white/55 text-xs font-normal">(incl. 18% GST)</span></span>
                     <span className="tabular-nums text-[#FF6523]">₹{finalTotal.toLocaleString('en-IN')}</span>
                   </div>
                 </div>
