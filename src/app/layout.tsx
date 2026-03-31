@@ -20,6 +20,20 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   title: 'MycoZenith — Cordyceps Performance Supplements',
   description: 'Premium cordyceps-powered supplements designed to enhance energy, endurance, and mental clarity.',
+  openGraph: {
+    type:        'website',
+    siteName:    'MycoZenith',
+    title:       'MycoZenith — Cordyceps Performance Supplements',
+    description: 'Premium mushroom supplements backed by science. Lion\'s Mane, Cordyceps, Reishi.',
+    url:         'https://mycozenith.com',
+    images: [{ url: 'https://mycozenith.com/hero1.jpeg', width: 1200, height: 630, alt: 'MycoZenith' }],
+  },
+  twitter: {
+    card:        'summary_large_image',
+    title:       'MycoZenith — Cordyceps Performance Supplements',
+    description: 'Premium mushroom supplements backed by science.',
+    images:      ['https://mycozenith.com/hero1.jpeg'],
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -19,9 +19,23 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params
   const post = POSTS.find((p) => p.slug === slug)
   if (!post) return {}
+  const ogImage = `https://mycozenith.com${post.image}`
   return {
     title: `${post.title} — MycoZenith`,
     description: post.excerpt,
+    openGraph: {
+      type:        'article',
+      title:       post.title,
+      description: post.excerpt,
+      url:         `https://mycozenith.com/blog/${slug}`,
+      images:      [{ url: ogImage, width: 1200, height: 630, alt: post.title }],
+    },
+    twitter: {
+      card:        'summary_large_image',
+      title:       post.title,
+      description: post.excerpt,
+      images:      [ogImage],
+    },
   }
 }
 
