@@ -159,10 +159,41 @@ export default function CheckoutPage() {
   const [orderError,   setOrderError]     = useState('')
   const [successOrder, setSuccessOrder]   = useState<string | null>(null)
 
+  /* Saved addresses */
+  interface SavedAddress { id: string; label: string; full_name: string; phone?: string; line1: string; line2?: string; city: string; state: string; pincode: string; is_default: boolean }
+  const [savedAddresses,   setSavedAddresses]   = useState<SavedAddress[]>([])
+  const [selectedSavedId,  setSelectedSavedId]  = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!user) return
+    const supabase = createClient()
+    supabase.from('user_addresses').select('*').eq('user_id', user.id).order('is_default', { ascending: false })
+      .then(({ data }) => {
+        if (data?.length) {
+          setSavedAddresses(data as SavedAddress[])
+          // Auto-fill from default address
+          const def = data.find((a: SavedAddress) => a.is_default) ?? data[0]
+          fillFromSaved(def as SavedAddress)
+          setSelectedSavedId(def.id)
+        }
+      })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user])
+
+  function fillFromSaved(addr: SavedAddress) {
+    setAddr1(addr.line1)
+    setAddr2(addr.line2 ?? '')
+    setCity(addr.city)
+    setState(addr.state)
+    setPincode(addr.pincode)
+    if (addr.full_name) setName(addr.full_name)
+    if (addr.phone) setPhone(addr.phone)
+  }
+
   /* Pre-fill from auth */
   useEffect(() => {
     if (user) {
-      setName(user.user_metadata?.full_name ?? '')
+      setName(prev => prev || (user.user_metadata?.full_name ?? ''))
       setEmail(user.email ?? '')
     }
   }, [user])
@@ -348,6 +379,60 @@ export default function CheckoutPage() {
                 <p className="text-[#8B5CF6] text-[10px] font-semibold tracking-[0.2em] uppercase mb-1">Step 2</p>
                 <h2 className="text-white text-base font-semibold">Delivery Address</h2>
               </div>
+
+              {/* Saved address picker */}
+              {savedAddresses.length > 0 && (
+                <div className="mb-5">
+                  <p className="text-white/40 text-[11px] font-semibold tracking-[0.14em] uppercase mb-2.5">Saved Addresses</p>
+                  <div className="flex flex-col gap-2">
+                    {savedAddresses.map(addr => (
+                      <button
+                        key={addr.id}
+                        type="button"
+                        onClick={() => { fillFromSaved(addr); setSelectedSavedId(addr.id) }}
+                        className={[
+                          'w-full text-left px-4 py-3 rounded-xl border transition-all duration-150 cursor-pointer',
+                          selectedSavedId === addr.id
+                            ? 'border-[#8B5CF6]/50 bg-[#8B5CF6]/8'
+                            : 'border-white/[0.08] bg-white/[0.02] hover:border-white/20',
+                        ].join(' ')}
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="min-w-0">
+                            <p className="text-white text-xs font-semibold mb-0.5 flex items-center gap-2">
+                              {addr.label || 'Address'}
+                              {addr.is_default && (
+                                <span className="text-[9px] font-semibold bg-[#8B5CF6]/15 border border-[#8B5CF6]/30 text-[#8B5CF6] px-1.5 py-0.5 rounded-full tracking-wide">Default</span>
+                              )}
+                            </p>
+                            <p className="text-white/45 text-xs leading-relaxed line-clamp-2">
+                              {[addr.line1, addr.line2, addr.city, addr.state, addr.pincode].filter(Boolean).join(', ')}
+                            </p>
+                          </div>
+                          <div className={['w-4 h-4 rounded-full border-2 shrink-0 mt-0.5 flex items-center justify-center transition-colors duration-150',
+                            selectedSavedId === addr.id ? 'border-[#8B5CF6]' : 'border-white/20'].join(' ')}>
+                            {selectedSavedId === addr.id && <div className="w-2 h-2 rounded-full bg-[#8B5CF6]" />}
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => { setSelectedSavedId(null); setAddr1(''); setAddr2(''); setCity(''); setState(''); setPincode('') }}
+                      className={[
+                        'w-full text-left px-4 py-3 rounded-xl border transition-all duration-150 cursor-pointer',
+                        selectedSavedId === null
+                          ? 'border-[#8B5CF6]/50 bg-[#8B5CF6]/8'
+                          : 'border-white/[0.08] bg-white/[0.02] hover:border-white/20',
+                      ].join(' ')}
+                    >
+                      <p className="text-white/60 text-xs font-medium">+ Enter a new address</p>
+                    </button>
+                  </div>
+                  <div className="border-t border-white/[0.06] mt-4 mb-1" />
+                </div>
+              )}
+
               <div className="flex flex-col gap-3">
                 <Field label="Address Line 1" required>
                   <div ref={addr1Ref} className="relative">

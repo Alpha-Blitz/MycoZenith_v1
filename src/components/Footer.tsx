@@ -41,10 +41,10 @@ const QUICK_LINKS = [
 ]
 
 const RESOURCES = [
-  { label: 'Science & Research', href: '#' },
-  { label: 'FAQ',                href: '#' },
-  { label: 'Certifications',     href: '#' },
-  { label: 'Sustainability',     href: '#' },
+  { label: 'Science & Research', href: '/blog'    },
+  { label: 'FAQ',                href: '/about'   },
+  { label: 'Certifications',     href: '/about'   },
+  { label: 'Sustainability',     href: '/about'   },
 ]
 
 const LEGAL = [
@@ -78,15 +78,15 @@ export default function Footer() {
             </ul>
             {/* Social icons */}
             <div className="flex items-center gap-4">
-              <a href="#" aria-label="Instagram"
+              <a href="https://instagram.com/mycozenith" target="_blank" rel="noopener noreferrer" aria-label="Instagram"
                 className="text-white/35 hover:text-[#8B5CF6] transition-colors duration-200">
                 <InstagramIcon />
               </a>
-              <a href="#" aria-label="LinkedIn"
+              <a href="https://linkedin.com/company/mycozenith" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"
                 className="text-white/35 hover:text-[#8B5CF6] transition-colors duration-200">
                 <LinkedInIcon />
               </a>
-              <a href="#" aria-label="YouTube"
+              <a href="https://youtube.com/@mycozenith" target="_blank" rel="noopener noreferrer" aria-label="YouTube"
                 className="text-white/35 hover:text-[#8B5CF6] transition-colors duration-200">
                 <YoutubeIcon />
               </a>

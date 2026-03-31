@@ -177,7 +177,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             </div>
           ))}
           <div className="sm:flex-1 sm:py-4 sm:text-center">
-            <a href="#" className="flex items-center gap-1.5 text-[#FF6523] text-sm font-medium hover:text-[#FB923C] transition-colors duration-200 sm:justify-center">
+            <a href="/about" className="flex items-center gap-1.5 text-[#FF6523] text-sm font-medium hover:text-[#FB923C] transition-colors duration-200 sm:justify-center">
               View Lab Report <ArrowRight size={11} />
             </a>
           </div>
