@@ -83,7 +83,7 @@ interface ProductData {
   faq: { q: string; a: string }[]
   stock: string; sku: string; serving_size: string; extract: string; beta_glucan: string
   meta_title: string; meta_description: string
-  status: 'active' | 'draft'
+  status: 'active' | 'draft' | 'out_of_stock'
 }
 
 const EMPTY: ProductData = {
@@ -141,13 +141,15 @@ export default function ProductForm({ initialData, id }: { initialData?: Partial
         <div className="flex items-center gap-3">
           <span className="text-white/50 text-sm">Status:</span>
           <div className="flex items-center gap-2">
-            {(['draft', 'active'] as const).map(s => (
-              <button key={s} onClick={() => set('status', s)}
-                className={['px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all duration-150 cursor-pointer capitalize',
-                  data.status === s
-                    ? s === 'active' ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400' : 'bg-white/[0.06] border-white/[0.15] text-white/60'
-                    : 'bg-transparent border-white/[0.08] text-white/30 hover:text-white/60',
-                ].join(' ')}>{s}</button>
+            {([
+              { val: 'draft',         label: 'Draft',        activeClass: 'bg-white/[0.06] border-white/[0.15] text-white/60' },
+              { val: 'active',        label: 'Active',       activeClass: 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400' },
+              { val: 'out_of_stock',  label: 'Out of Stock', activeClass: 'bg-orange-500/15 border-orange-500/30 text-orange-400' },
+            ] as const).map(({ val, label, activeClass }) => (
+              <button key={val} onClick={() => set('status', val)}
+                className={['px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all duration-150 cursor-pointer',
+                  data.status === val ? activeClass : 'bg-transparent border-white/[0.08] text-white/30 hover:text-white/60',
+                ].join(' ')}>{label}</button>
             ))}
           </div>
         </div>

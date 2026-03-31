@@ -7,7 +7,17 @@ import Image from 'next/image'
 
 const ORDER_STATUSES = ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled', 'refunded']
 
-const INPUT = "w-full bg-white/[0.04] border border-white/[0.1] focus:border-[#8B5CF6]/50 text-white text-sm rounded-xl px-4 py-2.5 outline-none transition-colors duration-150"
+function fmtPayment(method?: string) {
+  if (!method) return null
+  if (method.toLowerCase() === 'cod') return 'CoD'
+  return method.charAt(0).toUpperCase() + method.slice(1)
+}
+
+function capitalize(s: string) {
+  return s.charAt(0).toUpperCase() + s.slice(1)
+}
+
+const INPUT = "w-full bg-[#111] border border-white/[0.12] focus:border-[#8B5CF6]/60 text-white text-sm rounded-xl px-4 py-2.5 outline-none transition-colors duration-150 placeholder-white/25"
 const SELECT = INPUT + " cursor-pointer admin-select"
 
 function fmt(n: number) {
@@ -121,7 +131,7 @@ export default function OrderDetail({ order }: { order: Order }) {
           <div><p className="text-white/40 text-xs mb-0.5">Name</p><p className="text-white/80">{order.customer_name}</p></div>
           <div><p className="text-white/40 text-xs mb-0.5">Email</p><p className="text-white/80">{order.customer_email}</p></div>
           {order.customer_phone && <div><p className="text-white/40 text-xs mb-0.5">Phone</p><p className="text-white/80">{order.customer_phone}</p></div>}
-          {order.payment_method && <div><p className="text-white/40 text-xs mb-0.5">Payment</p><p className="text-white/80 capitalize">{order.payment_method}</p></div>}
+          {order.payment_method && <div><p className="text-white/40 text-xs mb-0.5">Payment</p><p className="text-white/80">{fmtPayment(order.payment_method)}</p></div>}
         </div>
         <div className="mt-3 pt-3 border-t border-white/[0.06] text-sm">
           <p className="text-white/40 text-xs mb-1">Shipping Address</p>
@@ -143,14 +153,14 @@ export default function OrderDetail({ order }: { order: Order }) {
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
             <label className="text-white/50 text-xs font-semibold tracking-[0.12em] uppercase">Status</label>
-            <select value={status} onChange={e => setStatus(e.target.value)} className={SELECT}>
-              {ORDER_STATUSES.map(s => <option key={s} value={s} className="capitalize">{s}</option>)}
+            <select value={status} onChange={e => setStatus(e.target.value)} className={SELECT} style={{ colorScheme: 'dark' }}>
+              {ORDER_STATUSES.map(s => <option key={s} value={s} style={{ background: '#111', color: '#fff' }}>{capitalize(s)}</option>)}
             </select>
           </div>
           <div className="flex flex-col gap-1.5">
             <label className="text-white/50 text-xs font-semibold tracking-[0.12em] uppercase">Tracking ID</label>
             <input type="text" value={trackingId} onChange={e => setTracking(e.target.value)}
-              placeholder="AWB / tracking number" className={INPUT} />
+              placeholder="AWB / Tracking Number" className={INPUT} />
           </div>
           {error && <p className="text-red-400 text-xs">{error}</p>}
           <div className="flex justify-end">

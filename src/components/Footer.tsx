@@ -133,7 +133,7 @@ export default function Footer() {
           <div className="flex items-center gap-4 whitespace-nowrap">
             <p className="text-white/30 text-[11px]">© {year} MycoZenith. All rights reserved.</p>
             <span className="text-white/15 text-xs">·</span>
-            <p className="text-white/30 text-[11px]">GSTIN: 29BHJPH3246Q1ZU</p>
+            <p className="text-white/30 text-[11px]">GSTIN: 29BHJPH3246Q1ZP</p>
           </div>
           <div className="flex flex-wrap gap-6 justify-center">
             {LEGAL.map(({ label, href }) => (
