@@ -1,7 +1,7 @@
 'use client'
 
 function fmt(n: number) {
-  return '₹' + Number(n).toLocaleString('en-IN', { maximumFractionDigits: 0 })
+  return '₹' + Number(n).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 }
 
 interface OrderItem { product_name: string; unit_price: number; quantity: number; line_total: number }
@@ -27,72 +27,348 @@ interface InvoiceOrder {
 
 export default function InvoiceButton({ order }: { order: InvoiceOrder }) {
   function printInvoice() {
-    const GST_RATE = 0.18
-    const taxable = Math.round(order.total / (1 + GST_RATE))
-    const gst     = order.total - taxable
-    const cgst    = Math.round(gst / 2)
-    const sgst    = gst - cgst
-    const date    = new Date(order.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
+    const GST_RATE  = 0.18
+    const taxable   = Math.round(order.total / (1 + GST_RATE))
+    const gst       = order.total - taxable
+    const cgst      = Math.round(gst / 2)
+    const sgst      = gst - cgst
+    const date      = new Date(order.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' })
+    const payLabel  = order.payment_method?.toUpperCase() === 'COD' ? 'Cash on Delivery' : (order.payment_method ?? 'Cash on Delivery')
+    const year      = new Date(order.created_at).getFullYear()
 
-    const rows = order.order_items.map(i => `
-      <tr>
-        <td style="padding:10px 0;border-bottom:1px solid #eee;font-size:13px">${i.product_name}</td>
-        <td style="padding:10px 0;border-bottom:1px solid #eee;font-size:13px;text-align:center">${i.quantity}</td>
-        <td style="padding:10px 0;border-bottom:1px solid #eee;font-size:13px;text-align:right">${fmt(i.unit_price)}</td>
-        <td style="padding:10px 0;border-bottom:1px solid #eee;font-size:13px;text-align:right;font-weight:600">${fmt(i.line_total)}</td>
+    const rows = order.order_items.map((i, idx) => `
+      <tr class="${idx % 2 === 0 ? 'row-even' : 'row-odd'}">
+        <td class="td-item">${i.product_name}</td>
+        <td class="td-center">2106</td>
+        <td class="td-right">${i.quantity}</td>
+        <td class="td-right">${fmt(i.unit_price)}</td>
+        <td class="td-right fw6">${fmt(i.line_total)}</td>
       </tr>`).join('')
 
     const html = `<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Invoice ${order.order_number}</title>
+  <title>Tax Invoice — ${order.order_number}</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #111; padding: 48px; font-size: 14px; }
-    .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; padding-bottom: 24px; border-bottom: 2px solid #111; }
-    .brand { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
-    .brand-sub { font-size: 12px; color: #666; margin-top: 4px; }
-    .invoice-meta { text-align: right; }
-    .invoice-meta .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: #888; }
-    .invoice-meta .value { font-size: 16px; font-weight: 700; margin-top: 2px; }
-    .invoice-meta .date { font-size: 12px; color: #666; margin-top: 4px; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 36px; }
-    .section-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: #888; margin-bottom: 8px; font-weight: 600; }
-    .section-value { font-size: 13px; line-height: 1.6; color: #333; }
-    table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
-    thead tr { background: #f5f5f5; }
-    thead th { padding: 10px 0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: #666; font-weight: 600; text-align: left; }
-    thead th:not(:first-child) { text-align: center; }
-    thead th:last-child { text-align: right; }
-    .totals { margin-left: auto; width: 260px; }
-    .totals-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 13px; color: #555; }
-    .totals-row.total { font-size: 15px; font-weight: 700; color: #111; padding-top: 10px; margin-top: 6px; border-top: 2px solid #111; }
-    .totals-row.gst { font-size: 12px; color: #888; }
-    .footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid #eee; font-size: 11px; color: #aaa; text-align: center; }
-    .badge { display: inline-block; background: #f0f0f0; border-radius: 4px; padding: 2px 8px; font-size: 11px; font-weight: 600; }
-    @media print { body { padding: 32px; } }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 12px;
+      color: #1a1a1a;
+      background: #fff;
+      padding: 40px 48px 48px;
+      line-height: 1.5;
+    }
+
+    /* ── Top stripe ── */
+    .stripe {
+      height: 5px;
+      background: #111;
+      margin: -40px -48px 36px;
+    }
+
+    /* ── Header ── */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1.5px solid #222;
+    }
+    .brand-name {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #111;
+    }
+    .brand-tagline {
+      font-size: 10px;
+      color: #777;
+      margin-top: 3px;
+      letter-spacing: 0.02em;
+    }
+    .brand-address {
+      font-size: 10.5px;
+      color: #555;
+      margin-top: 10px;
+      line-height: 1.7;
+    }
+    .invoice-block { text-align: right; }
+    .invoice-title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      color: #111;
+    }
+    .invoice-sub {
+      font-size: 10.5px;
+      color: #777;
+      margin-top: 4px;
+      letter-spacing: 0.02em;
+    }
+    .invoice-num {
+      font-size: 13px;
+      font-weight: 600;
+      color: #111;
+      margin-top: 6px;
+    }
+
+    /* ── Meta chips row ── */
+    .meta-row {
+      display: flex;
+      gap: 0;
+      border: 1.5px solid #222;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+    .meta-cell {
+      flex: 1;
+      padding: 10px 14px;
+      border-right: 1.5px solid #222;
+    }
+    .meta-cell:last-child { border-right: none; }
+    .meta-label {
+      font-size: 9px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #888;
+      margin-bottom: 3px;
+    }
+    .meta-value {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #111;
+    }
+
+    /* ── Party grid ── */
+    .parties {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border: 1.5px solid #222;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+    .party {
+      padding: 14px 16px;
+    }
+    .party:first-child { border-right: 1.5px solid #222; }
+    .party-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #888;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #e5e5e5;
+    }
+    .party-name {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 4px;
+    }
+    .party-detail {
+      font-size: 11px;
+      color: #444;
+      line-height: 1.7;
+    }
+    .gstin-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      color: #333;
+      background: #f3f3f3;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      padding: 1px 6px;
+      margin-top: 6px;
+    }
+
+    /* ── Items table ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1.5px solid #222;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 0;
+    }
+    thead tr {
+      background: #111;
+    }
+    thead th {
+      padding: 10px 12px;
+      font-size: 9.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #fff;
+      text-align: left;
+    }
+    thead th.th-right { text-align: right; }
+    thead th.th-center { text-align: center; }
+    .row-even { background: #fff; }
+    .row-odd  { background: #fafafa; }
+    .td-item   { padding: 10px 12px; font-size: 11.5px; color: #222; border-bottom: 1px solid #e8e8e8; }
+    .td-center { padding: 10px 12px; font-size: 11.5px; color: #555; text-align: center; border-bottom: 1px solid #e8e8e8; }
+    .td-right  { padding: 10px 12px; font-size: 11.5px; color: #222; text-align: right; border-bottom: 1px solid #e8e8e8; }
+    .fw6 { font-weight: 600; }
+    tr:last-child td { border-bottom: none; }
+
+    /* ── Totals ── */
+    .totals-wrap {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 20px;
+      margin-bottom: 28px;
+    }
+    .totals {
+      width: 300px;
+      border: 1.5px solid #222;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .totals-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 14px;
+      border-bottom: 1px solid #e8e8e8;
+      font-size: 11.5px;
+      color: #444;
+    }
+    .totals-row:last-child { border-bottom: none; }
+    .totals-row.subtotal-row { background: #fafafa; }
+    .totals-row.gst-row { font-size: 10.5px; color: #777; }
+    .totals-row.total-row {
+      background: #111;
+      color: #fff;
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 11px 14px;
+    }
+    .totals-row .lbl { }
+    .totals-row .val { font-weight: 500; }
+    .totals-row.total-row .val { font-weight: 700; }
+
+    /* ── Notes ── */
+    .notes {
+      border: 1.5px solid #222;
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin-bottom: 28px;
+      display: flex;
+      gap: 40px;
+    }
+    .notes-col { flex: 1; }
+    .notes-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #888;
+      margin-bottom: 4px;
+    }
+    .notes-val {
+      font-size: 11px;
+      color: #333;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      border-top: 1.5px solid #222;
+      padding-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-note {
+      font-size: 10px;
+      color: #999;
+      font-style: italic;
+    }
+    .footer-brand {
+      font-size: 10px;
+      font-weight: 600;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    @media print {
+      body { padding: 24px 32px 32px; }
+      .stripe { margin: -24px -32px 28px; }
+    }
   </style>
 </head>
 <body>
+  <div class="stripe"></div>
+
+  <!-- Header -->
   <div class="header">
     <div>
-      <div class="brand">MycoZenith</div>
-      <div class="brand-sub">mycozenith.com · hello@mycozenith.com</div>
-      <div class="brand-sub" style="margin-top:2px">GSTIN: 29BHJPH3246Q1ZP</div>
+      <div class="brand-name">MycoZenith Biologics</div>
+      <div class="brand-tagline">Evidence-Based Functional Mushroom Supplements</div>
+      <div class="brand-address">
+        hello@mycozenith.com · mycozenith.com<br>
+        GSTIN: 29BHJPH3246Q1ZP &nbsp;·&nbsp; HSN: 2106
+      </div>
     </div>
-    <div class="invoice-meta">
-      <div class="label">Tax Invoice</div>
-      <div class="value">${order.order_number}</div>
-      <div class="date">${date}</div>
+    <div class="invoice-block">
+      <div class="invoice-title">Tax Invoice</div>
+      <div class="invoice-sub">Financial Year ${year}–${year + 1}</div>
+      <div class="invoice-num">${order.order_number}</div>
+      <div class="invoice-sub" style="margin-top:3px">${date}</div>
     </div>
   </div>
 
-  <div class="grid">
-    <div>
-      <div class="section-label">Bill To</div>
-      <div class="section-value">
-        <strong>${order.customer_name}</strong><br>
+  <!-- Meta row -->
+  <div class="meta-row">
+    <div class="meta-cell">
+      <div class="meta-label">Invoice No.</div>
+      <div class="meta-value">${order.order_number}</div>
+    </div>
+    <div class="meta-cell">
+      <div class="meta-label">Invoice Date</div>
+      <div class="meta-value">${date}</div>
+    </div>
+    <div class="meta-cell">
+      <div class="meta-label">Payment Mode</div>
+      <div class="meta-value">${payLabel}</div>
+    </div>
+    <div class="meta-cell">
+      <div class="meta-label">Place of Supply</div>
+      <div class="meta-value">${order.state}</div>
+    </div>
+  </div>
+
+  <!-- Bill To / Sold By -->
+  <div class="parties">
+    <div class="party">
+      <div class="party-label">Sold By</div>
+      <div class="party-name">MycoZenith Biologics</div>
+      <div class="party-detail">
+        hello@mycozenith.com<br>
+        +91 80952 55685<br>
+        India
+      </div>
+      <div class="gstin-tag">GSTIN: 29BHJPH3246Q1ZP</div>
+    </div>
+    <div class="party">
+      <div class="party-label">Bill To / Ship To</div>
+      <div class="party-name">${order.customer_name}</div>
+      <div class="party-detail">
         ${order.customer_email}<br>
         ${order.customer_phone ? order.customer_phone + '<br>' : ''}
         ${order.address_line1}${order.address_line2 ? ', ' + order.address_line2 : ''}<br>
@@ -100,39 +376,55 @@ export default function InvoiceButton({ order }: { order: InvoiceOrder }) {
         ${order.country}
       </div>
     </div>
-    <div>
-      <div class="section-label">Payment Details</div>
-      <div class="section-value">
-        <span class="badge">${order.payment_method?.toUpperCase() === 'COD' ? 'Cash on Delivery' : (order.payment_method ?? 'COD')}</span><br><br>
-        <span style="font-size:12px;color:#888">HSN Code: 2106</span>
-      </div>
-    </div>
   </div>
 
+  <!-- Items -->
   <table>
     <thead>
       <tr>
-        <th>Item</th>
-        <th style="text-align:center">Qty</th>
-        <th style="text-align:right">Unit Price</th>
-        <th style="text-align:right">Amount</th>
+        <th style="width:45%">Description</th>
+        <th class="th-center" style="width:10%">HSN</th>
+        <th class="th-right" style="width:8%">Qty</th>
+        <th class="th-right" style="width:16%">Unit Rate</th>
+        <th class="th-right" style="width:16%">Amount</th>
       </tr>
     </thead>
     <tbody>${rows}</tbody>
   </table>
 
-  <div class="totals">
-    <div class="totals-row"><span>Subtotal</span><span>${fmt(order.subtotal)}</span></div>
-    ${order.discount > 0 ? `<div class="totals-row"><span>Discount</span><span>−${fmt(order.discount)}</span></div>` : ''}
-    <div class="totals-row"><span>Shipping</span><span>${order.shipping === 0 ? 'Free' : fmt(order.shipping)}</span></div>
-    <div class="totals-row gst"><span>Taxable Value</span><span>${fmt(taxable)}</span></div>
-    <div class="totals-row gst"><span>CGST @ 9%</span><span>${fmt(cgst)}</span></div>
-    <div class="totals-row gst"><span>SGST @ 9%</span><span>${fmt(sgst)}</span></div>
-    <div class="totals-row total"><span>Total (incl. 18% GST)</span><span>${fmt(order.total)}</span></div>
+  <!-- Totals -->
+  <div class="totals-wrap">
+    <div class="totals">
+      <div class="totals-row subtotal-row"><span class="lbl">Subtotal</span><span class="val">${fmt(order.subtotal)}</span></div>
+      ${order.discount > 0 ? `<div class="totals-row"><span class="lbl">Discount</span><span class="val" style="color:#d33">− ${fmt(order.discount)}</span></div>` : ''}
+      <div class="totals-row"><span class="lbl">Shipping</span><span class="val">${order.shipping === 0 ? 'Free' : fmt(order.shipping)}</span></div>
+      <div class="totals-row" style="border-top:1.5px solid #ccc;margin-top:2px"><span class="lbl">Taxable Value</span><span class="val">${fmt(taxable)}</span></div>
+      <div class="totals-row gst-row"><span class="lbl">CGST @ 9%</span><span class="val">${fmt(cgst)}</span></div>
+      <div class="totals-row gst-row"><span class="lbl">SGST @ 9%</span><span class="val">${fmt(sgst)}</span></div>
+      <div class="totals-row total-row"><span class="lbl">Total (Incl. GST)</span><span class="val">${fmt(order.total)}</span></div>
+    </div>
   </div>
 
+  <!-- Notes -->
+  <div class="notes">
+    <div class="notes-col">
+      <div class="notes-label">Payment Terms</div>
+      <div class="notes-val">${payLabel}</div>
+    </div>
+    <div class="notes-col">
+      <div class="notes-label">Tax Registration</div>
+      <div class="notes-val">GSTIN: 29BHJPH3246Q1ZP</div>
+    </div>
+    <div class="notes-col">
+      <div class="notes-label">HSN Code</div>
+      <div class="notes-val">2106 — Food Preparations</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
   <div class="footer">
-    This is a computer-generated invoice and does not require a signature. · © ${new Date().getFullYear()} MycoZenith
+    <div class="footer-note">This is a computer-generated invoice and does not require a physical signature.</div>
+    <div class="footer-brand">MycoZenith Biologics © ${new Date().getFullYear()}</div>
   </div>
 
   <script>window.onload = () => { window.print() }</script>
