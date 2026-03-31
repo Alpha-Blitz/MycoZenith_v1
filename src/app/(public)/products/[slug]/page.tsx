@@ -103,7 +103,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pt-20 sm:pt-28 pb-16 sm:pb-28">
 
         {/* ── Breadcrumb ─────────────────────────────────────────── */}
-        <nav className="flex items-center gap-2 text-sm text-[#8B5CF6]/60 mb-10">
+        <nav className="flex items-center gap-2 text-sm font-medium text-[#8B5CF6]/60 mb-10">
           <Link href="/" className="hover:text-[#8B5CF6] transition-colors duration-200">Shop</Link>
           <span className="text-[#8B5CF6]/35 text-base">›</span>
           <Link href="/products" className="hover:text-[#8B5CF6] transition-colors duration-200">Products</Link>
