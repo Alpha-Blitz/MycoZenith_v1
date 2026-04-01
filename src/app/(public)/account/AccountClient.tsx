@@ -116,13 +116,29 @@ function StatusTimeline({ status }: { status: string }) {
   )
 }
 
-/* ─── Order row ───────────────────────────────────────────────────── */
+/* ─── Order card ──────────────────────────────────────────────────── */
+const STATUS_DOT: Record<string, string> = {
+  pending: 'bg-yellow-400', confirmed: 'bg-blue-400', processing: 'bg-purple-400',
+  shipped: 'bg-[#FF6523]', delivered: 'bg-emerald-400', cancelled: 'bg-red-400', refunded: 'bg-red-400',
+}
+
 function OrderRow({ order, onCancel }: { order: Order; onCancel: (id: string) => Promise<void> }) {
   const [open, setOpen] = useState(false)
   const [confirming, setConfirming] = useState(false)
   const [cancelling, setCancelling] = useState(false)
 
-  const canCancel = ['pending', 'confirmed'].includes(order.status.toLowerCase())
+  const s = order.status.toLowerCase()
+  const canCancel = ['pending', 'confirmed'].includes(s)
+  const dotColor = STATUS_DOT[s] ?? 'bg-white/30'
+
+  const mainProduct = order.order_items[0]?.product_name ?? 'Order'
+  const extraCount = order.order_items.length - 1
+
+  const payLabel = order.payment_method?.toUpperCase() === 'COD'
+    ? 'Cash on Delivery'
+    : order.payment_method
+      ? order.payment_method.charAt(0).toUpperCase() + order.payment_method.slice(1)
+      : 'Cash on Delivery'
 
   async function handleCancel() {
     setCancelling(true)
@@ -131,127 +147,144 @@ function OrderRow({ order, onCancel }: { order: Order; onCancel: (id: string) =>
     setConfirming(false)
   }
 
-  const payLabel = order.payment_method?.toUpperCase() === 'COD'
-    ? 'Cash on Delivery'
-    : order.payment_method
-      ? order.payment_method.charAt(0).toUpperCase() + order.payment_method.slice(1)
-      : 'COD'
-
   return (
-    <div className={CARD + ' overflow-hidden'}>
-      {/* Header row */}
-      <button onClick={() => setOpen(v => !v)}
-        className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left cursor-pointer hover:bg-white/[0.02] transition-colors duration-150">
-        <div className="flex items-center gap-3 min-w-0">
-          <div className="shrink-0">
-            <p className="text-white text-sm font-semibold">{order.order_number}</p>
-            <p className="text-white/40 text-xs mt-0.5">{formatDate(order.created_at)}</p>
-          </div>
-          <div className="hidden sm:block"><StatusBadge status={order.status} /></div>
-        </div>
-        <div className="flex items-center gap-3 shrink-0">
-          <div className="sm:hidden"><StatusBadge status={order.status} /></div>
-          <span className="text-white font-semibold tabular-nums text-sm">{formatCurrency(order.total, order.currency)}</span>
-          <span className={['text-white/40 transition-transform duration-200', open ? 'rotate-180' : ''].join(' ')}>{icons.chevron}</span>
-        </div>
-      </button>
+    <div className="bg-[#0F0F0F] border border-white/[0.09] hover:border-white/[0.16] rounded-2xl overflow-hidden transition-all duration-150">
 
-      {/* Expanded body */}
+      {/* Always-visible card body */}
+      <div className="px-5 pt-5 pb-5">
+        {/* Row 1: order number + status indicator */}
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2.5">
+            <span className="text-white/70 font-semibold text-[13px]">{order.order_number}</span>
+            <span className="text-white/20 text-xs">|</span>
+            <StatusBadge status={order.status} />
+          </div>
+          <div className="flex items-center gap-1.5">
+            <div className={`w-2 h-2 rounded-full ${dotColor} shrink-0`} />
+            <span className="text-white/45 text-[13px] capitalize">{order.status}</span>
+          </div>
+        </div>
+
+        {/* Row 2: main product name */}
+        <p className="text-white text-[17px] font-bold leading-snug mb-1">
+          {mainProduct}
+          {extraCount > 0 && (
+            <span className="text-white/35 font-normal text-sm ml-1.5">+{extraCount} more</span>
+          )}
+        </p>
+
+        {/* Row 3: price · items · date */}
+        <div className="flex items-center gap-2 mb-5">
+          <span className="text-white/85 font-semibold text-[15px] tabular-nums">{formatCurrency(order.total, order.currency)}</span>
+          <span className="text-white/20 text-xs">·</span>
+          <span className="text-white/45 text-[13px]">{order.order_items.length} item{order.order_items.length !== 1 ? 's' : ''}</span>
+          <span className="text-white/20 text-xs">·</span>
+          <span className="text-white/35 text-[13px]">{formatDate(order.created_at)}</span>
+        </div>
+
+        {/* Row 4: action buttons */}
+        <div className="flex items-center gap-2 flex-wrap">
+          {order.tracking_url && (
+            <a href={order.tracking_url} target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-[13px] font-semibold border border-white/[0.18] text-white/65 hover:text-white hover:border-white/30 px-4 py-2 rounded-xl transition-all duration-150">
+              Track {icons.arrow}
+            </a>
+          )}
+          <Link href="/products"
+            className="inline-flex items-center gap-1.5 text-[13px] font-semibold bg-[#FF6523] hover:bg-[#E5561E] text-white px-4 py-2 rounded-xl transition-colors duration-150">
+            Reorder
+          </Link>
+          {canCancel && !confirming && (
+            <button onClick={() => setConfirming(true)}
+              className="text-[13px] text-red-400/55 hover:text-red-400 border border-red-500/15 hover:border-red-500/35 px-3.5 py-2 rounded-xl transition-all duration-150 cursor-pointer">
+              Cancel
+            </button>
+          )}
+          {confirming && (
+            <div className="flex items-center gap-2 bg-red-500/[0.06] border border-red-500/20 px-3.5 py-2 rounded-xl">
+              <span className="text-[13px] text-white/50">Cancel this order?</span>
+              <button onClick={handleCancel} disabled={cancelling}
+                className="text-[13px] text-red-400 font-bold hover:text-red-300 transition-colors cursor-pointer disabled:opacity-50">
+                {cancelling ? '…' : 'Yes'}
+              </button>
+              <span className="text-white/20">·</span>
+              <button onClick={() => setConfirming(false)}
+                className="text-[13px] text-white/40 hover:text-white/70 transition-colors cursor-pointer">Keep</button>
+            </div>
+          )}
+          <button onClick={() => setOpen(v => !v)}
+            className="inline-flex items-center gap-1 text-[13px] text-white/35 hover:text-white/60 transition-colors duration-150 cursor-pointer ml-auto">
+            {open ? 'Less' : 'Details'}
+            <span className={['transition-transform duration-200', open ? 'rotate-180' : ''].join(' ')}>{icons.chevron}</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Expanded section */}
       {open && (
         <div className="border-t border-white/[0.07]">
-
           {/* Status timeline */}
-          <div className="px-5 pt-4 pb-5">
+          <div className="px-5 pt-5 pb-5">
+            <p className="text-white/35 text-[11px] font-semibold uppercase tracking-widest mb-4">Order Progress</p>
             <StatusTimeline status={order.status} />
           </div>
 
-          {/* Items */}
-          <div className="border-t border-white/[0.07] px-5 pt-4 pb-4 flex flex-col gap-3">
-            <p className="text-white/40 text-xs font-semibold uppercase tracking-wider mb-1">
-              {order.order_items.length} item{order.order_items.length !== 1 ? 's' : ''}
+          {/* Item list */}
+          <div className="border-t border-white/[0.07] px-5 pt-4 pb-4 flex flex-col gap-4">
+            <p className="text-white/35 text-[11px] font-semibold uppercase tracking-widest">
+              Items ({order.order_items.length})
             </p>
             {order.order_items.map(item => (
-              <div key={item.id} className="flex items-center gap-3">
+              <div key={item.id} className="flex items-center gap-3.5">
                 {item.product_image ? (
-                  <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-white/[0.05] shrink-0">
-                    <Image src={item.product_image} alt={item.product_name} fill className="object-cover" sizes="40px" unoptimized={item.product_image.startsWith('http')} />
+                  <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-white/[0.05] shrink-0">
+                    <Image src={item.product_image} alt={item.product_name} fill className="object-cover" sizes="48px" unoptimized={item.product_image.startsWith('http')} />
                   </div>
                 ) : (
-                  <div className="w-10 h-10 rounded-lg bg-white/[0.05] shrink-0 flex items-center justify-center text-white/20">
-                    {icons.package}
-                  </div>
+                  <div className="w-12 h-12 rounded-xl bg-white/[0.05] shrink-0 flex items-center justify-center text-white/20">{icons.package}</div>
                 )}
                 <div className="min-w-0 flex-1">
                   <Link href={`/products/${item.product_slug}`}
-                    className="text-white/85 text-sm font-medium truncate hover:text-white transition-colors duration-150 block">
+                    className="text-white/85 text-[14px] font-medium truncate hover:text-white transition-colors duration-150 block">
                     {item.product_name}
                   </Link>
-                  <p className="text-white/35 text-xs mt-0.5">Qty {item.quantity} × {formatCurrency(item.unit_price, order.currency)}</p>
+                  <p className="text-white/35 text-[12px] mt-0.5">Qty {item.quantity} × {formatCurrency(item.unit_price, order.currency)}</p>
                 </div>
-                <span className="text-white/70 text-sm tabular-nums font-medium shrink-0">{formatCurrency(item.line_total, order.currency)}</span>
+                <span className="text-white/70 text-[14px] tabular-nums font-semibold shrink-0">{formatCurrency(item.line_total, order.currency)}</span>
               </div>
             ))}
           </div>
 
-          {/* Price breakdown + tracking + payment */}
-          <div className="border-t border-white/[0.07] px-5 pt-4 pb-4 flex flex-col sm:flex-row gap-5">
-            {/* Left: breakdown */}
-            <div className="flex-1 flex flex-col gap-1.5">
-              <div className="flex justify-between text-xs text-white/45">
+          {/* Price breakdown + tracking */}
+          <div className="border-t border-white/[0.07] px-5 pt-4 pb-5 flex flex-col sm:flex-row gap-6">
+            <div className="flex-1 flex flex-col gap-2">
+              <p className="text-white/35 text-[11px] font-semibold uppercase tracking-widest mb-1">Summary</p>
+              <div className="flex justify-between text-[13px] text-white/45">
                 <span>Subtotal</span><span className="tabular-nums">{formatCurrency(order.subtotal, order.currency)}</span>
               </div>
               {order.discount > 0 && (
-                <div className="flex justify-between text-xs text-emerald-400/80">
+                <div className="flex justify-between text-[13px] text-emerald-400/80">
                   <span>Discount</span><span className="tabular-nums">− {formatCurrency(order.discount, order.currency)}</span>
                 </div>
               )}
-              <div className="flex justify-between text-xs text-white/45">
+              <div className="flex justify-between text-[13px] text-white/45">
                 <span>Shipping</span><span className="tabular-nums">{order.shipping === 0 ? 'Free' : formatCurrency(order.shipping, order.currency)}</span>
               </div>
-              <div className="flex justify-between text-sm font-semibold text-white pt-1.5 border-t border-white/[0.07] mt-0.5">
+              <div className="flex justify-between text-[14px] font-bold text-white pt-2 border-t border-white/[0.07] mt-1">
                 <span>Total (incl. 18% GST)</span><span className="tabular-nums">{formatCurrency(order.total, order.currency)}</span>
               </div>
-              <p className="text-white/30 text-xs mt-0.5">{payLabel}</p>
+              <p className="text-white/30 text-[12px] mt-0.5">{payLabel}</p>
             </div>
-
-            {/* Right: tracking */}
             {order.tracking_id && (
-              <div className="sm:border-l sm:border-white/[0.07] sm:pl-5 flex flex-col gap-1">
-                <p className="text-white/40 text-xs font-semibold uppercase tracking-wider mb-0.5">Tracking</p>
-                <p className="text-white/70 text-sm font-mono">{order.tracking_id}</p>
+              <div className="sm:border-l sm:border-white/[0.07] sm:pl-6 flex flex-col gap-1.5">
+                <p className="text-white/35 text-[11px] font-semibold uppercase tracking-widest mb-1">Tracking</p>
+                <p className="text-white/75 text-[13px] font-mono">{order.tracking_id}</p>
                 {order.tracking_url && (
                   <a href={order.tracking_url} target="_blank" rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-[#8B5CF6] text-xs font-semibold hover:text-[#a78bfa] transition-colors duration-150 mt-1">
+                    className="inline-flex items-center gap-1.5 text-[#8B5CF6] text-[13px] font-semibold hover:text-[#a78bfa] transition-colors duration-150 mt-1">
                     Track shipment {icons.arrow}
                   </a>
                 )}
-              </div>
-            )}
-          </div>
-
-          {/* Actions */}
-          <div className="border-t border-white/[0.07] px-5 py-3.5 flex items-center justify-between gap-3">
-            <Link href="/products"
-              className="text-xs text-white/45 hover:text-white/70 transition-colors duration-150">
-              Reorder →
-            </Link>
-            {canCancel && !confirming && (
-              <button onClick={() => setConfirming(true)}
-                className="text-xs text-red-400/60 hover:text-red-400 border border-red-500/20 hover:border-red-500/40 px-3 py-1.5 rounded-lg transition-all duration-150 cursor-pointer">
-                Cancel Order
-              </button>
-            )}
-            {confirming && (
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-white/50">Cancel this order?</span>
-                <button onClick={handleCancel} disabled={cancelling}
-                  className="text-xs text-red-400 font-semibold bg-red-500/10 hover:bg-red-500/20 border border-red-500/25 px-3 py-1.5 rounded-lg transition-all duration-150 cursor-pointer disabled:opacity-50">
-                  {cancelling ? 'Cancelling…' : 'Yes, cancel'}
-                </button>
-                <button onClick={() => setConfirming(false)}
-                  className="text-xs text-white/40 hover:text-white/60 transition-colors duration-150 cursor-pointer">
-                  Keep
-                </button>
               </div>
             )}
           </div>
@@ -465,40 +498,82 @@ export default function AccountClient({ user, orders, addresses: initAddresses, 
   const savedCount = savedPosts.length + favorites.length
 
   return (
-    <div className="min-h-screen bg-[#1E1E1E] pt-24 sm:pt-28 pb-20 sm:pb-28 px-4 sm:px-6">
-      <div className="max-w-3xl mx-auto">
+    <div className="min-h-screen bg-[#1E1E1E] pt-20 sm:pt-24 pb-20 px-4 sm:px-6">
+      <div className="max-w-5xl mx-auto flex gap-6 items-start">
 
-        {/* Page header */}
-        <div className="flex items-center justify-between mb-8 sm:mb-10">
-          <div>
-            <span className="text-[#8B5CF6] text-[11px] font-semibold tracking-[0.22em] uppercase">Account</span>
-            <h1 className="text-white text-3xl sm:text-4xl font-semibold tracking-tight mt-1">My Account</h1>
+        {/* ── Sidebar (desktop) ──────────────────────────────── */}
+        <aside className="hidden md:flex flex-col w-56 shrink-0 sticky top-24 gap-1">
+
+          {/* Avatar mini card */}
+          <div className="bg-[#0F0F0F] border border-white/[0.08] rounded-2xl p-4 flex items-center gap-3 mb-2">
+            <div className="relative w-10 h-10 shrink-0">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#8B5CF6]/30 to-[#7c3aed]/20 border border-[#8B5CF6]/25 flex items-center justify-center text-[#8B5CF6] text-base font-bold overflow-hidden">
+                {avatarUrl
+                  ? <Image src={avatarUrl} alt="Avatar" fill className="object-cover rounded-full" sizes="40px" />
+                  : initial}
+              </div>
+            </div>
+            <div className="min-w-0">
+              <p className="text-white text-[13px] font-semibold truncate">{name || 'Account'}</p>
+              <p className="text-white/35 text-[11px] truncate">{user.email}</p>
+            </div>
           </div>
-          <button onClick={handleSignOut}
-            className="inline-flex items-center gap-2 text-sm text-white/40 hover:text-red-400 border border-white/[0.08] hover:border-red-500/30 px-4 py-2 rounded-xl transition-all duration-150 cursor-pointer">
-            {icons.signout} Sign out
-          </button>
-        </div>
 
-        {/* Tab bar */}
-        <div className="flex items-center gap-1 bg-[#0F0F0F] border border-white/[0.07] rounded-2xl p-1 mb-6 overflow-x-auto">
+          {/* Nav items */}
           {TABS.map(({ id, label, icon }) => (
             <button key={id} onClick={() => setActiveTab(id)}
               className={[
-                'inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-150 cursor-pointer whitespace-nowrap shrink-0',
-                activeTab === id ? 'bg-[#8B5CF6]/15 text-white border border-[#8B5CF6]/25' : 'text-white/45 hover:text-white/70',
+                'flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-150 cursor-pointer text-left w-full',
+                activeTab === id
+                  ? 'bg-[#8B5CF6]/12 text-white border border-[#8B5CF6]/20 border-l-[3px] border-l-[#8B5CF6]'
+                  : 'text-white/45 hover:text-white/75 hover:bg-white/[0.04] border border-transparent',
               ].join(' ')}>
-              <span className={activeTab === id ? 'text-[#8B5CF6]' : ''}>{icon}</span>
+              <span className={activeTab === id ? 'text-[#8B5CF6]' : 'text-white/35'}>{icon}</span>
               {label}
               {id === 'orders' && orderList.length > 0 && (
-                <span className="bg-[#8B5CF6]/20 text-[#8B5CF6] text-[10px] font-semibold px-1.5 py-0.5 rounded-full">{orderList.length}</span>
+                <span className="ml-auto bg-[#8B5CF6]/20 text-[#8B5CF6] text-[10px] font-bold px-1.5 py-0.5 rounded-full">{orderList.length}</span>
               )}
               {id === 'saved' && savedCount > 0 && (
-                <span className="bg-[#8B5CF6]/20 text-[#8B5CF6] text-[10px] font-semibold px-1.5 py-0.5 rounded-full">{savedCount}</span>
+                <span className="ml-auto bg-[#8B5CF6]/20 text-[#8B5CF6] text-[10px] font-bold px-1.5 py-0.5 rounded-full">{savedCount}</span>
               )}
             </button>
           ))}
-        </div>
+
+          {/* Sign out */}
+          <button onClick={handleSignOut}
+            className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-medium text-white/35 hover:text-red-400 hover:bg-red-500/[0.07] border border-transparent transition-all duration-150 cursor-pointer mt-2">
+            {icons.signout} Sign out
+          </button>
+        </aside>
+
+        {/* ── Main content ───────────────────────────────────── */}
+        <div className="flex-1 min-w-0">
+
+          {/* Welcome header */}
+          <div className="mb-6">
+            <p className="text-white/35 text-[13px] mb-0.5">Welcome back,</p>
+            <h1 className="text-white text-3xl sm:text-4xl font-bold tracking-tight">{name || user.email.split('@')[0]}</h1>
+          </div>
+
+          {/* Mobile tab bar */}
+          <div className="flex md:hidden items-center gap-1 bg-[#0F0F0F] border border-white/[0.07] rounded-2xl p-1 mb-6 overflow-x-auto">
+            {TABS.map(({ id, label, icon }) => (
+              <button key={id} onClick={() => setActiveTab(id)}
+                className={[
+                  'inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-[13px] font-medium transition-all duration-150 cursor-pointer whitespace-nowrap shrink-0',
+                  activeTab === id ? 'bg-[#8B5CF6]/15 text-white border border-[#8B5CF6]/25' : 'text-white/45 hover:text-white/70',
+                ].join(' ')}>
+                <span className={activeTab === id ? 'text-[#8B5CF6]' : ''}>{icon}</span>
+                {label}
+                {id === 'orders' && orderList.length > 0 && (
+                  <span className="bg-[#8B5CF6]/20 text-[#8B5CF6] text-[10px] font-bold px-1.5 py-0.5 rounded-full">{orderList.length}</span>
+                )}
+                {id === 'saved' && savedCount > 0 && (
+                  <span className="bg-[#8B5CF6]/20 text-[#8B5CF6] text-[10px] font-bold px-1.5 py-0.5 rounded-full">{savedCount}</span>
+                )}
+              </button>
+            ))}
+          </div>
 
         {/* ── PROFILE TAB ──────────────────────────────────────── */}
         {activeTab === 'profile' && (
@@ -506,25 +581,25 @@ export default function AccountClient({ user, orders, addresses: initAddresses, 
 
             {/* Avatar + identity */}
             <div className={CARD + ' p-6 flex items-center gap-5'}>
-              <div className="relative w-16 h-16 shrink-0">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#8B5CF6]/30 to-[#7c3aed]/20 border border-[#8B5CF6]/30 flex items-center justify-center text-[#8B5CF6] text-2xl font-bold overflow-hidden">
+              <div className="relative w-20 h-20 shrink-0">
+                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#8B5CF6]/30 to-[#7c3aed]/20 border border-[#8B5CF6]/30 flex items-center justify-center text-[#8B5CF6] text-3xl font-bold overflow-hidden">
                   {avatarUrl ? (
-                    <Image src={avatarUrl} alt="Avatar" fill className="object-cover rounded-full" sizes="64px" />
+                    <Image src={avatarUrl} alt="Avatar" fill className="object-cover rounded-full" sizes="80px" />
                   ) : initial}
                 </div>
                 <button onClick={() => fileInputRef.current?.click()}
                   disabled={avatarUploading}
-                  className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-[#8B5CF6] hover:bg-[#7c3aed] border-2 border-[#1E1E1E] flex items-center justify-center text-white transition-colors duration-150 cursor-pointer disabled:opacity-60">
+                  className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-[#8B5CF6] hover:bg-[#7c3aed] border-2 border-[#1E1E1E] flex items-center justify-center text-white transition-colors duration-150 cursor-pointer disabled:opacity-60">
                   {avatarUploading
-                    ? <svg className="animate-spin w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+                    ? <svg className="animate-spin w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
                     : icons.camera}
                 </button>
                 <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
               </div>
               <div className="min-w-0">
-                <p className="text-white text-lg font-semibold truncate">{name || 'No name set'}</p>
-                <p className="text-white/45 text-sm truncate mt-0.5">{user.email}</p>
-                <p className="text-white/30 text-xs mt-1">Member since {formatDate(user.createdAt)}</p>
+                <p className="text-white text-xl font-bold truncate">{name || 'No name set'}</p>
+                <p className="text-white/50 text-[14px] truncate mt-0.5">{user.email}</p>
+                <p className="text-white/30 text-[12px] mt-1.5">Member since {formatDate(user.createdAt)}</p>
               </div>
             </div>
 
@@ -798,7 +873,8 @@ export default function AccountClient({ user, orders, addresses: initAddresses, 
           </div>
         )}
 
-      </div>
+        </div>{/* end main */}
+      </div>{/* end flex gap-6 */}
     </div>
   )
 }
