@@ -72,10 +72,17 @@ export default function CheckoutPage() {
   const { user } = useAuth()
   const router = useRouter()
 
-  /* Redirect if cart is empty after hydration */
+  /* Order state — declared early so redirect effect can reference successOrder */
+  const [placing,      setPlacing]        = useState(false)
+  const [orderError,   setOrderError]     = useState('')
+  const [successOrder, setSuccessOrder]   = useState<string | null>(null)
+  interface OrderSnapshot { orderNumber: string; customerName: string; items: typeof items; subtotal: number; discount: number; shipping: number; total: number }
+  const [orderSnapshot,  setOrderSnapshot] = useState<OrderSnapshot | null>(null)
+
+  /* Redirect if cart is empty after hydration — skip if order just placed */
   useEffect(() => {
-    if (hydrated && items.length === 0) router.replace('/cart')
-  }, [hydrated, items.length, router])
+    if (hydrated && items.length === 0 && !successOrder) router.replace('/cart')
+  }, [hydrated, items.length, successOrder, router])
 
   /* Promo */
   const [promoInput,   setPromoInput]   = useState('')
@@ -160,13 +167,6 @@ export default function CheckoutPage() {
     setAddrSuggestions([])
     setShowAddrSuggestions(false)
   }
-
-  /* Order state */
-  const [placing,      setPlacing]        = useState(false)
-  const [orderError,   setOrderError]     = useState('')
-  const [successOrder, setSuccessOrder]   = useState<string | null>(null)
-  interface OrderSnapshot { orderNumber: string; customerName: string; items: typeof items; subtotal: number; discount: number; shipping: number; total: number }
-  const [orderSnapshot,  setOrderSnapshot] = useState<OrderSnapshot | null>(null)
 
   /* Saved addresses */
   interface SavedAddress { id: string; label: string; full_name: string; phone?: string; line1: string; line2?: string; city: string; state: string; pincode: string; is_default: boolean }
