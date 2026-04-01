@@ -129,13 +129,19 @@ export default function AuthModal() {
   async function handleForgotPassword() {
     if (!email) { setError('Enter your email above first.'); return }
     setLoading(true)
-    const supabase = createClient()
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: 'https://mycozenith.com/auth/callback',
-    })
+    try {
+      const res = await fetch('/api/auth/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+      const json = await res.json()
+      if (!res.ok) setError(json.error ?? 'Could not send reset email.')
+      else setResetSent(true)
+    } catch {
+      setError('Could not send reset email.')
+    }
     setLoading(false)
-    if (error) setError(error.message)
-    else setResetSent(true)
   }
 
   if (!isOpen) return null

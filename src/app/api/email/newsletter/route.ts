@@ -1,6 +1,7 @@
 import { Resend } from 'resend'
 import { NextRequest, NextResponse } from 'next/server'
 import { emailShell, ctaButton, sectionLabel, divider } from '@/lib/emailTemplate'
+import { createServiceClient } from '@/lib/supabase/service'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -10,6 +11,10 @@ export async function POST(req: NextRequest) {
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return NextResponse.json({ error: 'Invalid email' }, { status: 400 })
     }
+
+    // Save subscriber (ignore duplicate — already subscribed is fine)
+    const supabase = createServiceClient()
+    await supabase.from('newsletter_subscribers').upsert({ email }, { onConflict: 'email' })
 
     const body = `
       <!-- Hero -->

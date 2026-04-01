@@ -449,11 +449,17 @@ export default function AccountClient({ user, orders, addresses: initAddresses, 
   async function sendResetLink() {
     setResetSending(true)
     setResetMsg(null)
-    const supabase = createClient()
-    const { error } = await supabase.auth.resetPasswordForEmail(user.email, {
-      redirectTo: 'https://mycozenith.com/auth/callback',
-    })
-    setResetMsg(error ? { ok: false, text: 'Could not send reset email.' } : { ok: true, text: 'Reset link sent — check your inbox.' })
+    try {
+      const res = await fetch('/api/auth/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: user.email }),
+      })
+      const json = await res.json()
+      setResetMsg(res.ok ? { ok: true, text: 'Reset link sent — check your inbox.' } : { ok: false, text: json.error ?? 'Could not send reset email.' })
+    } catch {
+      setResetMsg({ ok: false, text: 'Could not send reset email.' })
+    }
     setResetSending(false)
   }
 
