@@ -1,7 +1,9 @@
+export const dynamic = 'force-dynamic'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { POSTS } from '@/lib/blog'
+import { POSTS, type Post } from '@/lib/blog'
 import { createClient } from '@/lib/supabase/server'
 import NewsletterForm from '@/components/NewsletterForm'
 import ReadProgress    from './ReadProgress'
@@ -11,14 +13,49 @@ import ArticleBody     from './ArticleBody'
 import ArticleInteractions from './ArticleInteractions'
 import CommentSection  from './CommentSection'
 
-export function generateStaticParams() {
-  return POSTS.map((p) => ({ slug: p.slug }))
+/* ─── DB row → Post mapper ───────────────────────────────────── */
+function mapDbRowToPost(row: Record<string, unknown>): Post {
+  return {
+    slug:                row.slug as string,
+    image:               row.image as string,
+    category:            row.category as string,
+    title:               row.title as string,
+    excerpt:             row.excerpt as string,
+    date:                row.published_at
+      ? new Date(row.published_at as string).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })
+      : '',
+    readTime:            row.read_time as string,
+    author:              row.author as Post['author'],
+    tags:                (row.tags as string[]) ?? [],
+    likeCount:           (row.like_count as number) ?? 0,
+    commentCount:        (row.comment_count as number) ?? 0,
+    relatedProductSlugs: (row.related_product_slugs as string[]) ?? [],
+    relatedPostSlugs:    (row.related_post_slugs as string[]) ?? [],
+    references:          (row.post_references as Post['references']) ?? [],
+    content:             (row.content as Post['content']) ?? [],
+  }
 }
 
+/* ─── generateMetadata ───────────────────────────────────────── */
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const post = POSTS.find((p) => p.slug === slug)
+
+  let post: Post | undefined
+
+  try {
+    const supabase = await createClient()
+    const { data } = await supabase
+      .from('blog_posts')
+      .select('*')
+      .eq('slug', slug)
+      .eq('status', 'published')
+      .single()
+    if (data) post = mapDbRowToPost(data)
+  } catch { /* fallback */ }
+
+  if (!post) post = POSTS.find((p) => p.slug === slug)
   if (!post) return {}
+
   const ogImage = `https://mycozenith.com${post.image}`
   return {
     title: `${post.title} — MycoZenith`,
@@ -55,27 +92,76 @@ export default async function BlogArticlePage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const post = POSTS.find((p) => p.slug === slug)
+  const supabase = await createClient()
+
+  /* ── Fetch post ─────────────────────────────────────────────── */
+  let post: Post | undefined
+
+  try {
+    const { data } = await supabase
+      .from('blog_posts')
+      .select('*')
+      .eq('slug', slug)
+      .eq('status', 'published')
+      .single()
+    if (data) post = mapDbRowToPost(data)
+  } catch { /* fallback */ }
+
+  if (!post) post = POSTS.find((p) => p.slug === slug)
   if (!post) notFound()
 
-  // Fetch real comment count from Supabase
-  const supabase = await createClient()
+  /* ── Live comment count ─────────────────────────────────────── */
   const { count: commentCount } = await supabase
     .from('blog_comments')
     .select('*', { count: 'exact', head: true })
     .eq('post_slug', slug)
   const liveCommentCount = commentCount ?? post.commentCount
 
-  const relatedPosts = (() => {
+  /* ── Related posts ──────────────────────────────────────────── */
+  let relatedPosts: Post[] = []
+
+  try {
+    if (post.relatedPostSlugs.length > 0) {
+      const { data: relatedData } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .in('slug', post.relatedPostSlugs)
+        .eq('status', 'published')
+      if (relatedData && relatedData.length > 0) {
+        relatedPosts = relatedData.map(mapDbRowToPost)
+      }
+    }
+
+    if (relatedPosts.length < 3) {
+      // Pad with other posts
+      const { data: otherData } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .eq('status', 'published')
+        .neq('slug', slug)
+        .limit(3 - relatedPosts.length)
+      if (otherData && otherData.length > 0) {
+        const usedSlugs = new Set([slug, ...relatedPosts.map((p) => p.slug)])
+        const extras = otherData
+          .filter((r) => !usedSlugs.has(r.slug as string))
+          .map(mapDbRowToPost)
+        relatedPosts = [...relatedPosts, ...extras].slice(0, 3)
+      }
+    }
+  } catch { /* fallback to static */ }
+
+  if (relatedPosts.length === 0) {
     const explicit = post.relatedPostSlugs
       .map((s) => POSTS.find((p) => p.slug === s))
-      .filter(Boolean) as typeof POSTS
-    if (explicit.length >= 3) return explicit.slice(0, 3)
-    // Pad to 3 with other posts not already included
-    const used = new Set([post.slug, ...post.relatedPostSlugs])
-    const extras = POSTS.filter((p) => !used.has(p.slug))
-    return [...explicit, ...extras].slice(0, 3)
-  })()
+      .filter(Boolean) as Post[]
+    if (explicit.length >= 3) {
+      relatedPosts = explicit.slice(0, 3)
+    } else {
+      const used = new Set([slug, ...post.relatedPostSlugs])
+      const extras = POSTS.filter((p) => !used.has(p.slug))
+      relatedPosts = [...explicit, ...extras].slice(0, 3)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-[#171717]">

@@ -1,5 +1,32 @@
+export const dynamic = 'force-dynamic'
+
 import ProductsGrid from './ProductsGrid'
 import { createClient } from '@/lib/supabase/server'
+import { PRODUCTS, type Product } from '@/lib/products'
+
+function mapDbRowToProduct(row: Record<string, unknown>): Product {
+  return {
+    slug:               row.slug as string,
+    image:              row.image as string,
+    images:             (row.images as string[]) ?? [],
+    name:               row.name as string,
+    tag:                row.tag as string,
+    description:        row.description as string,
+    price:              (row.price_display as string) ?? `₹${row.price}`,
+    rating:             (row.rating as number) ?? 0,
+    reviewCount:        (row.review_count as number) ?? 0,
+    heroBullets:        (row.hero_bullets as Product['heroBullets']) ?? [],
+    descriptionBullets: (row.description_bullets as string[]) ?? [],
+    longDescription:    (row.long_description as string) ?? '',
+    benefits:           (row.benefits as Product['benefits']) ?? [],
+    howToUse:           (row.how_to_use as Product['howToUse']) ?? [],
+    servingSize:        (row.serving_size as string) ?? '',
+    extract:            row.extract as string,
+    betaGlucan:         (row.beta_glucan as string) ?? '',
+    testimonials:       (row.testimonials as Product['testimonials']) ?? [],
+    faq:                (row.faq as Product['faq']) ?? [],
+  }
+}
 
 export default async function ProductsPage({
   searchParams,
@@ -8,16 +35,24 @@ export default async function ProductsPage({
 }) {
   const { q } = await searchParams
 
-  // Fetch out-of-stock slugs from admin DB
-  let outOfStockSlugs: string[] = []
+  let products: Product[] = []
+
   try {
     const supabase = await createClient()
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('products')
-      .select('slug')
-      .eq('status', 'out_of_stock')
-    outOfStockSlugs = data?.map(d => d.slug) ?? []
+      .select('*')
+      .eq('status', 'active')
+      .order('created_at', { ascending: false })
+
+    if (!error && data && data.length > 0) {
+      products = data.map(mapDbRowToProduct)
+    }
   } catch { /* ignore */ }
+
+  if (products.length === 0) {
+    products = PRODUCTS
+  }
 
   return (
     <div className="min-h-screen bg-[#1E1E1E] pt-20 sm:pt-28 pb-16 sm:pb-28 px-4 sm:px-6 lg:px-10">
@@ -30,7 +65,7 @@ export default async function ProductsPage({
           <p className="text-white/40 text-sm mt-2">Premium functional mushroom extracts — formulated for real results.</p>
         </div>
 
-        <ProductsGrid initialQuery={q ?? ''} outOfStockSlugs={outOfStockSlugs} />
+        <ProductsGrid products={products} initialQuery={q ?? ''} outOfStockSlugs={[]} />
 
       </div>
     </div>

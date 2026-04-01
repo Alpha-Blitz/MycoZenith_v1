@@ -1,7 +1,9 @@
+export const dynamic = 'force-dynamic'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { PRODUCTS } from '@/lib/products'
+import { PRODUCTS, type Product } from '@/lib/products'
 import NewsletterForm from '@/components/NewsletterForm'
 import ProductActions from './ProductActions'
 import FAQAccordion from './FAQAccordion'
@@ -9,8 +11,29 @@ import ImageCarousel from './ImageCarousel'
 import ReviewSection from './ReviewSection'
 import { createClient } from '@/lib/supabase/server'
 
-export function generateStaticParams() {
-  return PRODUCTS.map((p) => ({ slug: p.slug }))
+/* ─── DB row → Product mapper ────────────────────────────────── */
+function mapDbRowToProduct(row: Record<string, unknown>): Product {
+  return {
+    slug:               row.slug as string,
+    image:              row.image as string,
+    images:             (row.images as string[]) ?? [],
+    name:               row.name as string,
+    tag:                row.tag as string,
+    description:        row.description as string,
+    price:              (row.price_display as string) ?? `₹${row.price}`,
+    rating:             (row.rating as number) ?? 0,
+    reviewCount:        (row.review_count as number) ?? 0,
+    heroBullets:        (row.hero_bullets as Product['heroBullets']) ?? [],
+    descriptionBullets: (row.description_bullets as string[]) ?? [],
+    longDescription:    (row.long_description as string) ?? '',
+    benefits:           (row.benefits as Product['benefits']) ?? [],
+    howToUse:           (row.how_to_use as Product['howToUse']) ?? [],
+    servingSize:        (row.serving_size as string) ?? '',
+    extract:            row.extract as string,
+    betaGlucan:         (row.beta_glucan as string) ?? '',
+    testimonials:       (row.testimonials as Product['testimonials']) ?? [],
+    faq:                (row.faq as Product['faq']) ?? [],
+  }
 }
 
 /* ─── Icons ───────────────────────────────────────────────── */
@@ -94,24 +117,53 @@ function RelatedCard({ slug, image, name, tag, price }: { slug: string; image: s
 /* ─── Page ────────────────────────────────────────────────── */
 export default async function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const product = PRODUCTS.find((p) => p.slug === slug)
+  const supabase = await createClient()
+
+  /* ── Fetch product ──────────────────────────────────────────── */
+  let product: Product | undefined
+  let isOutOfStock = false
+
+  try {
+    const { data: dbRow } = await supabase
+      .from('products')
+      .select('*')
+      .eq('slug', slug)
+      .in('status', ['active', 'out_of_stock', 'draft'])
+      .single()
+
+    if (dbRow) {
+      product = mapDbRowToProduct(dbRow)
+      isOutOfStock = (dbRow as Record<string, unknown>).status === 'out_of_stock'
+    }
+  } catch { /* fallback */ }
+
+  if (!product) {
+    const staticProduct = PRODUCTS.find((p) => p.slug === slug)
+    if (staticProduct) {
+      product = staticProduct
+      isOutOfStock = false
+    }
+  }
+
   if (!product) notFound()
 
-  // Check admin-set status from DB (overrides static data)
-  let dbStatus: string | null = null
+  /* ── Related products ───────────────────────────────────────── */
+  let related: Product[] = []
+
   try {
-    const supabase = await createClient()
-    const { data: dbProduct } = await supabase
+    const { data: relatedData } = await supabase
       .from('products')
-      .select('status')
-      .eq('slug', product.slug)
-      .maybeSingle()
-    dbStatus = dbProduct?.status ?? null
-  } catch { /* ignore — static data is fallback */ }
+      .select('*')
+      .neq('slug', slug)
+      .in('status', ['active', 'out_of_stock'])
+    if (relatedData && relatedData.length > 0) {
+      related = relatedData.map(mapDbRowToProduct)
+    }
+  } catch { /* fallback */ }
 
-  const isOutOfStock = dbStatus === 'out_of_stock'
-
-  const related = PRODUCTS.filter((p) => p.slug !== slug)
+  if (related.length === 0) {
+    related = PRODUCTS.filter((p) => p.slug !== slug)
+  }
 
   return (
     <div className="min-h-screen bg-[#171717]">
@@ -277,7 +329,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             {product.testimonials.map((t, i) => (
               <div key={i} className="bg-[#171717] border border-white/[0.07] rounded-xl p-5 flex flex-col gap-3">
                 <Stars rating={t.rating} />
-                <p className="text-white/75 text-sm leading-relaxed flex-1">"{t.quote}"</p>
+                <p className="text-white/75 text-sm leading-relaxed flex-1">&quot;{t.quote}&quot;</p>
                 <p className="text-white/35 text-xs font-medium">— {t.author}</p>
               </div>
             ))}

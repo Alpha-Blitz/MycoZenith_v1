@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { PRODUCTS } from '@/lib/products'
+import type { Product } from '@/lib/products'
 import ProductCard from '@/components/ProductCard'
 
 const TAGS = ['Cognitive Focus', 'Stress + Immunity', 'Energy + Endurance', 'Immunity + Recovery', 'Antioxidant + Longevity']
@@ -113,7 +113,7 @@ function SortDropdown({ value, onChange }: { value: SortKey; onChange: (v: SortK
   )
 }
 
-export default function ProductsGrid({ initialQuery, outOfStockSlugs = [] }: { initialQuery: string; outOfStockSlugs?: string[] }) {
+export default function ProductsGrid({ products, initialQuery, outOfStockSlugs = [] }: { products: Product[]; initialQuery: string; outOfStockSlugs?: string[] }) {
   const [query, setQuery]         = useState(initialQuery)
   const [activeTag, setActiveTag] = useState<string | null>(null)
   const [sort, setSort]           = useState<SortKey>('featured')
@@ -122,7 +122,7 @@ export default function ProductsGrid({ initialQuery, outOfStockSlugs = [] }: { i
   // Reset to page 1 whenever filters change
   useEffect(() => { setPage(1) }, [query, activeTag, sort])
 
-  const filtered = PRODUCTS
+  const filtered = products
     .filter((p) => {
       const q = query.trim().toLowerCase()
       if (q && !p.name.toLowerCase().includes(q) && !p.description.toLowerCase().includes(q)) return false
@@ -227,9 +227,9 @@ export default function ProductsGrid({ initialQuery, outOfStockSlugs = [] }: { i
 
       {/* ── Result count ─────────────────────────────────── */}
       <p className="text-white/35 text-sm mb-6">
-        {filtered.length === PRODUCTS.length
-          ? `Showing all ${PRODUCTS.length} products`
-          : `${filtered.length} of ${PRODUCTS.length} products`}
+        {filtered.length === products.length
+          ? `Showing all ${products.length} products`
+          : `${filtered.length} of ${products.length} products`}
         {totalPages > 1 && ` — page ${page} of ${totalPages}`}
       </p>
 
