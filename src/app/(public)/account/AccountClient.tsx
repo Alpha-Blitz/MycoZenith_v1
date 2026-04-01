@@ -270,10 +270,10 @@ function OrderRow({ order, onCancel }: { order: Order; onCancel: (id: string) =>
               <div className="flex justify-between text-[13px] text-white/45">
                 <span>Shipping</span><span className="tabular-nums">{order.shipping === 0 ? 'Free' : formatCurrency(order.shipping, order.currency)}</span>
               </div>
-              <div className="flex justify-between text-[14px] font-bold text-white pt-2 border-t border-white/[0.07] mt-1">
+              <div className="flex justify-between text-[16px] font-bold text-white pt-2 border-t border-white/[0.07] mt-1">
                 <span>Total (incl. 18% GST)</span><span className="tabular-nums">{formatCurrency(order.total, order.currency)}</span>
               </div>
-              <p className="text-white/30 text-[12px] mt-0.5">{payLabel}</p>
+              <p className="text-white/45 text-[14px] mt-1">{payLabel}</p>
             </div>
             {order.tracking_id && (
               <div className="sm:border-l sm:border-white/[0.07] sm:pl-6 flex flex-col gap-1.5">
@@ -523,7 +523,7 @@ export default function AccountClient({ user, orders, addresses: initAddresses, 
           {TABS.map(({ id, label, icon }) => (
             <button key={id} onClick={() => setActiveTab(id)}
               className={[
-                'flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-150 cursor-pointer text-left w-full',
+                'flex items-center gap-3 px-4 py-2.5 rounded-xl text-[15px] font-medium transition-all duration-150 cursor-pointer text-left w-full',
                 activeTab === id
                   ? 'bg-[#8B5CF6]/12 text-white border border-[#8B5CF6]/20 border-l-[3px] border-l-[#8B5CF6]'
                   : 'text-white/45 hover:text-white/75 hover:bg-white/[0.04] border border-transparent',
