@@ -130,7 +130,9 @@ export default function AuthModal() {
     if (!email) { setError('Enter your email above first.'); return }
     setLoading(true)
     const supabase = createClient()
-    const { error } = await supabase.auth.resetPasswordForEmail(email)
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: 'https://mycozenith.com/auth/callback',
+    })
     setLoading(false)
     if (error) setError(error.message)
     else setResetSent(true)
