@@ -13,67 +13,87 @@ export async function POST(req: NextRequest) {
 
     const body = `
       <!-- Hero -->
-      <div style="text-align:center;margin-bottom:36px">
-        <div style="font-size:42px;margin-bottom:14px;line-height:1">🍄</div>
-        <h1 style="color:#ffffff;font-size:28px;font-weight:800;margin:0 0 10px;letter-spacing:-0.3px">You're in.</h1>
-        <p style="color:#888;font-size:15px;line-height:1.7;margin:0 auto;max-width:400px">
-          Welcome to the MycoZenith community. You'll be the first to know about new research, product drops, and exclusive offers.
+      <div style="text-align:center;padding-bottom:32px">
+        <div style="font-size:44px;line-height:1;margin-bottom:16px">&#127812;</div>
+        <h1 style="color:#ffffff;font-size:30px;font-weight:800;margin:0 0 10px;letter-spacing:-0.5px">You&apos;re in.</h1>
+        <p style="color:#aaaaaa;font-size:16px;line-height:1.7;margin:0 auto;max-width:400px">
+          Welcome to the MycoZenith community. You&apos;ll be the first to know about new research, product drops, and exclusive offers.
         </p>
       </div>
 
-      <!-- What to expect card -->
-      <div style="background:#141414;border:1px solid #252525;border-radius:16px;padding:24px;margin-bottom:24px">
-        ${sectionLabel('What to expect')}
+      <!-- What to expect -->
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#161616;border:1px solid #2a2a2a;border-radius:16px;margin-bottom:24px">
+        <tr><td style="padding:24px">
+          ${sectionLabel('What to expect')}
 
-        <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:14px">
-          <div style="width:36px;height:36px;background:#1a1a2e;border:1px solid #2a2a4a;border-radius:10px;text-align:center;line-height:36px;font-size:17px;flex-shrink:0">🔬</div>
-          <div>
-            <p style="color:#e8e8e8;font-size:14px;font-weight:600;margin:0 0 3px">Research Updates</p>
-            <p style="color:#606060;font-size:13px;line-height:1.55;margin:0">Deep-dives into the science of functional mushrooms — delivered clearly.</p>
-          </div>
-        </div>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px">
+            <tr>
+              <td width="48" valign="top" style="padding-right:14px;padding-top:1px">
+                <table cellpadding="0" cellspacing="0" border="0">
+                  <tr><td style="width:40px;height:40px;background:#0e0e1e;border:1px solid #1e1e3a;border-radius:11px;text-align:center;vertical-align:middle;font-size:19px;padding:9px 0" align="center">&#128300;</td></tr>
+                </table>
+              </td>
+              <td valign="top">
+                <p style="color:#e8e8e8;font-size:15px;font-weight:700;margin:0 0 4px">Research Updates</p>
+                <p style="color:#909090;font-size:14px;line-height:1.6;margin:0">Deep-dives into the science of functional mushrooms &mdash; delivered clearly.</p>
+              </td>
+            </tr>
+          </table>
 
-        <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:14px">
-          <div style="width:36px;height:36px;background:#1a1a1a;border:1px solid #252525;border-radius:10px;text-align:center;line-height:36px;font-size:17px;flex-shrink:0">🆕</div>
-          <div>
-            <p style="color:#e8e8e8;font-size:14px;font-weight:600;margin:0 0 3px">Early Product Access</p>
-            <p style="color:#606060;font-size:13px;line-height:1.55;margin:0">New launches announced to subscribers first — before anyone else.</p>
-          </div>
-        </div>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px">
+            <tr>
+              <td width="48" valign="top" style="padding-right:14px;padding-top:1px">
+                <table cellpadding="0" cellspacing="0" border="0">
+                  <tr><td style="width:40px;height:40px;background:#161616;border:1px solid #2a2a2a;border-radius:11px;text-align:center;vertical-align:middle;font-size:19px;padding:9px 0" align="center">&#128226;</td></tr>
+                </table>
+              </td>
+              <td valign="top">
+                <p style="color:#e8e8e8;font-size:15px;font-weight:700;margin:0 0 4px">Early Product Access</p>
+                <p style="color:#909090;font-size:14px;line-height:1.6;margin:0">New launches announced to subscribers first &mdash; before anyone else.</p>
+              </td>
+            </tr>
+          </table>
 
-        <div style="display:flex;gap:14px;align-items:flex-start">
-          <div style="width:36px;height:36px;background:#1f1a14;border:1px solid #3a2a1a;border-radius:10px;text-align:center;line-height:36px;font-size:17px;flex-shrink:0">🎁</div>
-          <div>
-            <p style="color:#e8e8e8;font-size:14px;font-weight:600;margin:0 0 3px">Exclusive Offers</p>
-            <p style="color:#606060;font-size:13px;line-height:1.55;margin:0">Subscriber-only discounts, bundles, and limited-time deals.</p>
-          </div>
-        </div>
-      </div>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td width="48" valign="top" style="padding-right:14px;padding-top:1px">
+                <table cellpadding="0" cellspacing="0" border="0">
+                  <tr><td style="width:40px;height:40px;background:#1a1208;border:1px solid #302010;border-radius:11px;text-align:center;vertical-align:middle;font-size:19px;padding:9px 0" align="center">&#127873;</td></tr>
+                </table>
+              </td>
+              <td valign="top">
+                <p style="color:#e8e8e8;font-size:15px;font-weight:700;margin:0 0 4px">Exclusive Offers</p>
+                <p style="color:#909090;font-size:14px;line-height:1.6;margin:0">Subscriber-only discounts, bundles, and limited-time deals.</p>
+              </td>
+            </tr>
+          </table>
+        </td></tr>
+      </table>
 
-      <!-- CTA -->
-      <div style="text-align:center;margin-bottom:14px">
+      <!-- CTAs -->
+      <div style="text-align:center;margin-bottom:16px">
         ${ctaButton('https://mycozenith.com/products', 'Shop Now')}
       </div>
-      <div style="text-align:center">
-        <a href="https://mycozenith.com/blog" style="color:#8B5CF6;font-size:14px;text-decoration:none;font-weight:500">Browse research articles →</a>
-      </div>
+      <p style="text-align:center;margin:0">
+        <a href="https://mycozenith.com/blog" style="color:#8B5CF6;font-size:15px;text-decoration:none;font-weight:600">Browse research articles &rarr;</a>
+      </p>
 
       ${divider()}
-      <p style="color:#333;font-size:12px;text-align:center;margin:0;line-height:1.7">
-        You subscribed with ${email}. Don't want updates?
-        <a href="https://mycozenith.com/unsubscribe" style="color:#484848;text-decoration:underline">Unsubscribe here</a>.
+      <p style="color:#444;font-size:13px;text-align:center;margin:0;line-height:1.7">
+        You subscribed with ${email}. Don&apos;t want updates?
+        <a href="https://mycozenith.com/unsubscribe" style="color:#606060;text-decoration:underline">Unsubscribe here</a>.
       </p>
     `
 
     const { error } = await resend.emails.send({
       from:    'MycoZenith <hello@mycozenith.com>',
       to:      email,
-      subject: "Welcome to MycoZenith — You're in 🍄",
+      subject: "Welcome to MycoZenith — You're in",
       html:    emailShell({
-        title:     'Welcome to MycoZenith',
-        preheader: "You're subscribed. First access to new articles, products, and exclusive offers.",
+        title:      'Welcome to MycoZenith',
+        preheader:  "You're subscribed. First access to new articles, products, and exclusive offers.",
         body,
-        footerNote: "You're receiving this because you subscribed to MycoZenith updates.",
+        footerNote: "You&apos;re receiving this because you subscribed to MycoZenith updates.",
       }),
     })
 
