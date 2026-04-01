@@ -360,7 +360,7 @@ export default function CheckoutPage() {
                       <h2 className="text-white text-xl font-bold">Order {snap.orderNumber}</h2>
                       <p className="text-white/40 text-[13px] mt-0.5">Placed on {orderDate}</p>
                     </div>
-                    <span className="inline-flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-semibold px-2.5 py-1 rounded-full mt-0.5">
+                    <span className="inline-flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[13px] font-semibold px-2.5 py-1 rounded-full mt-0.5">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                       Confirmed
                     </span>
@@ -433,12 +433,12 @@ export default function CheckoutPage() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-white font-semibold text-[15px]">{p.name}</p>
-                          <p className="text-white/40 text-[12px] mt-0.5 line-clamp-1">{p.description}</p>
+                          <p className="text-white/40 text-[13px] mt-0.5 line-clamp-1">{p.description}</p>
                         </div>
                         <div className="flex flex-col items-end gap-2 shrink-0">
                           <span className="text-white font-bold text-[15px]">{p.price}</span>
                           <Link href={`/products/${p.slug}`}
-                            className="inline-flex items-center gap-1 bg-[#FF6523] hover:bg-[#e5561e] text-white text-[12px] font-semibold px-3 py-1.5 rounded-lg transition-colors duration-200">
+                            className="inline-flex items-center gap-1 bg-[#FF6523] hover:bg-[#e5561e] text-white text-[13px] font-semibold px-3 py-1.5 rounded-lg transition-colors duration-200">
                             Add <ArrowRight size={11} />
                           </Link>
                         </div>
@@ -471,7 +471,7 @@ export default function CheckoutPage() {
                         step.done ? 'bg-[#FF6523]/20 border-[#FF6523]/50' : 'bg-white/[0.04] border-white/[0.15]'].join(' ')}>
                         {step.done && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#FF6523" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>}
                       </div>
-                      <span className={['text-[13px]', step.done ? 'text-white/80' : 'text-white/40'].join(' ')}>
+                      <span className={['text-[15px]', step.done ? 'text-white/85' : 'text-white/50'].join(' ')}>
                         {step.label}{step.done && ' ✓'}
                       </span>
                     </div>
@@ -485,14 +485,14 @@ export default function CheckoutPage() {
                   <span className="text-lg">🧬</span>
                   <h3 className="text-white text-[15px] font-bold">Welcome to MycoZenith</h3>
                 </div>
-                <p className="text-white/45 text-[13px] leading-relaxed mb-4">
+                <p className="text-white/50 text-[14px] leading-relaxed mb-4">
                   You&apos;re not just buying a supplement. You&apos;re upgrading your performance system.
                 </p>
                 <Link href="/products"
-                  className="flex items-center justify-between bg-[#FF6523]/10 hover:bg-[#FF6523]/20 border border-[#FF6523]/25 text-[#FF6523] text-[13px] font-semibold px-4 py-2.5 rounded-xl transition-all duration-200">
+                  className="flex items-center justify-between bg-[#FF6523]/10 hover:bg-[#FF6523]/20 border border-[#FF6523]/25 text-[#FF6523] text-[14px] font-semibold px-4 py-2.5 rounded-xl transition-all duration-200">
                   Explore Your Stack <ArrowRight />
                 </Link>
-                <p className="text-white/25 text-[12px] mt-4 text-center">Join 2,000+ high performers</p>
+                <p className="text-white/35 text-[13px] mt-4 text-center">Join 2,000+ high performers</p>
                 {/* Social */}
                 <div className="flex items-center justify-center gap-3 mt-3">
                   <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
@@ -508,8 +508,8 @@ export default function CheckoutPage() {
 
               {/* Referral */}
               <div className="bg-gradient-to-br from-[#FF6523]/10 to-[#FF6523]/5 border border-[#FF6523]/20 rounded-2xl p-5">
-                <p className="text-[#FF6523] text-[15px] font-bold mb-1">Give ₹100, Get ₹100</p>
-                <p className="text-white/40 text-[12px] mb-3">Share with a friend and both of you get ₹100 off your next order.</p>
+                <p className="text-[#FF6523] text-[16px] font-bold mb-1">Give ₹100, Get ₹100</p>
+                <p className="text-white/50 text-[14px] mb-3">Share with a friend and both of you get ₹100 off your next order.</p>
                 <button
                   onClick={() => { navigator.clipboard.writeText(`${typeof window !== 'undefined' ? window.location.origin : ''}/products`).catch(() => {}) }}
                   className="w-full flex items-center justify-between bg-[#FF6523] hover:bg-[#e5561e] text-white text-[13px] font-semibold px-4 py-2.5 rounded-xl transition-colors duration-200 cursor-pointer">

@@ -22,13 +22,39 @@ function fmt(n: number) {
 
 export default function OrdersTable({ orders }: { orders: OrderRow[] }) {
   const [tab, setTab] = useState<string>('all')
+  const [query, setQuery] = useState('')
 
-  const filtered = tab === 'all' ? orders : orders.filter(o => o.status === tab)
+  const filtered = orders
+    .filter(o => tab === 'all' || o.status === tab)
+    .filter(o => {
+      if (!query.trim()) return true
+      const q = query.toLowerCase()
+      return (
+        o.order_number.toLowerCase().includes(q) ||
+        o.customer_name.toLowerCase().includes(q) ||
+        o.customer_email.toLowerCase().includes(q)
+      )
+    })
 
   return (
     <div>
-      {/* Status tabs */}
-      <div className="flex gap-1 mb-5 overflow-x-auto pb-1">
+      {/* Search + Status tabs */}
+      <div className="flex flex-col sm:flex-row gap-3 mb-5">
+        {/* Search */}
+        <div className="relative sm:w-64">
+          <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-white/25 pointer-events-none" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+          </svg>
+          <input
+            type="text"
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            placeholder="Search orders, customers…"
+            className="w-full bg-[#0F0F0F] border border-white/[0.08] focus:border-[#8B5CF6]/50 text-white text-sm pl-9 pr-3 py-2 rounded-xl outline-none transition-colors duration-150 placeholder-white/20"
+          />
+        </div>
+        {/* Status tabs */}
+        <div className="flex gap-1 overflow-x-auto pb-1">
         {STATUS_TABS.map(s => (
           <button key={s} onClick={() => setTab(s)}
             className={['px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all duration-150 cursor-pointer capitalize shrink-0',
@@ -37,6 +63,7 @@ export default function OrdersTable({ orders }: { orders: OrderRow[] }) {
                 : 'bg-transparent border-white/[0.08] text-white/40 hover:text-white/70',
             ].join(' ')}>{s}</button>
         ))}
+        </div>
       </div>
 
       {filtered.length === 0 ? (
