@@ -8,6 +8,7 @@ import { useCart } from '@/context/CartContext'
 import { useAuth } from '@/context/AuthContext'
 import { createClient } from '@/lib/supabase/client'
 import { event as gaEvent } from '@/lib/gtag'
+import { PRODUCTS } from '@/lib/products'
 
 /* ─── Promo codes ─────────────────────────────────────────────── */
 const PROMO_CODES: Record<string, number> = { MYCO10: 0.10 }
@@ -164,6 +165,8 @@ export default function CheckoutPage() {
   const [placing,      setPlacing]        = useState(false)
   const [orderError,   setOrderError]     = useState('')
   const [successOrder, setSuccessOrder]   = useState<string | null>(null)
+  interface OrderSnapshot { orderNumber: string; customerName: string; items: typeof items; subtotal: number; discount: number; shipping: number; total: number }
+  const [orderSnapshot,  setOrderSnapshot] = useState<OrderSnapshot | null>(null)
 
   /* Saved addresses */
   interface SavedAddress { id: string; label: string; full_name: string; phone?: string; line1: string; line2?: string; city: string; state: string; pincode: string; is_default: boolean }
@@ -301,6 +304,7 @@ export default function CheckoutPage() {
         items: items.map(i => ({ item_id: i.slug, item_name: i.name, price: i.price, quantity: i.quantity })),
       })
 
+      setOrderSnapshot({ orderNumber: order.order_number, customerName: name.trim(), items: [...items], subtotal, discount, shipping, total: finalTotal })
       clearCart()
       setSuccessOrder(order.order_number)
     } catch (e: unknown) {
@@ -312,30 +316,208 @@ export default function CheckoutPage() {
   }
 
   /* ── Success state ──────────────────────────────────────────── */
-  if (successOrder) {
+  if (successOrder && orderSnapshot) {
+    const snap = orderSnapshot
+    const orderDate = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long' })
+    const fmt = (n: number) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(n)
+    const upsellProducts = PRODUCTS.filter(p => !snap.items.find(i => i.slug === p.slug)).slice(0, 2)
+
     return (
-      <div className="min-h-screen bg-[#1E1E1E] flex items-center justify-center px-4 pt-20">
-        <div className="max-w-md w-full text-center">
-          <div className="w-20 h-20 rounded-full bg-[#8B5CF6]/15 border border-[#8B5CF6]/30 flex items-center justify-center mx-auto mb-6">
-            <CheckIcon size={36} />
+      <div className="min-h-screen bg-[#1E1E1E] pt-20 sm:pt-24 pb-20 px-4 sm:px-6">
+        <div className="max-w-5xl mx-auto">
+
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-2 text-[13px] text-white/30 mb-8">
+            <Link href="/" className="hover:text-white/60 transition-colors">Home</Link>
+            <span>›</span>
+            <span className="text-[#FF6523]">Order Confirmed</span>
           </div>
-          <p className="text-[#8B5CF6] text-xs font-semibold tracking-[0.22em] uppercase mb-3">Order Confirmed</p>
-          <h1 className="text-white text-2xl sm:text-3xl font-semibold tracking-tight mb-2">
-            Thank you for your order!
-          </h1>
-          <p className="text-white/45 text-sm leading-relaxed mb-2">
-            We&apos;ll confirm your order shortly via email.
-          </p>
-          <p className="text-white/30 text-xs mb-8">Order #{successOrder}</p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/account?tab=orders"
-              className="inline-flex items-center justify-center gap-2 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white text-sm font-semibold px-6 py-3 rounded-xl transition-all duration-200">
-              Track Order <ArrowRight />
-            </Link>
-            <Link href="/products"
-              className="inline-flex items-center justify-center gap-2 border border-white/[0.12] text-white/60 hover:text-white hover:border-white/25 text-sm font-medium px-6 py-3 rounded-xl transition-all duration-200">
-              Continue Shopping
-            </Link>
+
+          {/* Hero */}
+          <div className="text-center mb-10">
+            {/* Glowing check */}
+            <div className="relative inline-flex items-center justify-center mb-6">
+              <div className="absolute w-24 h-24 rounded-full bg-emerald-500/10 blur-xl" />
+              <div className="relative w-16 h-16 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+            </div>
+            <h1 className="text-white text-3xl sm:text-4xl font-bold tracking-tight mb-2">Thank you for your order!</h1>
+            <p className="text-white/45 text-[15px]">You&apos;re one step closer to peak performance.</p>
+          </div>
+
+          {/* Two-column */}
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-5">
+
+            {/* ── LEFT ── */}
+            <div className="flex flex-col gap-4">
+
+              {/* Order summary card */}
+              <div className="bg-[#0F0F0F] border border-white/[0.09] rounded-2xl overflow-hidden">
+                <div className="px-5 pt-5 pb-4 border-b border-white/[0.07]">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <h2 className="text-white text-xl font-bold">Order {snap.orderNumber}</h2>
+                      <p className="text-white/40 text-[13px] mt-0.5">Placed on {orderDate}</p>
+                    </div>
+                    <span className="inline-flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-semibold px-2.5 py-1 rounded-full mt-0.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      Confirmed
+                    </span>
+                  </div>
+                </div>
+
+                {/* Items */}
+                <div className="px-5 py-4 flex flex-col gap-4">
+                  {snap.items.map((item, i) => (
+                    <div key={i} className="flex items-center gap-4">
+                      <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-white/[0.05] shrink-0">
+                        {item.image && <Image src={item.image} alt={item.name} fill className="object-cover" sizes="56px" unoptimized={item.image.startsWith('http')} />}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-white font-semibold text-[15px] truncate">{item.name}</p>
+                        <p className="text-white/40 text-[13px] mt-0.5">× {item.quantity}</p>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <p className="text-white font-semibold text-[15px]">{fmt(item.price * item.quantity)}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Totals */}
+                <div className="border-t border-white/[0.07] px-5 py-4 flex flex-col gap-2">
+                  {snap.discount > 0 && (
+                    <div className="flex justify-between text-[13px] text-emerald-400/80">
+                      <span>Discount</span><span>− {fmt(snap.discount)}</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between text-[13px] text-white/45">
+                    <span>Shipping</span><span>{snap.shipping === 0 ? 'Free' : fmt(snap.shipping)}</span>
+                  </div>
+                  <div className="flex justify-between text-[16px] font-bold text-white border-t border-white/[0.07] pt-2 mt-1">
+                    <span>Total</span><span>{fmt(snap.total)}</span>
+                  </div>
+                </div>
+
+                {/* Delivery estimate + CTA */}
+                <div className="border-t border-white/[0.07] px-5 py-4">
+                  <div className="flex items-center gap-2 text-[13px] text-white/50 mb-4">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                    Arriving in <span className="text-[#FF6523] font-semibold">3–5 business days</span>
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-2.5">
+                    <Link href="/account?tab=orders"
+                      className="flex-1 inline-flex items-center justify-center gap-2 border border-white/[0.15] text-white/70 hover:text-white hover:border-white/30 text-[14px] font-semibold px-5 py-2.5 rounded-xl transition-all duration-200">
+                      Track Order
+                    </Link>
+                    <Link href="/products"
+                      className="flex-1 inline-flex items-center justify-center gap-2 bg-[#FF6523] hover:bg-[#e5561e] text-white text-[14px] font-semibold px-5 py-2.5 rounded-xl transition-colors duration-200">
+                      Continue Shopping <ArrowRight />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+
+              {/* Upsell / Complete your stack */}
+              {upsellProducts.length > 0 && (
+                <div className="bg-[#0F0F0F] border border-white/[0.09] rounded-2xl overflow-hidden">
+                  <div className="px-5 pt-5 pb-3 border-b border-white/[0.07]">
+                    <h3 className="text-white text-[15px] font-bold">🔥 Complete Your Performance Stack</h3>
+                  </div>
+                  <div className="p-5 flex flex-col gap-3">
+                    {upsellProducts.map(p => (
+                      <div key={p.slug} className="flex items-center gap-4 bg-white/[0.03] border border-white/[0.06] rounded-xl p-3.5">
+                        <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-white/[0.05] shrink-0">
+                          <Image src={p.image} alt={p.name} fill className="object-cover" sizes="56px" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-white font-semibold text-[15px]">{p.name}</p>
+                          <p className="text-white/40 text-[12px] mt-0.5 line-clamp-1">{p.description}</p>
+                        </div>
+                        <div className="flex flex-col items-end gap-2 shrink-0">
+                          <span className="text-white font-bold text-[15px]">{p.price}</span>
+                          <Link href={`/products/${p.slug}`}
+                            className="inline-flex items-center gap-1 bg-[#FF6523] hover:bg-[#e5561e] text-white text-[12px] font-semibold px-3 py-1.5 rounded-lg transition-colors duration-200">
+                            Add <ArrowRight size={11} />
+                          </Link>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="border-t border-white/[0.07] px-5 py-3.5">
+                    <Link href="/products" className="text-[13px] text-white/35 hover:text-white/60 transition-colors">
+                      ← Continue Shopping
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* ── RIGHT ── */}
+            <div className="flex flex-col gap-4">
+
+              {/* What's next */}
+              <div className="bg-[#0F0F0F] border border-white/[0.09] rounded-2xl p-5">
+                <h3 className="text-white text-[15px] font-bold mb-4">#1 What&apos;s Next</h3>
+                <div className="flex flex-col gap-3">
+                  {[
+                    { label: 'Order confirmed', done: true },
+                    { label: 'Packed within 24 hours', done: false },
+                    { label: 'Shipped with tracking link', done: false },
+                  ].map((step, i) => (
+                    <div key={i} className="flex items-center gap-3">
+                      <div className={['w-5 h-5 rounded-full border flex items-center justify-center shrink-0 transition-all',
+                        step.done ? 'bg-[#FF6523]/20 border-[#FF6523]/50' : 'bg-white/[0.04] border-white/[0.15]'].join(' ')}>
+                        {step.done && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#FF6523" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>}
+                      </div>
+                      <span className={['text-[13px]', step.done ? 'text-white/80' : 'text-white/40'].join(' ')}>
+                        {step.label}{step.done && ' ✓'}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Welcome message */}
+              <div className="bg-[#0F0F0F] border border-white/[0.09] rounded-2xl p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-lg">🧬</span>
+                  <h3 className="text-white text-[15px] font-bold">Welcome to MycoZenith</h3>
+                </div>
+                <p className="text-white/45 text-[13px] leading-relaxed mb-4">
+                  You&apos;re not just buying a supplement. You&apos;re upgrading your performance system.
+                </p>
+                <Link href="/products"
+                  className="flex items-center justify-between bg-[#FF6523]/10 hover:bg-[#FF6523]/20 border border-[#FF6523]/25 text-[#FF6523] text-[13px] font-semibold px-4 py-2.5 rounded-xl transition-all duration-200">
+                  Explore Your Stack <ArrowRight />
+                </Link>
+                <p className="text-white/25 text-[12px] mt-4 text-center">Join 2,000+ high performers</p>
+                {/* Social */}
+                <div className="flex items-center justify-center gap-3 mt-3">
+                  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
+                    className="w-9 h-9 rounded-xl bg-white/[0.05] border border-white/[0.08] hover:border-white/20 flex items-center justify-center text-white/40 hover:text-white transition-all duration-150">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>
+                  </a>
+                  <a href="mailto:hello@mycozenith.com"
+                    className="w-9 h-9 rounded-xl bg-white/[0.05] border border-white/[0.08] hover:border-white/20 flex items-center justify-center text-white/40 hover:text-white transition-all duration-150">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  </a>
+                </div>
+              </div>
+
+              {/* Referral */}
+              <div className="bg-gradient-to-br from-[#FF6523]/10 to-[#FF6523]/5 border border-[#FF6523]/20 rounded-2xl p-5">
+                <p className="text-[#FF6523] text-[15px] font-bold mb-1">Give ₹100, Get ₹100</p>
+                <p className="text-white/40 text-[12px] mb-3">Share with a friend and both of you get ₹100 off your next order.</p>
+                <button
+                  onClick={() => { navigator.clipboard.writeText(`${typeof window !== 'undefined' ? window.location.origin : ''}/products`).catch(() => {}) }}
+                  className="w-full flex items-center justify-between bg-[#FF6523] hover:bg-[#e5561e] text-white text-[13px] font-semibold px-4 py-2.5 rounded-xl transition-colors duration-200 cursor-pointer">
+                  Share Link <ArrowRight />
+                </button>
+              </div>
+
+            </div>
           </div>
         </div>
       </div>
