@@ -36,17 +36,21 @@ export default async function ProductsPage({
   const { q } = await searchParams
 
   let products: Product[] = []
+  let outOfStockSlugs: string[] = []
 
   try {
     const supabase = await createClient()
     const { data, error } = await supabase
       .from('products')
       .select('*')
-      .eq('status', 'active')
+      .in('status', ['active', 'out_of_stock'])
       .order('created_at', { ascending: false })
 
     if (!error && data && data.length > 0) {
       products = data.map(mapDbRowToProduct)
+      outOfStockSlugs = data
+        .filter((r: Record<string, unknown>) => r.status === 'out_of_stock')
+        .map((r: Record<string, unknown>) => r.slug as string)
     }
   } catch { /* ignore */ }
 
@@ -65,7 +69,7 @@ export default async function ProductsPage({
           <p className="text-white/40 text-sm mt-2">Premium functional mushroom extracts — formulated for real results.</p>
         </div>
 
-        <ProductsGrid products={products} initialQuery={q ?? ''} outOfStockSlugs={[]} />
+        <ProductsGrid products={products} initialQuery={q ?? ''} outOfStockSlugs={outOfStockSlugs} />
 
       </div>
     </div>

@@ -37,7 +37,7 @@ export default function ProductCard({ slug, image, name, tag, description, price
   }
 
   return (
-    <div className="group relative flex flex-col rounded-2xl overflow-hidden border border-white/[0.08] hover:border-[#8B5CF6]/40 bg-[#0F0F0F] transition-all duration-300 hover:shadow-[0_8px_40px_rgba(139,92,246,0.12)]">
+    <div className="group relative flex flex-col h-full rounded-2xl overflow-hidden border border-white/[0.08] hover:border-[#8B5CF6]/40 bg-[#0F0F0F] transition-all duration-300 hover:shadow-[0_8px_40px_rgba(139,92,246,0.12)]">
 
       {/* ── Image (entire top is a link) ─────────────────── */}
       <Link href={`/products/${slug}`} className="relative block aspect-[3/4] overflow-hidden">

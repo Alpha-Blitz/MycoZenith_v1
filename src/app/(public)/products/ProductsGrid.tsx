@@ -237,7 +237,7 @@ export default function ProductsGrid({ products, initialQuery, outOfStockSlugs =
       {paginated.length > 0 ? (
         <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
           {paginated.map((product) => (
-            <div key={product.slug} className="relative">
+            <div key={product.slug} className="relative h-full">
               <ProductCard {...product} />
               {outOfStockSlugs.includes(product.slug) && (
                 <div className="absolute top-3 right-3 z-10 inline-flex items-center bg-orange-500/90 text-white text-[10px] font-semibold tracking-wide uppercase px-2.5 py-1 rounded-full shadow-md pointer-events-none">
